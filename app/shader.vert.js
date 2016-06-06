@@ -6,6 +6,8 @@ attribute vec3 position;
 attribute vec3 normal;
 attribute vec2 texcoord;
 
+uniform sampler2D topographyMap;
+uniform sampler2D bathymetryMap;
 uniform vec3 lightPosition;
 uniform mat4 view;
 uniform mat4 viewProjection;
@@ -22,14 +24,20 @@ void main(void) {
 
   vec4 planePosition = vec4(position, 1.0);
 
+  planePosition.y += (
+    texture2D(topographyMap, vUv).r * 0.01 -
+    (1.0 - texture2D(bathymetryMap, vUv).r) * 0.01
+  );
+
+  float scale = (1.0 + planePosition.y);
   vec4 spherePosition = vec4(
-    sin(position.x * PI) * cos(position.z * PI),
-    cos(position.x * PI) * cos(position.z * PI),
-    sin(position.z * PI),
+    scale * sin(planePosition.x * PI) * cos(planePosition.z * PI),
+    scale * cos(planePosition.x * PI) * cos(planePosition.z * PI),
+    scale * sin(planePosition.z * PI),
     1.0
   );
 
-  vec4 mixPosition = mix(planePosition, spherePosition, 1.0);
+  vec4 mixPosition = mix(planePosition, spherePosition, 0.0);
 
   gl_Position = viewProjection * mixPosition;
   vNormal = vec3(view * mixPosition);

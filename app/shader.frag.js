@@ -57,7 +57,7 @@ vec3 lightAmount(vec3 direction, vec3 color, vec3 normal) {
 }
 
 void main() {
-  vec2 dHdxy = heightDerivative(vUv) * 0.01;
+  vec2 dHdxy = heightDerivative(vUv) * 0.001;
   vec3 pNormal = perturbNormal(vPosition, vNormal, dHdxy);
 
   vec3 light = lightAmount(
@@ -67,9 +67,15 @@ void main() {
   ) + vec3(0.2);
 
   gl_FragColor = vec4(
-    (light + light) * (
+    light * 4.0 * (
       (texture2D(diffuseMap, vUv).rgb * 0.5 + 0.25) +
-      (texture2D(bathymetryMap, vUv).rgb * vec3(0.0, 0.1, 0.25))
+      (
+        (
+          vec3(1.0) -
+          texture2D(bathymetryMap, vUv).rgb
+        ) *
+        vec3(0.0, 0.1, 0.25)
+      )
     ),
     1.0
   );

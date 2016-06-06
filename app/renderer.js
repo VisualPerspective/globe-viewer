@@ -24,7 +24,7 @@ export default class Renderer {
     this.textures = twgl.createTextures(gl, {
       diffuseMap: { src: 'data/color-4096.png' },
       topographyMap: { src: 'data/topography-4096.png' },
-      bathymetryMap: { src: 'data/bathymetry-blue-2048.png' }
+      bathymetryMap: { src: 'data/bathymetry-4096.png' }
     })
 
     if (ext) {
@@ -37,7 +37,7 @@ export default class Renderer {
       for (name in this.textures) {
         var texture = this.textures[name];
         gl.bindTexture(gl.TEXTURE_2D, texture);
-        gl.texParameterf(gl.TEXTURE_2D, ext.TEXTURE_MAX_ANISOTROPY_EXT, 16);
+        gl.texParameterf(gl.TEXTURE_2D, ext.TEXTURE_MAX_ANISOTROPY_EXT, 4);
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
       }

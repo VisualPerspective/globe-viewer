@@ -13,6 +13,7 @@
     "prod": "brunch build --production"
   },
   "dependencies": {
+    "lodash": "^4.13.1",
     "raw-loader": "^0.5.1",
     "twgl.js": "^1.7.0"
   },

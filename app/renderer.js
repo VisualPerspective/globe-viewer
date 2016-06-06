@@ -51,7 +51,7 @@ export default class Renderer {
     }
   }
 
-  render(time) {
+  render(time, camera) {
     var gl = this.gl
     twgl.resizeCanvasToDisplaySize(gl.canvas)
     gl.viewport(0, 0, gl.canvas.width, gl.canvas.height)
@@ -63,21 +63,21 @@ export default class Renderer {
     var projection = m4.perspective(
       30 * Math.PI / 180,
       gl.canvas.clientWidth / gl.canvas.clientHeight,
-      0.5,
-      100
+      0.01,
+      10
     )
 
-    var eye = [
-      4 * Math.sin(time / 1000),
-      4,
-      0.3 * Math.cos(time / 2000)
-    ]
+    var eye = [0, 0, -camera.distance]
+
+    var cameraMatrix = m4.identity()
+    cameraMatrix = m4.rotateY(cameraMatrix, -camera.orbit)
+    cameraMatrix = m4.rotateX(cameraMatrix, camera.elevation)
+    eye = m4.transformPoint(cameraMatrix, eye)
 
     var target = [0, 0, 0]
-    var up = [0, 0, 1]
+    var up = [0, 1, 0]
 
-    var camera = m4.lookAt(eye, target, up)
-    var view = m4.inverse(camera)
+    var view = m4.inverse(m4.lookAt(eye, target, up))
     var viewProjection = m4.multiply(view, projection)
 
     Object.assign(this.uniforms, {

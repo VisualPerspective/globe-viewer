@@ -1,0 +1,50 @@
+body {
+  color: #333;
+  font-family: 'Droid Sans', Helvetica, Arial, sans-serif;
+  line-height: 1.45;
+  margin: 0 10rem 10rem;
+}
+
+@media (max-width: 48rem) {
+  body {
+    padding: 0 1.5rem;
+  }
+}
+
+canvas {
+ width: 100%;
+ border: 1px solid #eee;
+}
+
+p {
+  font-size: 1rem;
+}
+
+h1, h2, h3 {
+  color: #111;
+}
+
+h1 {
+  letter-spacing: -0.1rem;
+  margin-top: 3rem;
+}
+
+p, h3 {
+  margin: 0.6rem 0 0 0;
+}
+
+h2 {
+  letter-spacing: -0.05rem;
+  margin: 2.5rem 0 0 0;
+}
+
+h3 {
+  font-size: 1.1rem;
+  line-height: 1.35;
+}
+
+dl {
+  font-size: 1rem;
+  margin: 0.75rem 0 0 0;
+}
+

@@ -47,7 +47,7 @@ export default class OrbitCamera {
   }
 
   handleMouseMove(e) {
-    var newMousePosition = { x: e.offsetX, y: e.offsetY }
+    var newMousePosition = { x: e.screenX, y: e.screenY }
 
     if (this.mousePosition !== undefined && this.dragging) {
       var deltaX = newMousePosition.x - this.mousePosition.x

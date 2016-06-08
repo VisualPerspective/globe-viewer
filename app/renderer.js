@@ -26,9 +26,9 @@ export default class Renderer {
     )
 
     this.textures = twgl.createTextures(gl, {
-      diffuseMap: { src: 'data/color-4096.png' },
-      topographyMap: { src: 'data/topography-4096.png' },
-      bathymetryMap: { src: 'data/bathymetry-4096.png' }
+      diffuseMap: { src: 'data/color-8192.png' },
+      topographyMap: { src: 'data/topography-8192.png' },
+      bathymetryMap: { src: 'data/bathymetry-8192.png' }
     })
 
     if (ext) {
@@ -51,7 +51,7 @@ export default class Renderer {
       diffuseMap: this.textures.diffuseMap,
       topographyMap: this.textures.topographyMap,
       bathymetryMap: this.textures.bathymetryMap,
-      lightPosition: [1, 1, 0]
+      lightPosition: [1, 1, 1]
     }
   }
 
@@ -63,6 +63,8 @@ export default class Renderer {
     gl.enable(gl.DEPTH_TEST)
     gl.enable(gl.CULL_FACE)
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT)
+
+    var model = m4.identity();
 
     var projection = m4.perspective(
       30 * Math.PI / 180,
@@ -85,9 +87,9 @@ export default class Renderer {
     var viewProjection = m4.multiply(view, projection)
 
     Object.assign(this.uniforms, {
+      model: model,
       view: view,
-      viewProjection: viewProjection,
-      sphereMix: (Math.sin(time * 0.001) + 1) / 2
+      projection: projection
     })
 
     gl.useProgram(this.programInfo.program)

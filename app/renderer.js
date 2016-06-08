@@ -1,6 +1,7 @@
 import twgl from 'twgl.js'
-import vert from './shader.vert'
-import frag from './shader.frag'
+import vert from './shader.vert.glsl'
+import frag from './shader.frag.glsl'
+
 var m4 = twgl.m4
 
 export default class Renderer {
@@ -11,7 +12,10 @@ export default class Renderer {
 
     var ext = gl.getExtension("EXT_texture_filter_anisotropic")
 
-    this.programInfo = twgl.createProgramInfo(gl, [vert, frag])
+    this.programInfo = twgl.createProgramInfo(gl, [
+      vert,
+      frag
+    ])
 
     this.bufferInfo = twgl.primitives.createPlaneBufferInfo(
       gl,

@@ -51,7 +51,7 @@ export default class Renderer {
       diffuseMap: this.textures.diffuseMap,
       topographyMap: this.textures.topographyMap,
       bathymetryMap: this.textures.bathymetryMap,
-      lightPosition: [1, 1, 1]
+      lightPosition: [1, -0.2, -1]
     }
   }
 

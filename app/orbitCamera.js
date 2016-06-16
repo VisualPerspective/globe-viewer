@@ -7,9 +7,9 @@ export default class OrbitCamera {
 
     this.orbit = 0
 
-    this.elevation = (Math.PI / 2) * 0.99
-    this.minElevation = 0
-    this.maxElevation = this.elevation
+    this.elevation = 0
+    this.minElevation = -(Math.PI / 2 * 0.99)
+    this.maxElevation = (Math.PI / 2 * 0.99)
 
     this.distance = 2.5
     this.minDistance = 0.5
@@ -20,7 +20,7 @@ export default class OrbitCamera {
     this.mousePosition = undefined
 
     this.mouseOrbitSpeed = 0.003
-    this.mouseElevationSpeed = 0.01
+    this.mouseElevationSpeed = 0.003
     this.mouseDistanceSpeed = 0.001
 
     document.addEventListener('mousemove', (e) => {

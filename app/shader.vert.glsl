@@ -23,7 +23,7 @@ varying vec3 vLightPosition;
 const float PI = 3.141592653589793;
 
 void main(void) {
-  mat4 modelView = model * view;
+  mat4 modelView = view * model;
   vUv = vec2(1, 1) - texcoord;
 
   vec3 planePosition = position;
@@ -36,17 +36,17 @@ void main(void) {
   float scale = (1.0 + planePosition.y);
   vec3 spherePosition = vec3(
     scale * sin(planePosition.x * PI) * cos(planePosition.z * PI),
-    scale * cos(planePosition.x * PI) * cos(planePosition.z * PI),
-    scale * sin(planePosition.z * PI)
+    scale * sin(planePosition.z * PI),
+    scale * -cos(planePosition.x * PI) * cos(planePosition.z * PI)
   );
 
   vec3 mixPosition = mix(planePosition, spherePosition, 1.0);
 
-  gl_Position = projection * modelView * vec4(planePosition, 1.0);
-  vPosition = vec3(modelView * vec4(spherePosition, 1.0));
+  gl_Position = projection * modelView * vec4(mixPosition, 1.0);
+  vPosition = vec3(modelView * vec4(mixPosition, 1.0));
 
   vLightPosition = normalize(vec3(view * vec4(lightPosition, 0.0)));
 
   mat3 normalMatrix = transpose(inverse(mat3(modelView)));
-  vNormal = normalize(normalMatrix * spherePosition);
+  vNormal = normalize(normalMatrix * mixPosition);
 }

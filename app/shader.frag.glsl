@@ -57,18 +57,48 @@ vec2 heightDerivative(vec2 texST) {
 
 
 void main() {
-  vec2 dHdxy = heightDerivative(vUv) * 0.002;
+  vec2 dHdxy = heightDerivative(vUv) * 0.005;
   vec3 pNormal = perturbNormal(
     normalize(vPosition),
     normalize(vNormal),
     dHdxy
   );
 
-  vec3 N = normalize(vNormal);
+  vec3 N = normalize(pNormal);
   vec3 L = normalize(vLightPosition);
-  float diffuse = lambert(L, N) * 0.95 + 0.05;
+  float bumpDiffuse = lambert(
+    normalize(pNormal),
+    normalize(vLightPosition)
+  );
 
-  vec4 baseColor = texture2D(diffuseMap, vUv);
+  float surfaceDiffuse = lambert(
+    normalize(vNormal),
+    normalize(vLightPosition)
+  );
+
+  float diffuse = mix(
+    bumpDiffuse,
+    surfaceDiffuse,
+    0.5
+  );
+
+  if (surfaceDiffuse < 0.3) {
+    diffuse = mix(
+      surfaceDiffuse,
+      bumpDiffuse,
+      0.5 * surfaceDiffuse / 0.3
+    );
+  }
+
+  diffuse = diffuse * 0.99 + 0.01;
+
+  float oceanDepth = texture2D(bathymetryMap, vUv).x;
+  vec4 baseColor = mix(
+    vec4(0.0, 0.1, 0.2, 1.0),
+    toLinear(texture2D(diffuseMap, vUv)),
+    oceanDepth
+  );
+
   vec4 finalColor = vec4(baseColor.rgb * diffuse, 1.0);
 
   gl_FragColor = toGamma(finalColor);

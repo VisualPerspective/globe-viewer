@@ -36,14 +36,14 @@ export default class Renderer {
         gl.TEXTURE_2D,
         ext.TEXTURE_MAX_ANISOTROPY_EXT,
         4
-      );
+      )
 
       for (name in this.textures) {
-        var texture = this.textures[name];
-        gl.bindTexture(gl.TEXTURE_2D, texture);
-        gl.texParameterf(gl.TEXTURE_2D, ext.TEXTURE_MAX_ANISOTROPY_EXT, 4);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+        var texture = this.textures[name]
+        gl.bindTexture(gl.TEXTURE_2D, texture)
+        gl.texParameterf(gl.TEXTURE_2D, ext.TEXTURE_MAX_ANISOTROPY_EXT, 4)
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE)
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE)
       }
     }
 
@@ -64,7 +64,7 @@ export default class Renderer {
     gl.enable(gl.CULL_FACE)
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT)
 
-    var model = m4.identity();
+    var model = m4.identity()
 
     var projection = m4.perspective(
       30 * Math.PI / 180,

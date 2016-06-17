@@ -40,7 +40,7 @@ void main(void) {
     scale * -cos(planePosition.x * PI) * cos(planePosition.z * PI)
   );
 
-  vec3 mixPosition = mix(planePosition, spherePosition, 1.0);
+  vec3 mixPosition = mix(planePosition, spherePosition, 0.0);
 
   gl_Position = projection * modelView * vec4(mixPosition, 1.0);
   vPosition = vec3(modelView * vec4(mixPosition, 1.0));
@@ -48,5 +48,5 @@ void main(void) {
   vLightPosition = normalize(vec3(view * vec4(lightPosition, 0.0)));
 
   mat3 normalMatrix = transpose(inverse(mat3(modelView)));
-  vNormal = normalize(normalMatrix * mixPosition);
+  vNormal = normalize(normalMatrix * spherePosition);
 }

@@ -1,5 +1,5 @@
 import twgl from 'twgl.js'
-import vert from './shader.vert.glsl'
+import vert from './sphere.vert.glsl'
 import frag from './shader.frag.glsl'
 
 var m4 = twgl.m4
@@ -51,7 +51,7 @@ export default class Renderer {
       diffuseMap: this.textures.diffuseMap,
       topographyMap: this.textures.topographyMap,
       bathymetryMap: this.textures.bathymetryMap,
-      lightPosition: [1, -0.2, -1]
+      lightPosition: [1, 1, -1]
     }
   }
 

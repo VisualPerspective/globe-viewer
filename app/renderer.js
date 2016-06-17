@@ -1,5 +1,6 @@
 import twgl from 'twgl.js'
-import vert from './sphere.vert.glsl'
+import planeVert from './plane.vert.glsl'
+import sphereVert from './sphere.vert.glsl'
 import frag from './shader.frag.glsl'
 
 var m4 = twgl.m4
@@ -12,17 +13,14 @@ export default class Renderer {
 
     var ext = gl.getExtension("EXT_texture_filter_anisotropic")
 
-    this.programInfo = twgl.createProgramInfo(gl, [
-      vert,
-      frag
-    ])
+    this.planeProgram = twgl.createProgramInfo(gl, [planeVert, frag])
+    this.planeBuffer = twgl.primitives.createPlaneBufferInfo(
+      gl, 2, 1, 250, 250
+    )
 
-    this.bufferInfo = twgl.primitives.createPlaneBufferInfo(
-      gl,
-      2,
-      1,
-      250,
-      250
+    this.sphereProgram = twgl.createProgramInfo(gl, [sphereVert, frag])
+    this.sphereBuffer = twgl.primitives.createPlaneBufferInfo(
+      gl, 2, 1, 250, 250
     )
 
     this.textures = twgl.createTextures(gl, {
@@ -92,13 +90,21 @@ export default class Renderer {
       projection: projection
     })
 
-    gl.useProgram(this.programInfo.program)
-    twgl.setBuffersAndAttributes(gl, this.programInfo, this.bufferInfo)
-    twgl.setUniforms(this.programInfo, this.uniforms)
+    var program = this.planeProgram;
+    var buffer = this.planeBuffer;
+
+    if (camera.sphereMode) {
+      program = this.sphereProgram;
+      buffer = this.sphereBuffer;
+    }
+
+    gl.useProgram(program.program)
+    twgl.setBuffersAndAttributes(gl, program, buffer)
+    twgl.setUniforms(program, this.uniforms)
 
     gl.drawElements(
       gl.TRIANGLES,
-      this.bufferInfo.numElements,
+      buffer.numElements,
       gl.UNSIGNED_SHORT,
       0
     )

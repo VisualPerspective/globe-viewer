@@ -76,27 +76,42 @@ void main() {
     normalize(vLightPosition)
   );
 
-  float diffuse = mix(
-    bumpDiffuse,
-    surfaceDiffuse,
-    0.5
-  );
+  float landness = texture2D(diffuseMap, vUv).a;
+  float oceanDepth = texture2D(bathymetryMap, vUv).r;
 
-  if (surfaceDiffuse < 0.3) {
-    diffuse = mix(
-      surfaceDiffuse,
-      bumpDiffuse,
-      0.5 * surfaceDiffuse / 0.3
+  float bumpiness = 0.2;
+
+  if (landness < 0.5) {
+    bumpiness = 0.0;
+  }
+
+  float shadowStart = 0.15;
+  if (surfaceDiffuse < shadowStart) {
+    bumpiness = mix(
+      0.0,
+      bumpiness,
+      surfaceDiffuse / shadowStart
     );
   }
 
+  float diffuse = mix(
+    surfaceDiffuse,
+    bumpDiffuse,
+    bumpiness
+  );
+
   diffuse = diffuse * 0.99 + 0.01;
 
-  float oceanDepth = texture2D(bathymetryMap, vUv).x;
-  vec4 baseColor = mix(
-    vec4(0.0, 0.1, 0.2, 1.0),
-    toLinear(texture2D(diffuseMap, vUv)),
+  vec4 oceanColor = mix(
+    vec4(0.0, 0.05, 0.1, 1.0),
+    vec4(0.0, 0.075, 0.15, 1.0),
     oceanDepth
+  );
+
+  vec4 baseColor = mix(
+    oceanColor,
+    toLinear(texture2D(diffuseMap, vUv)),
+    landness * oceanDepth
   );
 
   vec4 finalColor = vec4(baseColor.rgb * diffuse, 1.0);

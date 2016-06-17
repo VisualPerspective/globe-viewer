@@ -5,23 +5,31 @@ export default class OrbitCamera {
     this.gl = gl
     this.fov = 50
 
-    this.orbit = 0
+    this.longitude = 90
+    this.minLongitude = 0
+    this.maxLongitude = 180
 
-    this.elevation = 0
-    this.minElevation = -(Math.PI / 2 * 0.99)
-    this.maxElevation = (Math.PI / 2 * 0.99)
+    this.latitude = 0
+    this.minLatitude = -90
+    this.maxLatitude = 90
 
-    this.distance = 2.5
-    this.minDistance = 0.5
-    this.maxDistance = 4
+    this.zoom = 0.0
+    this.minZoom = 0.5
+    this.maxZoom = 1.0
 
     this.dragging = false
     this.dragStart = undefined
     this.mousePosition = undefined
 
-    this.mouseOrbitSpeed = 0.003
-    this.mouseElevationSpeed = 0.003
-    this.mouseDistanceSpeed = 0.001
+    this.mouseLatitudeSpeed = 0.03
+    this.mouseLongitudeSpeed = 0.03
+    this.mouseZoomSpeed = 0.001
+
+    this.sphereMode = true
+
+    document.addEventListener('keydown', (e) => {
+      this.sphereMode = !this.sphereMode
+    })
 
     document.addEventListener('mousemove', (e) => {
       this.handleMouseMove(e)
@@ -36,7 +44,7 @@ export default class OrbitCamera {
     })
 
     gl.canvas.addEventListener('mousewheel', (e) => {
-      this.changeDistance(-e.wheelDelta * this.mouseDistanceSpeed)
+      this.changeZoom(-e.wheelDelta * this.mouseZoomSpeed)
       e.preventDefault()
       return false
     })
@@ -53,30 +61,34 @@ export default class OrbitCamera {
       var deltaX = newMousePosition.x - this.mousePosition.x
       var deltaY = newMousePosition.y - this.mousePosition.y
 
-      this.changeOrbit(deltaX * this.mouseOrbitSpeed)
-      this.changeElevation(deltaY * this.mouseElevationSpeed)
+      this.changeLongitude(deltaX * this.mouseLongitudeSpeed)
+      this.changeLatitude(deltaY * this.mouseLatitudeSpeed)
     }
 
     this.mousePosition = newMousePosition
   }
 
-  changeOrbit(amount) {
-    this.orbit = this.orbit + amount
-  }
-
-  changeElevation(amount) {
-    this.elevation = _.clamp(
-      this.elevation + amount,
-      this.minElevation,
-      this.maxElevation
+  changeLatitude(amount) {
+    this.latitude = _.clamp(
+      this.latitude + amount,
+      this.minLatitude,
+      this.maxLatitude
     )
   }
 
-  changeDistance(amount) {
-    this.distance = _.clamp(
-      this.distance + amount,
-      this.minDistance,
-      this.maxDistance
+  changeLongitude(amount) {
+    this.longitude = _.clamp(
+      this.longitude + amount,
+      this.minLongitude,
+      this.maxLongitude
+    )
+  }
+
+  changeZoom(amount) {
+    this.zoom = _.clamp(
+      this.zoom + amount,
+      this.minZoom,
+      this.maxZoom
     )
   }
 }

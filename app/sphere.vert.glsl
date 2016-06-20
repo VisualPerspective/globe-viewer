@@ -9,16 +9,18 @@ attribute vec2 texcoord;
 
 uniform sampler2D topographyMap;
 uniform sampler2D bathymetryMap;
-uniform vec3 lightPosition;
+uniform vec3 lightDirection;
 
 uniform mat4 model;
 uniform mat4 view;
 uniform mat4 projection;
+uniform vec3 eye;
 
 varying vec2 vUv;
 varying vec3 vPosition;
 varying vec3 vNormal;
-varying vec3 vLightPosition;
+varying vec3 vLightDirection;
+varying vec3 vEye;
 
 const float PI = 3.141592653589793;
 
@@ -30,7 +32,7 @@ void main(void) {
   pos.y += (
     texture2D(topographyMap, vUv).r +
     texture2D(bathymetryMap, vUv).r
-  ) * 0.01;
+  ) * 0.001;
 
   float scale = (1.0 + pos.y);
   vec3 spherePosition = vec3(
@@ -40,10 +42,11 @@ void main(void) {
   );
 
   gl_Position = projection * modelView * vec4(spherePosition, 1.0);
-  vPosition = vec3(modelView * vec4(spherePosition, 1.0));
+  vPosition = vec3(model * vec4(spherePosition, 1.0));
+  vEye = eye;
 
-  vLightPosition = normalize(vec3(view * vec4(lightPosition, 0.0)));
+  vLightDirection = lightDirection;
 
-  mat3 normalMatrix = transpose(inverse(mat3(modelView)));
+  mat3 normalMatrix = transpose(inverse(mat3(model)));
   vNormal = normalize(normalMatrix * spherePosition);
 }

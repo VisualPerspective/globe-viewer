@@ -5,6 +5,7 @@ precision highp float;
 #pragma glslify: toLinear = require(glsl-gamma/in)
 #pragma glslify: toGamma = require(glsl-gamma/out)
 #pragma glslify: luma = require(glsl-luma)
+#pragma glslify: cookTorranceSpec = require(glsl-specular-cook-torrance)
 
 uniform float time;
 uniform mat4 view;
@@ -15,7 +16,10 @@ uniform sampler2D diffuseMap;
 varying vec2 vUv;
 varying vec3 vPosition;
 varying vec3 vNormal;
-varying vec3 vLightPosition;
+varying vec3 vLightDirection;
+varying vec3 vEye;
+
+const float PI = 3.141592653589793;
 
 // Based on https://docs.unrealengine.com/latest/attachments/Engine/Rendering/LightingAndShadows/BumpMappingWithoutTangentSpace5mm_sfgrad_bump.pdf
 vec3 perturbNormal(vec3 surf_pos, vec3 surf_norm, vec2 dHdxy) {
@@ -56,65 +60,65 @@ vec2 heightDerivative(vec2 texST) {
 }
 
 
+float fresnel(float f0, vec3 n, vec3 l) {
+  return f0 + (1.0 - f0) * pow(1.0 - dot(n, l), 5.0);
+}
+
 void main() {
-  vec2 dHdxy = heightDerivative(vUv) * 0.005;
+  float bumpScale = mix(
+    0.001,
+    0.003,
+    clamp(distance(vEye, vPosition), 0.0, 10.0)
+  );
+
+
+  vec2 dHdxy = heightDerivative(vUv) * bumpScale;
   vec3 pNormal = perturbNormal(
     normalize(vPosition),
     normalize(vNormal),
     dHdxy
   );
 
-  vec3 N = normalize(pNormal);
-  vec3 L = normalize(vLightPosition);
-  float bumpDiffuse = lambert(
-    normalize(pNormal),
-    normalize(vLightPosition)
-  );
-
-  float surfaceDiffuse = lambert(
-    normalize(vNormal),
-    normalize(vLightPosition)
-  );
+  float vNdotL = dot(vNormal, vLightDirection);
 
   float landness = texture2D(diffuseMap, vUv).a;
   float oceanDepth = texture2D(bathymetryMap, vUv).r;
 
-  float bumpiness = 0.2;
+  float bumpiness = 0.5;
 
   if (landness < 0.5) {
-    bumpiness = 0.0;
+    bumpiness = 0.1;
   }
 
-  float shadowStart = 0.15;
-  if (surfaceDiffuse < shadowStart) {
+  float shadowStart = 0.25;
+  if (vNdotL < shadowStart) {
     bumpiness = mix(
       0.0,
       bumpiness,
-      surfaceDiffuse / shadowStart
+      vNdotL / shadowStart
     );
   }
 
-  float diffuse = mix(
-    surfaceDiffuse,
-    bumpDiffuse,
-    bumpiness
+  vec3 oceanColor = mix(
+    vec3(0.0, 0.05, 0.1),
+    vec3(0.0, 0.05, 0.5),
+    pow(oceanDepth, 0.5)
   );
 
-  diffuse = diffuse * 0.99 + 0.01;
-
-  vec4 oceanColor = mix(
-    vec4(0.0, 0.05, 0.1, 1.0),
-    vec4(0.0, 0.075, 0.15, 1.0),
-    oceanDepth
-  );
-
-  vec4 baseColor = mix(
+  vec3 diffuseColor = mix(
     oceanColor,
-    toLinear(texture2D(diffuseMap, vUv)),
-    landness * oceanDepth
+    toLinear(texture2D(diffuseMap, vUv).rgb),
+    landness
   );
 
-  vec4 finalColor = vec4(baseColor.rgb * diffuse, 1.0);
+  vec3 N = normalize(mix(vNormal, pNormal, bumpiness));
+  vec3 L = normalize(vLightDirection);
+  vec3 V = normalize(vEye - vPosition);
+  vec3 H = normalize(L + V);
+  float NdotL = dot(N, L);
+  float NdotV = dot(N, V);
+  float NdotL_clamped = max(NdotL, 0.0);
+  float NdotV_clamped = max(NdotV, 0.0);
 
-  gl_FragColor = toGamma(finalColor);
+  gl_FragColor = vec4(1.0);
 }

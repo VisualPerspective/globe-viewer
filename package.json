@@ -18,6 +18,7 @@
     "glsl-gamma": "^2.0.0",
     "glsl-inverse": "^1.0.0",
     "glsl-luma": "^1.0.1",
+    "glsl-specular-cook-torrance": "^2.0.1",
     "glsl-transpose": "^1.0.0",
     "glslify": "^5.0.2",
     "glslify-brunch": "^1.0.0",

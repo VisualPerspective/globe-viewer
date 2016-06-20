@@ -5,24 +5,24 @@ export default class OrbitCamera {
     this.gl = gl
     this.fov = 50
 
-    this.longitude = 90
-    this.minLongitude = 0
+    this.longitude = 71
+    this.minLongitude = -180
     this.maxLongitude = 180
 
-    this.latitude = 0
+    this.latitude = 42.3
     this.minLatitude = -90
     this.maxLatitude = 90
 
-    this.zoom = 0.0
-    this.minZoom = 0.5
+    this.zoom = 0.5
+    this.minZoom = 0.0
     this.maxZoom = 1.0
 
     this.dragging = false
     this.dragStart = undefined
     this.mousePosition = undefined
 
-    this.mouseLatitudeSpeed = 0.03
-    this.mouseLongitudeSpeed = 0.03
+    this.mouseLatitudeSpeed = 0.3
+    this.mouseLongitudeSpeed = 0.3
     this.mouseZoomSpeed = 0.001
 
     this.sphereMode = true

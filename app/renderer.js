@@ -49,7 +49,7 @@ export default class Renderer {
       diffuseMap: this.textures.diffuseMap,
       topographyMap: this.textures.topographyMap,
       bathymetryMap: this.textures.bathymetryMap,
-      lightPosition: [1, 1, -1]
+      lightDirection: [1, 0.2, 1]
     }
   }
 
@@ -71,15 +71,38 @@ export default class Renderer {
       10
     )
 
-    var eye = [0, 0, -camera.distance]
+    var sphereEye = [0, 0, -(1.5 + camera.zoom * 3)]
+    var sphereCamera = m4.identity()
+    sphereCamera = m4.rotateY(sphereCamera, -(camera.longitude / 180 * Math.PI))
+    sphereCamera = m4.rotateX(sphereCamera, (camera.latitude / 180 * Math.PI))
+    sphereEye = m4.transformPoint(sphereCamera, sphereEye)
+    var sphereUp = m4.transformPoint(sphereCamera, [0, 1, 0])
+    var sphereTarget = [0, 0, 0]
 
-    var cameraMatrix = m4.identity()
-    cameraMatrix = m4.rotateY(cameraMatrix, -camera.orbit)
-    cameraMatrix = m4.rotateX(cameraMatrix, camera.elevation)
-    eye = m4.transformPoint(cameraMatrix, eye)
+    var planeEye = [0, (0.2 + camera.zoom * 2), 0]
+    var planeCamera = m4.identity()
+    planeCamera = m4.translate(planeCamera, [
+      (camera.longitude / 180),
+      0,
+      (camera.latitude / 180)
+    ])
+    planeEye = m4.transformPoint(planeCamera, planeEye)
+    var planeUp = [0, 0, 1]
+    var planeTarget = m4.transformPoint(planeCamera, [0, 0, 0])
 
-    var target = [0, 0, 0]
-    var up = [0, 1, 0]
+    var program = this.planeProgram
+    var buffer = this.planeBuffer
+    var eye = planeEye
+    var up = planeUp
+    var target = planeTarget
+
+    if (camera.sphereMode) {
+      program = this.sphereProgram
+      buffer = this.sphereBuffer
+      eye = sphereEye
+      up = sphereUp
+      target = sphereTarget
+    }
 
     var view = m4.inverse(m4.lookAt(eye, target, up))
     var viewProjection = m4.multiply(view, projection)
@@ -87,16 +110,10 @@ export default class Renderer {
     Object.assign(this.uniforms, {
       model: model,
       view: view,
-      projection: projection
+      projection: projection,
+      eye: eye,
+      time: time
     })
-
-    var program = this.planeProgram;
-    var buffer = this.planeBuffer;
-
-    if (camera.sphereMode) {
-      program = this.sphereProgram;
-      buffer = this.sphereBuffer;
-    }
 
     gl.useProgram(program.program)
     twgl.setBuffersAndAttributes(gl, program, buffer)

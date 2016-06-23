@@ -25,7 +25,7 @@ export default class Renderer {
     )
 
     this.textures = twgl.createTextures(gl, {
-      diffuseMap: { src: 'data/color-4096-2.png' },
+      diffuseMap: { src: 'data/color-4096.png' },
       topographyMap: { src: 'data/topography-4096.png' },
       bathymetryMap: { src: 'data/bathymetry-4096.png' },
       landmaskMap: { src: 'data/landmask-4096.png' },

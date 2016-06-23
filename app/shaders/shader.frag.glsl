@@ -84,7 +84,7 @@ void main() {
 
   float roughness = landness > 0.5 ?
     (0.5 + diffuseColor.r * 0.5) :
-    0.4;
+    0.5;
 
   float atmosphere = (NdotL_clamped * pow(1.0 - NdotV_clamped, 5.0)) * 0.1;
 
@@ -96,6 +96,7 @@ void main() {
   vec3 color = colorAmbient + atmosphere;
   float exposure = (2.0 - dot(V, L)) * 1.5;
   vec3 tonemapped = tonemap(color * exposure);
+  vec3 gamma = toGamma(tonemapped);
 
-  gl_FragColor = vec4(toGamma(tonemapped), 1.0);
+  gl_FragColor = vec4(gamma, 1.0);
 }

@@ -1,7 +1,7 @@
 import twgl from 'twgl.js'
-import planeVert from './plane.vert.glsl'
-import sphereVert from './sphere.vert.glsl'
-import frag from './shader.frag.glsl'
+import planeVert from './shaders/plane.vert.glsl'
+import sphereVert from './shaders/sphere.vert.glsl'
+import frag from './shaders/shader.frag.glsl'
 
 var m4 = twgl.m4
 
@@ -9,24 +9,27 @@ export default class Renderer {
   constructor(gl) {
     this.gl = gl
 
+    gl.clearColor(0, 0, 0, 0);
     gl.getExtension("OES_standard_derivatives")
 
     var ext = gl.getExtension("EXT_texture_filter_anisotropic")
 
     this.planeProgram = twgl.createProgramInfo(gl, [planeVert, frag])
     this.planeBuffer = twgl.primitives.createPlaneBufferInfo(
-      gl, 2, 1, 250, 250
+      gl, 2, 1, 50, 50
     )
 
     this.sphereProgram = twgl.createProgramInfo(gl, [sphereVert, frag])
-    this.sphereBuffer = twgl.primitives.createPlaneBufferInfo(
-      gl, 2, 1, 250, 250
+    this.sphereBuffer = twgl.primitives.createSphereBufferInfo(
+      gl, 1, 75, 75
     )
 
     this.textures = twgl.createTextures(gl, {
-      diffuseMap: { src: 'data/color-natural-8192.png' },
-      topographyMap: { src: 'data/topography-8192.png' },
-      bathymetryMap: { src: 'data/bathymetry-8192.png' }
+      diffuseMap: { src: 'data/color-4096-2.png' },
+      topographyMap: { src: 'data/topography-4096.png' },
+      bathymetryMap: { src: 'data/bathymetry-4096.png' },
+      landmaskMap: { src: 'data/landmask-4096.png' },
+      lightsMap: { src: 'data/lights-4096.png' }
     })
 
     if (ext) {
@@ -39,9 +42,10 @@ export default class Renderer {
       for (name in this.textures) {
         var texture = this.textures[name]
         gl.bindTexture(gl.TEXTURE_2D, texture)
-        gl.texParameterf(gl.TEXTURE_2D, ext.TEXTURE_MAX_ANISOTROPY_EXT, 4)
+        gl.texParameterf(gl.TEXTURE_2D, ext.TEXTURE_MAX_ANISOTROPY_EXT, 16)
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE)
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE)
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR)
       }
     }
 
@@ -49,7 +53,9 @@ export default class Renderer {
       diffuseMap: this.textures.diffuseMap,
       topographyMap: this.textures.topographyMap,
       bathymetryMap: this.textures.bathymetryMap,
-      lightDirection: [1, 0.2, 1]
+      landmaskMap: this.textures.landmaskMap,
+      lightsMap: this.textures.lightsMap,
+      lightDirection: [1, 0.2, -1]
     }
   }
 
@@ -63,6 +69,9 @@ export default class Renderer {
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT)
 
     var model = m4.identity()
+
+    var light = m4.identity()
+    light = m4.rotateY(light, time * 0.0001);
 
     var projection = m4.perspective(
       30 * Math.PI / 180,
@@ -111,8 +120,10 @@ export default class Renderer {
       model: model,
       view: view,
       projection: projection,
-      eye: eye,
-      time: time
+      planeEye: planeEye,
+      sphereEye: sphereEye,
+      time: time,
+      lightDirection: m4.transformPoint(light, [1, 0.2, -1])
     })
 
     gl.useProgram(program.program)

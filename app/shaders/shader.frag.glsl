@@ -84,7 +84,7 @@ void main() {
 
   float roughness = landness > 0.5 ?
     (0.5 + diffuseColor.r * 0.5) :
-    0.5;
+    0.3;
 
   float atmosphere = (NdotL_clamped * pow(1.0 - NdotV_clamped, 5.0)) * 0.1;
 

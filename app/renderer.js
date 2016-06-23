@@ -6,72 +6,47 @@ import frag from './shaders/shader.frag.glsl'
 var m4 = twgl.m4
 
 export default class Renderer {
-  constructor(gl) {
+  constructor(gl, scene) {
     this.gl = gl
 
     gl.clearColor(0, 0, 0, 0);
-    gl.getExtension("OES_standard_derivatives")
 
+    gl.getExtension("OES_standard_derivatives")
     var ext = gl.getExtension("EXT_texture_filter_anisotropic")
 
-    this.planeProgram = twgl.createProgramInfo(gl, [planeVert, frag])
-    this.planeBuffer = twgl.primitives.createPlaneBufferInfo(
-      gl, 2, 1, 50, 50
-    )
-
-    this.sphereProgram = twgl.createProgramInfo(gl, [sphereVert, frag])
-    this.sphereBuffer = twgl.primitives.createSphereBufferInfo(
-      gl, 1, 75, 75
-    )
-
-    this.textures = twgl.createTextures(gl, {
-      diffuseMap: { src: 'data/color-4096.png' },
-      topographyMap: { src: 'data/topography-4096.png' },
-      bathymetryMap: { src: 'data/bathymetry-4096.png' },
-      landmaskMap: { src: 'data/landmask-4096.png' },
-      lightsMap: { src: 'data/lights-4096.png' }
-    })
-
-    if (ext) {
-      gl.texParameterf(
-        gl.TEXTURE_2D,
-        ext.TEXTURE_MAX_ANISOTROPY_EXT,
-        4
-      )
-
-      for (name in this.textures) {
-        var texture = this.textures[name]
-        gl.bindTexture(gl.TEXTURE_2D, texture)
-        gl.texParameterf(gl.TEXTURE_2D, ext.TEXTURE_MAX_ANISOTROPY_EXT, 16)
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE)
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE)
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR)
-      }
-    }
+    gl.texParameterf(gl.TEXTURE_2D,
+      ext.TEXTURE_MAX_ANISOTROPY_EXT, 4)
 
     this.uniforms = {
-      diffuseMap: this.textures.diffuseMap,
-      topographyMap: this.textures.topographyMap,
-      bathymetryMap: this.textures.bathymetryMap,
-      landmaskMap: this.textures.landmaskMap,
-      lightsMap: this.textures.lightsMap,
       lightDirection: [1, 0.2, -1]
     }
-  }
 
-  render(time, camera) {
-    var gl = this.gl
-    twgl.resizeCanvasToDisplaySize(gl.canvas)
-    gl.viewport(0, 0, gl.canvas.width, gl.canvas.height)
+    for (name in scene.textures) {
+      var texture = scene.textures[name]
+      gl.bindTexture(gl.TEXTURE_2D, texture)
+      gl.texParameterf(gl.TEXTURE_2D, ext.TEXTURE_MAX_ANISOTROPY_EXT, 16)
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE)
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE)
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR)
+
+      this.uniforms[name] = texture
+    }
+
+    this.planeProgram = twgl.createProgramInfo(gl, [planeVert, frag])
+    this.sphereProgram = twgl.createProgramInfo(gl, [sphereVert, frag])
 
     gl.enable(gl.DEPTH_TEST)
     gl.enable(gl.CULL_FACE)
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT)
+  }
+
+  render(time, scene, camera) {
+    var gl = this.gl
+    twgl.resizeCanvasToDisplaySize(gl.canvas)
+    gl.viewport(0, 0, gl.canvas.width, gl.canvas.height)
 
     var model = m4.identity()
-
     var light = m4.identity()
-    light = m4.rotateY(light, time * 0.0001);
 
     var projection = m4.perspective(
       30 * Math.PI / 180,
@@ -102,14 +77,14 @@ export default class Renderer {
     var planeTarget = m4.transformPoint(planeCamera, [0, 0, 0])
 
     var program = this.planeProgram
-    var buffer = this.planeBuffer
+    var buffer = scene.planeBuffer
     var eye = planeEye
     var up = planeUp
     var target = planeTarget
 
     if (camera.sphereMode) {
       program = this.sphereProgram
-      buffer = this.sphereBuffer
+      buffer = scene.sphereBuffer
       eye = sphereEye
       up = sphereUp
       target = sphereTarget

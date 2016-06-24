@@ -5,7 +5,7 @@ import OrbitCamera from './orbitCamera'
 import FPSCounter from './fpsCounter'
 
 document.addEventListener('DOMContentLoaded', () => {
-  var gl = twgl.getWebGLContext(document.getElementById("c"))
+  var gl = twgl.getWebGLContext(document.querySelector(".map-canvas"))
 
   var scene = new Scene(gl)
   var renderer = new Renderer(gl, scene)

@@ -11,9 +11,25 @@ body {
   }
 }
 
-canvas {
- width: 100%;
- border: 1px solid #eee;
+.map-container {
+  height: 70vh;
+  width: 100%;
+  border: 1px solid #eee;
+  display: flex;
+}
+
+.map-controls {
+  flex-basis: 20rem;
+  flex-grow: 0;
+  border-right: 1px solid #eee;
+}
+
+.map-canvas {
+  flex-basis: 100%;
+  -ms-user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
 }
 
 p {

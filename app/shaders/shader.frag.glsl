@@ -32,7 +32,9 @@ bool isNan(float val) {
 void main() {
   vec3 V = normalize(vEye - vPosition);
   float vNdotL = dot(vNormal, vLightDirection);
+  float vNdotL_clamped = clamp(vNdotL, 0.0, 1.0);
   float vNdotV = dot(vNormal, V);
+  float vNdotV_clamped = clamp(vNdotV, 0.0, 1.0);
 
   float bumpScale = mix(
     0.001,
@@ -63,8 +65,8 @@ void main() {
   }
 
   vec3 oceanColor = mix(
-    vec3(0.0, 0.00, 0.4),
-    vec3(0.0, 0.05, 0.4),
+    vec3(0.0, 0.00, 0.3),
+    vec3(0.0, 0.05, 0.3),
     pow(oceanDepth, 0.5)
   );
 
@@ -83,15 +85,24 @@ void main() {
   float NdotV_clamped = max(NdotV, 0.000001);
 
   float roughness = landness > 0.5 ?
+<<<<<<< HEAD
     (0.5 + diffuseColor.r * 0.5) :
     0.3;
 
   float atmosphere = (NdotL_clamped * pow(1.0 - NdotV_clamped, 5.0)) * 0.1;
 
-  vec3 colorAmbient = 2.0 * max(0.5 - vNdotL, 0.0) *
-    pow(texture2D(lightsMap, vUv).r, 3.0) *
+  vec3 colorAmbient = 0.25 * step(vNdotL, 0.0) *
+    pow(texture2D(lightsMap, vUv).r, 1.0) *
     vec3(0.8, 0.8, 0.5) +
-    vec3(0.01, 0.01, 0.05) * diffuseColor;
+    0.016 * vec3(0.1, 0.1, 1.0) * diffuseColor +
+    atmosphere;
+
+  vec3 color = colorDiff + colorSpec + colorAmbient;
+  float exposure = mix(
+    2.0,
+    50.0,
+    pow((1.0 - dot(normalize(vEye), L)) / 2.0, 10.0)
+  );
 
   vec3 color = colorAmbient + atmosphere;
   float exposure = (2.0 - dot(V, L)) * 1.5;

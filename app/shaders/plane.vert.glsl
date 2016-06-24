@@ -33,7 +33,7 @@ void main(void) {
   float scale = 1.0 + (
     texture2D(topographyMap, vUv).r +
     texture2D(bathymetryMap, vUv).r
-  ) * 0.01;
+  ) * 0.0;
 
   vec3 spherePosition = vec3(
     scale * sin(planePosition.x * PI) * cos(planePosition.z * PI),

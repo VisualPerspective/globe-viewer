@@ -39,6 +39,12 @@ export default class OrbitCamera {
       this.dragging = true
     })
 
+    document.addEventListener('selectstart', (e) => {
+      if (this.dragging === true) {
+        e.preventDefault()
+      }
+    })
+
     document.addEventListener('mouseup', () => {
       this.dragging = false
     })

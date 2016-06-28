@@ -99,7 +99,7 @@ void main() {
 
   vec3 color = colorDiff + colorSpec + colorAmbient;
   float exposure = mix(
-    2.0,
+    2.5,
     50.0,
     pow((1.0 - dot(normalize(vEye), L)) / 2.0, 10.0)
   );

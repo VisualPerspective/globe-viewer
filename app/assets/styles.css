@@ -27,7 +27,7 @@ body {
 
 .map-controls>div {
   padding: 1rem;
-  border-bottom: 1px solid #888;
+  border-bottom: 1px solid #dedede;
   text-transform: uppercase;
   font-weight: bold;
   font-size: 13px;
@@ -67,11 +67,11 @@ body {
 }
 
 .range-control input[type=number] {
-  flex: 0 0 3rem;
+  flex: 0 0 5rem;
   min-width: 0;
   border-radius: 4px;
   border: 1px solid #ddd;
-  padding: 4px 5px;
+  padding: 6px 8px;
   margin: 0 0 0 0.5rem;
 }
 

@@ -1,4 +1,5 @@
 // Based on https://docs.unrealengine.com/latest/attachments/Engine/Rendering/LightingAndShadows/BumpMappingWithoutTangentSpace5mm_sfgrad_bump.pdf
+
 vec3 perturbNormal(vec3 surf_pos, vec3 surf_norm, vec2 dHdxy) {
     vec3 vSigmaX = dFdx(surf_pos);
     vec3 vSigmaY = dFdy(surf_pos);

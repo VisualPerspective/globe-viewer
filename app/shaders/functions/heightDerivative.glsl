@@ -1,4 +1,5 @@
 // Based on https://docs.unrealengine.com/latest/attachments/Engine/Rendering/LightingAndShadows/BumpMappingWithoutTangentSpace/mm_sfgrad_bump.pdf
+
 vec2 heightDerivative(vec2 texST, sampler2D map) {
     vec2 TexDx = dFdx(texST);
     vec2 TexDy = dFdy(texST);

@@ -1,13 +1,13 @@
 #extension GL_OES_standard_derivatives : enable
 precision highp float;
 
-#pragma glslify: lambert = require(glsl-diffuse-lambert)
 #pragma glslify: toLinear = require(glsl-gamma/in)
 #pragma glslify: toGamma = require(glsl-gamma/out)
 #pragma glslify: luma = require(glsl-luma)
 #pragma glslify: heightDerivative = require(./functions/heightDerivative)
 #pragma glslify: perturbNormal = require(./functions/perturbNormal)
 #pragma glslify: tonemap = require(./functions/tonemap)
+#pragma glslify: exposure = require(./functions/exposure)
 
 uniform float time;
 uniform mat4 view;
@@ -85,28 +85,26 @@ void main() {
   float NdotV_clamped = max(NdotV, 0.000001);
 
   float roughness = landness > 0.5 ?
-<<<<<<< HEAD
     (0.5 + diffuseColor.r * 0.5) :
     0.3;
 
   float atmosphere = (NdotL_clamped * pow(1.0 - NdotV_clamped, 5.0)) * 0.1;
+  float atmosphere = 0.0;
+  vec3 lightColor = vec3(1.0, 1.0, 0.99);
+  if (dot(vNormal, L) > 0.0) {
+    atmosphere = (
+      max(vNdotL_clamped, 0.0) * pow(1.0 - vNdotV_clamped, 5.0)
+    ) * 0.2;
+  }
 
-  vec3 colorAmbient = 0.01 * 1.0 *
+  vec3 colorAmbient = 0.01 *
     pow(texture2D(lightsMap, vUv).r, 1.0) *
     vec3(0.8, 0.8, 0.5) +
     0.001 * vec3(0.1, 0.1, 1.0) * diffuseColor +
     atmosphere;
 
-  vec3 color = colorDiff + colorSpec + colorAmbient;
-  float exposure = mix(
-    2.5,
-    300.0,
-    pow((1.0 - dot(normalize(vEye), L)) / 2.0, 8.0)
-  );
-
   vec3 color = colorAmbient + atmosphere;
-  float exposure = (2.0 - dot(V, L)) * 1.5;
-  vec3 tonemapped = tonemap(color * exposure);
+  vec3 tonemapped = tonemap(color * exposure(vEye, L));
   vec3 gamma = toGamma(tonemapped);
 
   gl_FragColor = vec4(gamma, 1.0);

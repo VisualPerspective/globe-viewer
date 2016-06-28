@@ -41,12 +41,21 @@ export default class Renderer {
 
   render(time, scene, camera) {
     var gl = this.gl
-    twgl.resizeCanvasToDisplaySize(gl.canvas)
+    var width = gl.canvas.parentNode.offsetWidth
+    var height = gl.canvas.parentNode.offsetHeight
+
+    if (width != gl.canvas.width ||
+        height != gl.canvas.height) {
+      gl.canvas.width = width
+      gl.canvas.height = height
+    }
+
     gl.viewport(0, 0, gl.canvas.width, gl.canvas.height)
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT)
 
     var model = m4.identity()
     var light = m4.identity()
+    light = m4.rotateY(light, -Math.PI)
 
     var projection = m4.perspective(
       30 * Math.PI / 180,

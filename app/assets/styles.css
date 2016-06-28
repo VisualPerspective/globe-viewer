@@ -28,6 +28,11 @@ body {
 .map-controls>div {
   padding: 1rem;
   border-bottom: 1px solid #888;
+  text-transform: uppercase;
+  font-weight: bold;
+  font-size: 13px;
+  color: #606060;
+  letter-spacing: 0px;
 }
 
 .map-canvas {
@@ -44,35 +49,30 @@ body {
   height: 100%;
 }
 
-.range-slider input {
+.range-control input {
   box-sizing: border-box;
 }
 
-.range-slider label {
+.range-control label {
   display: block;
-  text-transform: uppercase;
-  font-weight: bold;
-  font-size: 13px;
-  color: #606060;
-  letter-spacing: 0px;
   margin-bottom: -2px;
 }
 
-.range-slider>.slider {
+.range-control>.slider {
   display: flex;
 }
 
-.range-slider input[type=range] {
-  flex: 0 0 75%;
-  margin: 0 0.5rem 0 0;
+.range-control input[type=range] {
+  flex: 1 1 100%;
 }
 
-.range-slider input[type=number] {
-  flex: 1 0;
+.range-control input[type=number] {
+  flex: 0 0 3rem;
   min-width: 0;
   border-radius: 4px;
   border: 1px solid #ddd;
-  padding: 3px 5px;
+  padding: 4px 5px;
+  margin: 0 0 0 0.5rem;
 }
 
 p {

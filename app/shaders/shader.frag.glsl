@@ -91,17 +91,17 @@ void main() {
 
   float atmosphere = (NdotL_clamped * pow(1.0 - NdotV_clamped, 5.0)) * 0.1;
 
-  vec3 colorAmbient = 0.25 * step(vNdotL, 0.0) *
+  vec3 colorAmbient = 0.01 * 1.0 *
     pow(texture2D(lightsMap, vUv).r, 1.0) *
     vec3(0.8, 0.8, 0.5) +
-    0.016 * vec3(0.1, 0.1, 1.0) * diffuseColor +
+    0.001 * vec3(0.1, 0.1, 1.0) * diffuseColor +
     atmosphere;
 
   vec3 color = colorDiff + colorSpec + colorAmbient;
   float exposure = mix(
     2.5,
-    50.0,
-    pow((1.0 - dot(normalize(vEye), L)) / 2.0, 10.0)
+    300.0,
+    pow((1.0 - dot(normalize(vEye), L)) / 2.0, 8.0)
   );
 
   vec3 color = colorAmbient + atmosphere;

@@ -67,9 +67,17 @@ export default class Camera {
     if (this.mousePosition !== undefined && this.dragging) {
       var deltaX = newMousePosition.x - this.mousePosition.x
       var deltaY = newMousePosition.y - this.mousePosition.y
+      var zoomFactor = 1 - (this.zoom.value * 0.8);
 
-      this.changeLongitude(deltaX * this.longitude.mouseSpeed)
-      this.changeLatitude(deltaY * this.latitude.mouseSpeed)
+      this.changeLongitude(
+        deltaX * zoomFactor *
+        this.longitude.mouseSpeed
+      )
+
+      this.changeLatitude(
+        deltaY * zoomFactor *
+        this.latitude.mouseSpeed
+      )
     }
 
     this.mousePosition = newMousePosition

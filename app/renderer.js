@@ -64,7 +64,7 @@ export default class Renderer {
       10
     )
 
-    var sphereEye = [0, 0, -(6 - camera.zoom.value * 3)]
+    var sphereEye = [0, 0, -(4.5 - camera.zoom.value * 3)]
     var sphereCamera = m4.identity()
     sphereCamera = m4.rotateY(sphereCamera,
       -(camera.longitude.value / 180 * Math.PI) + Math.PI / 2

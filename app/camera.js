@@ -84,11 +84,16 @@ export default class Camera {
   }
 
   changeLongitude(amount) {
-    this.longitude.value = _.clamp(
-      this.longitude.value + amount,
-      this.longitude.min,
-      this.longitude.max
-    )
+    var value = this.longitude.value + amount;
+    if (value > this.longitude.max) {
+      var remainder = value % this.longitude.max
+      value = this.longitude.min + remainder
+    }
+    else if (value < this.longitude.min) {
+      value = this.longitude.max - (this.longitude.min - value)
+    }
+
+    this.longitude.value = value
   }
 
   changeZoom(amount) {

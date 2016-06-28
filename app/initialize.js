@@ -2,17 +2,19 @@ import twgl from 'twgl.js'
 import Controller from './controller'
 import Scene from './scene'
 import Renderer from './renderer'
-import OrbitCamera from './orbitCamera'
+import Camera from './camera'
 import FPSCounter from './fpsCounter'
 
 document.addEventListener('DOMContentLoaded', () => {
-  var gl = twgl.getWebGLContext(document.querySelector(".map-canvas"))
+  var gl = twgl.getWebGLContext(
+    document.querySelector(".map-canvas canvas")
+  )
 
-  var controller = new Controller()
   var scene = new Scene(gl)
   var renderer = new Renderer(gl, scene)
-  var camera = new OrbitCamera(gl)
+  var camera = new Camera(gl)
   var fpsCounter = new FPSCounter()
+  var controller = new Controller(camera)
 
   function tick(time) {
     if (

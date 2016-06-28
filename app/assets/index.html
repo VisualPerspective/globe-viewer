@@ -14,8 +14,32 @@
     <small>FPS: <span id="fps"></span></small>
   </h1>
   <div class="map-container">
-    <div class="map-controls"></div>
-    <canvas class="map-canvas"></canvas>
+    <div class="map-controls">
+      <range-slider
+        label="Latitude"
+        property="latitude"
+        value="0"
+        min="-90"
+        max="90">
+      </range-slider>
+      <range-slider
+        label="Longitude"
+        property="longitude"
+        value="90"
+        min="0"
+        max="180">
+      </range-slider>
+      <range-slider
+        label="Zoom"
+        property="zoom"
+        value="2"
+        min="0"
+        max="10">
+      </range-slider>
+    </div>
+    <div class="map-canvas">
+      <canvas></canvas>
+    </div>
   </div>
 </body>
 </html>

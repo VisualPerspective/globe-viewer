@@ -56,11 +56,11 @@ body {
 
 .range-control label {
   display: block;
-  margin-bottom: -2px;
+  margin-bottom: -3px;
 }
 
 .range-control.range-slider label {
-  margin-bottom: 4px;
+  margin-bottom: 3px;
 }
 
 .range-control>.slider {

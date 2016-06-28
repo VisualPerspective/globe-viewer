@@ -44,10 +44,18 @@ export default class Renderer {
     var width = gl.canvas.parentNode.offsetWidth
     var height = gl.canvas.parentNode.offsetHeight
 
-    if (width != gl.canvas.width ||
-        height != gl.canvas.height) {
-      gl.canvas.width = width
-      gl.canvas.height = height
+    if (width + 'px' != gl.canvas.style.width ||
+        height + 'px' != gl.canvas.style.height) {
+      // set the display size of the canvas.
+      gl.canvas.style.width = width + "px";
+      gl.canvas.style.height = height + "px";
+
+      // set the size of the drawingBuffer
+      var devicePixelRatio = window.devicePixelRatio || 1;
+      gl.canvas.width = width * devicePixelRatio;
+      gl.canvas.height = height * devicePixelRatio;
+
+      console.log(gl.canvas.width, gl.canvas.height)
     }
 
     gl.viewport(0, 0, gl.canvas.width, gl.canvas.height)

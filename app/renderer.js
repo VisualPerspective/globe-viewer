@@ -55,7 +55,7 @@ export default class Renderer {
 
     var model = m4.identity()
     var light = m4.identity()
-    light = m4.rotateY(light, -Math.PI)
+    light = m4.rotateY(light, scene.time.value / 24.0 * 2.0 * Math.PI)
 
     var projection = m4.perspective(
       30 * Math.PI / 180,

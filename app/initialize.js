@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
   var renderer = new Renderer(gl, scene)
   var camera = new Camera(gl)
   var fpsCounter = new FPSCounter()
-  var controls = new Controls(camera)
+  var controls = new Controls(scene, camera)
 
   function tick(time) {
     if (

@@ -3,11 +3,13 @@ import registerRangeSlider from 'components/rangeSlider'
 import registerRangeStepper from 'components/rangeStepper'
 
 export default class Controls {
-  constructor(camera) {
+  constructor(scene, camera) {
     var propertyMap = {
       'latitude': camera.latitude,
       'longitude': camera.longitude,
-      'zoom': camera.zoom
+      'zoom': camera.zoom,
+      'time': scene.time,
+      'season': scene.season
     }
 
     registerRangeSlider(propertyMap)

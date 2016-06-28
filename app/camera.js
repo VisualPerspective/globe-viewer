@@ -32,10 +32,6 @@ export default class Camera {
 
     this.sphereMode = true
 
-    document.addEventListener('keydown', (e) => {
-      this.sphereMode = !this.sphereMode
-    })
-
     document.addEventListener('mousemove', (e) => {
       this.handleMouseMove(e)
     })
@@ -55,7 +51,7 @@ export default class Camera {
     })
 
     gl.canvas.addEventListener('mousewheel', (e) => {
-      this.changeZoom(-e.wheelDelta * this.zoom.mouseSpeed)
+      this.changeZoom(e.wheelDelta * this.zoom.mouseSpeed)
       e.preventDefault()
       return false
     })

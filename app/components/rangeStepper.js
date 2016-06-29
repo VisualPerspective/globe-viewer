@@ -3,7 +3,12 @@ import Vue from 'vue'
 export default function registerRangeStepper(propertyMap) {
   Vue.component('range-stepper', Vue.extend({
     data: function () {
-      return propertyMap[this.property]
+      return propertyMap[this.property].data
+    },
+    computed: {
+      formatted: function () {
+        return propertyMap[this.property].formatted.apply(this)
+      }
     },
     props: [
       'label',
@@ -12,6 +17,7 @@ export default function registerRangeStepper(propertyMap) {
     template: `
       <div class="range-stepper range-control">
         <label>{{label}}</label>
+        <span>{{formatted}}</span>
         <div class="slider">
           <input type='range'
             min='{{min}}'

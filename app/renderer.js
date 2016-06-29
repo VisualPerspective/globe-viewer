@@ -1,4 +1,6 @@
 import twgl from 'twgl.js'
+import moment from 'moment'
+import sunCoordinates from 'coordinates.js'
 import planeVert from './shaders/plane.vert.glsl'
 import sphereVert from './shaders/sphere.vert.glsl'
 import frag from './shaders/shader.frag.glsl'
@@ -17,10 +19,7 @@ export default class Renderer {
     gl.texParameterf(gl.TEXTURE_2D,
       ext.TEXTURE_MAX_ANISOTROPY_EXT, 16)
 
-    this.uniforms = {
-      lightDirection: [1, 0.2, -1]
-    }
-
+    this.uniforms = {}
     for (name in scene.textures) {
       var texture = scene.textures[name]
       gl.bindTexture(gl.TEXTURE_2D, texture)
@@ -63,8 +62,16 @@ export default class Renderer {
 
     var model = m4.identity()
     var light = m4.identity()
-    light = m4.rotateZ(light, ((scene.season.value - 0.5) * 2 * 23.4 * 2) / 180 * Math.PI)
-    light = m4.rotateY(light, scene.time.value / 24 * 2 * Math.PI)
+
+    var time = moment('2016-01-01T00:00:00.000Z')
+      .utcOffset(0)
+      .dayOfYear(scene.dayOfYear.value)
+      .add(scene.hourOfDay.value * 60 * 60, 'seconds')
+
+    var sun = sunCoordinates(_.toInteger(time.format('x')))
+
+    light = m4.rotateY(light, -sun.hourAngle)
+    light = m4.rotateZ(light, -sun.declination)
 
     var projection = m4.perspective(
       30 * Math.PI / 180,
@@ -118,7 +125,7 @@ export default class Renderer {
       planeEye: planeEye,
       sphereEye: sphereEye,
       time: time,
-      lightDirection: m4.transformPoint(light, [1, 0.2, -1])
+      lightDirection: m4.transformPoint(light, [-1, 0, 0])
     })
 
     gl.useProgram(program.program)

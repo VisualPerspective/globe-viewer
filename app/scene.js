@@ -4,16 +4,16 @@ var m4 = twgl.m4
 
 export default class Scene {
   constructor(gl) {
-    this.time = {
+    this.hourOfDay = {
       value: 12, //UTC
       min: 0,
       max: 24
     }
 
-    this.season = {
-      value: 0.5, // 0-1 Jan1 - Dec31
-      min: 0.0,
-      max: 1.0
+    this.dayOfYear = {
+      value: 182,
+      min: 1,
+      max: 365
     }
 
     this.planeBuffer = twgl.primitives.createPlaneBufferInfo(

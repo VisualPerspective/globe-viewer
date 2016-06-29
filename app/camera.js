@@ -6,14 +6,14 @@ export default class Camera {
     this.fov = 50
 
     this.longitude = {
-      value: 71,
+      value: 0,
       min: -180,
       max: 180,
       mouseSpeed: 0.3
     }
 
     this.latitude = {
-      value: 42.3,
+      value: 0,
       min: -90,
       max: 90,
       mouseSpeed: 0.3

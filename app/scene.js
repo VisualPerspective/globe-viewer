@@ -1,4 +1,5 @@
 import twgl from 'twgl.js'
+import moment from 'moment'
 
 var m4 = twgl.m4
 
@@ -6,8 +7,8 @@ export default class Scene {
   constructor(gl) {
     this.hourOfDay = {
       value: 12, //UTC
-      min: 0,
-      max: 24
+      min: 0.001,
+      max: 23.999
     }
 
     this.dayOfYear = {
@@ -38,5 +39,12 @@ export default class Scene {
       landmaskMap: { src: 'data/landmask-4096.png' },
       lightsMap: { src: 'data/lights-4096.png' }
     })
+  }
+
+  calculatedMoment() {
+    return moment('2016-01-01T00:00:00.000Z')
+      .utcOffset(0)
+      .dayOfYear(this.dayOfYear.value)
+      .add(this.hourOfDay.value * 60 * 60, 'seconds')
   }
 }

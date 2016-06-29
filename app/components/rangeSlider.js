@@ -16,8 +16,10 @@ export default function registerRangeSlider(propertyMap) {
     ],
     template: `
       <div class="range-slider range-control">
-        <label>{{label}}</label>
-        <span>{{formatted}}</span>
+        <div class="top-row">
+          <label>{{label}}</label>
+          <span>{{formatted}}</span>
+        </div>
         <div class="slider">
           <input type='range'
             min='{{min}}'

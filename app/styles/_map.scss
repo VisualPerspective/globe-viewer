@@ -39,13 +39,16 @@
 
     input { box-sizing: border-box; }
 
-    label {
-      display: block;
-      margin-bottom: -3px;
+    >.top-row {
+      display: flex;
+      margin-bottom: -4px;
+      span {
+        flex: 1;
+        color: #6d6d6d;
+        font-weight: normal;
+        text-align: right;
+      }
     }
-
-    &.range-slider label { margin-bottom: 3px; }
-    >.slider { display: flex; }
 
     input[type=range] {
       flex: 1 1 100%;

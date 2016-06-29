@@ -1,5 +1,4 @@
 import twgl from 'twgl.js'
-import moment from 'moment'
 import sunCoordinates from 'coordinates.js'
 import planeVert from './shaders/plane.vert.glsl'
 import sphereVert from './shaders/sphere.vert.glsl'
@@ -63,11 +62,7 @@ export default class Renderer {
     var model = m4.identity()
     var light = m4.identity()
 
-    var time = moment('2016-01-01T00:00:00.000Z')
-      .utcOffset(0)
-      .dayOfYear(scene.dayOfYear.value)
-      .add(scene.hourOfDay.value * 60 * 60, 'seconds')
-
+    var time = scene.calculatedMoment()
     var sun = sunCoordinates(_.toInteger(time.format('x')))
 
     light = m4.rotateY(light, -sun.hourAngle)

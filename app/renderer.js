@@ -50,13 +50,13 @@ export default class Renderer {
 
       // set the size of the drawingBuffer
       var devicePixelRatio = window.devicePixelRatio || 1;
-      gl.canvas.width = width * devicePixelRatio;
-      gl.canvas.height = height * devicePixelRatio;
+      gl.canvas.width = Math.floor(width * devicePixelRatio);
+      gl.canvas.height = Math.floor(height * devicePixelRatio);
 
+      gl.viewport(0, 0, gl.canvas.width, gl.canvas.height)
       console.log(gl.canvas.width, gl.canvas.height)
     }
 
-    gl.viewport(0, 0, gl.canvas.width, gl.canvas.height)
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT)
 
     var model = m4.identity()

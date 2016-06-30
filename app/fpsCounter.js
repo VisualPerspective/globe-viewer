@@ -23,7 +23,7 @@ export default class FPSCounter {
 
   setText(text) {
     var fps = document.getElementById('fps')
-    if (fps !== undefined) {
+    if (fps !== null) {
       fps.textContent = text
     }
   }

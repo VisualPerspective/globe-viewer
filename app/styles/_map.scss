@@ -1,27 +1,35 @@
+$gray-bg: #fff;
+
 .map-container {
-  height: 70vh;
+  height: 100vh;
   width: 100%;
   border-radius: 5px;
   display: flex;
 
   .map-controls {
-    flex: 0 0 15rem;
-    border: 1px solid #888;
-    border-radius: 4px 0 0 4px;
+    flex: 0 0 20rem;
+    border: 1px solid #eee;
+    border-right-width: 0;
 
     >div {
-      padding: 0.75rem;
-      border-bottom: 1px solid #dedede;
+      padding: 0.75rem 1.5rem;
       text-transform: uppercase;
       font-weight: bold;
       font-size: 13px;
       color: #405060;
       letter-spacing: 0px;
     }
+
+    >h1 {
+      color: #00156b;
+      font-size: 16px;
+      letter-spacing: 0;
+      margin: 0;
+      padding: 0.75rem 1.5rem 0.25rem;
+    }
   }
 
   .map-canvas {
-    background: #000;
     flex-basis: 100%;
     -ms-user-select: none;
     -webkit-user-select: none;

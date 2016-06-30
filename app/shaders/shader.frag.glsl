@@ -8,11 +8,11 @@ precision highp float;
 #pragma glslify: perturbNormal = require(./functions/perturbNormal)
 #pragma glslify: tonemap = require(./functions/tonemap)
 #pragma glslify: exposure = require(./functions/exposure)
+#pragma glslify: terrainBumpScale = require(./functions/terrainBumpScale)
 
 uniform float time;
 uniform mat4 view;
 uniform sampler2D topographyMap;
-uniform sampler2D bathymetryMap;
 uniform sampler2D diffuseMap;
 uniform sampler2D landmaskMap;
 uniform sampler2D lightsMap;
@@ -36,33 +36,17 @@ void main() {
   float vNdotV = dot(vNormal, V);
   float vNdotV_clamped = clamp(vNdotV, 0.0, 1.0);
 
-  float bumpScale = mix(
-    0.001,
-    0.01,
-    vNdotL * vNdotL * vNdotV * (
-      (clamp(distance(vEye, vPosition), 0.0, 5.0) / 10.0 + 0.5)
-    )
-  );
+  float landness = texture2D(landmaskMap, vUv).r;
+  float oceanDepth = 1.0 - texture2D(topographyMap, vUv).r;
 
-  vec2 dHdxy = heightDerivative(vUv, topographyMap) * bumpScale;
+  vec2 dHdxy = heightDerivative(vUv, topographyMap) *
+    terrainBumpScale(landness, -0.05, vNdotL, vNdotV, vEye, vPosition);
+
   vec3 pNormal = perturbNormal(
     normalize(vPosition),
     normalize(vNormal),
     dHdxy
   );
-
-  float landness = texture2D(landmaskMap, vUv).r;
-  float oceanDepth = texture2D(bathymetryMap, vUv).r;
-
-  float bumpiness = 1.0;
-  float shadowStart = 0.25;
-  if (vNdotL < shadowStart) {
-    bumpiness = mix(
-      0.0,
-      bumpiness,
-      vNdotL / shadowStart
-    );
-  }
 
   vec3 oceanColor = mix(
     vec3(0.0, 0.00, 0.3),
@@ -76,7 +60,7 @@ void main() {
     landness
   );
 
-  vec3 N = normalize(mix(vNormal, pNormal, bumpiness));
+  vec3 N = normalize(pNormal);
   vec3 L = normalize(vLightDirection);
   vec3 H = normalize(L + V);
   float NdotL = dot(N, L);
@@ -85,10 +69,20 @@ void main() {
   float NdotV_clamped = max(NdotV, 0.000001);
 
   float roughness = landness > 0.5 ?
+<<<<<<< HEAD
     (0.5 + diffuseColor.r * 0.5) :
     0.3;
 
   float atmosphere = (NdotL_clamped * pow(1.0 - NdotV_clamped, 5.0)) * 0.1;
+=======
+    (1.0 - diffuseColor.r * 0.5) :
+    0.35;
+
+  float f0 = 0.05;
+  float D = 0.0;
+  float F = 0.0;
+  float G = 0.0;
+>>>>>>> add3b19... refactor bump map to function
   float atmosphere = 0.0;
   vec3 lightColor = vec3(1.0, 1.0, 0.99);
   if (dot(vNormal, L) > 0.0) {

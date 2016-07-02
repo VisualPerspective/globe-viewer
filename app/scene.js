@@ -34,8 +34,7 @@ export default class Scene {
 
     this.textures = twgl.createTextures(gl, {
       diffuseMap: { src: 'data/color-4096.png' },
-      topographyMap: { src: 'data/topography-4096.png' },
-      bathymetryMap: { src: 'data/bathymetry-4096.png' },
+      topographyMap: { src: 'data/topo-bathy-4096.png' },
       landmaskMap: { src: 'data/landmask-4096.png' },
       lightsMap: { src: 'data/lights-4096.png' }
     })

@@ -2,7 +2,7 @@
 
 float exposure(vec3 eye, vec3 L) {
   return mix(
-    2.5,
+    5.0,
     300.0,
     pow((1.0 - dot(normalize(eye), L)) / 2.0, 8.0)
   );

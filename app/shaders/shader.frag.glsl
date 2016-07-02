@@ -9,6 +9,7 @@ precision highp float;
 #pragma glslify: tonemap = require(./functions/tonemap)
 #pragma glslify: exposure = require(./functions/exposure)
 #pragma glslify: terrainBumpScale = require(./functions/terrainBumpScale)
+#pragma glslify: brdf = require(./functions/brdf)
 
 uniform float time;
 uniform mat4 view;
@@ -69,26 +70,23 @@ void main() {
   float NdotV_clamped = max(NdotV, 0.000001);
 
   float roughness = landness > 0.5 ?
-<<<<<<< HEAD
     (0.5 + diffuseColor.r * 0.5) :
     0.3;
 
   float atmosphere = (NdotL_clamped * pow(1.0 - NdotV_clamped, 5.0)) * 0.1;
-=======
-    (1.0 - diffuseColor.r * 0.5) :
-    0.35;
 
-  float f0 = 0.05;
-  float D = 0.0;
-  float F = 0.0;
-  float G = 0.0;
->>>>>>> add3b19... refactor bump map to function
   float atmosphere = 0.0;
   vec3 lightColor = vec3(1.0, 1.0, 0.99);
+  float atmosphere = 0.0;
+  vec3 lightColor = vec3(1.0, 1.0, 1.0) * 1.0;
+  vec3 color = vec3(0.0, 0.0, 0.0);
+
   if (dot(vNormal, L) > 0.0) {
     atmosphere = (
       max(vNdotL_clamped, 0.0) * pow(1.0 - vNdotV_clamped, 5.0)
     ) * 0.2;
+
+    color = lightColor * NdotL * brdf(diffuseColor, L, V, N);
   }
 
   vec3 colorAmbient = 0.01 *
@@ -97,7 +95,8 @@ void main() {
     0.001 * vec3(0.1, 0.1, 1.0) * diffuseColor +
     atmosphere;
 
-  vec3 color = colorAmbient + atmosphere;
+  color += colorAmbient;
+
   vec3 tonemapped = tonemap(color * exposure(vEye, L));
   vec3 gamma = toGamma(tonemapped);
 

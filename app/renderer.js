@@ -12,20 +12,12 @@ export default class Renderer {
     gl.clearColor(0, 0, 0, 0);
 
     gl.getExtension("OES_standard_derivatives")
-    let ext = gl.getExtension("EXT_texture_filter_anisotropic")
-
-    gl.texParameterf(gl.TEXTURE_2D,
-      ext.TEXTURE_MAX_ANISOTROPY_EXT, 16)
+    this.anisotropic = gl.getExtension("EXT_texture_filter_anisotropic")
 
     this.uniforms = {}
     for (name in scene.textures) {
       let texture = scene.textures[name]
-      gl.bindTexture(gl.TEXTURE_2D, texture)
-      gl.texParameterf(gl.TEXTURE_2D, ext.TEXTURE_MAX_ANISOTROPY_EXT, 16)
-      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.REPEAT)
-      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE)
-      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR)
-
+      this.setupGlobeTexture(gl, texture)
       this.uniforms[name] = texture
     }
 
@@ -35,8 +27,60 @@ export default class Renderer {
     gl.enable(gl.CULL_FACE)
   }
 
+  setupGlobeTexture(gl, texture) {
+    gl.bindTexture(gl.TEXTURE_2D, texture)
+
+    if (this.anisotropic) {
+      gl.texParameterf(
+        gl.TEXTURE_2D,
+        this.anisotropic.TEXTURE_MAX_ANISOTROPY_EXT,
+        16
+      )
+    }
+
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.REPEAT)
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE)
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR)
+  }
+
   render(time, scene, camera) {
     let gl = this.gl
+    this.updateCanvasSize(gl);
+
+    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT)
+
+    let model = m4.identity()
+    let light = m4.identity()
+
+    let moment = scene.calculatedMoment()
+    let sun = sunCoordinates(_.toInteger(moment.format('x')))
+
+    light = m4.rotateY(light, -sun.hourAngle)
+    light = m4.rotateZ(light, -sun.declination)
+
+    Object.assign(
+      this.uniforms,
+      camera.getRenderValues(gl),
+      {
+        model: model,
+        time: time,
+        lightDirection: m4.transformPoint(light, [-1, 0, 0])
+      }
+    )
+
+    gl.useProgram(this.globeProgram.program)
+    twgl.setBuffersAndAttributes(gl, this.globeProgram, scene.globeBuffer)
+    twgl.setUniforms(this.globeProgram, this.uniforms)
+
+    gl.drawElements(
+      gl.TRIANGLES,
+      scene.globeBuffer.numElements,
+      gl.UNSIGNED_SHORT,
+      0
+    )
+  }
+
+  updateCanvasSize(gl) {
     let width = gl.canvas.parentNode.offsetWidth
     let height = gl.canvas.parentNode.offsetHeight
 
@@ -52,61 +96,6 @@ export default class Renderer {
       gl.canvas.height = Math.floor(height * devicePixelRatio);
 
       gl.viewport(0, 0, gl.canvas.width, gl.canvas.height)
-      console.log(gl.canvas.width, gl.canvas.height)
     }
-
-    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT)
-
-    let model = m4.identity()
-    let light = m4.identity()
-
-    let moment = scene.calculatedMoment()
-    let sun = sunCoordinates(_.toInteger(moment.format('x')))
-
-    light = m4.rotateY(light, -sun.hourAngle)
-    light = m4.rotateZ(light, -sun.declination)
-
-    let projection = m4.perspective(
-      30 * Math.PI / 180,
-      gl.canvas.clientWidth / gl.canvas.clientHeight,
-      0.01,
-      10
-    )
-
-    let eye = [0, 0, -(4.5 - camera.zoom.value * 3)]
-    let cameraMatrix = m4.rotateY(m4.identity(),
-      -(camera.longitude.value / 180 * Math.PI) + Math.PI / 2
-    )
-
-    cameraMatrix = m4.rotateX(cameraMatrix,
-      camera.latitude.value / 180 * Math.PI
-    )
-
-    eye = m4.transformPoint(cameraMatrix, eye)
-    let up = m4.transformPoint(cameraMatrix, [0, 1, 0])
-    let target = [0, 0, 0]
-
-    let view = m4.inverse(m4.lookAt(eye, target, up))
-    let viewProjection = m4.multiply(view, projection)
-
-    Object.assign(this.uniforms, {
-      model: model,
-      view: view,
-      projection: projection,
-      eye: eye,
-      time: time,
-      lightDirection: m4.transformPoint(light, [-1, 0, 0])
-    })
-
-    gl.useProgram(this.globeProgram.program)
-    twgl.setBuffersAndAttributes(gl, this.globeProgram, scene.globeBuffer)
-    twgl.setUniforms(this.globeProgram, this.uniforms)
-
-    gl.drawElements(
-      gl.TRIANGLES,
-      scene.globeBuffer.numElements,
-      gl.UNSIGNED_SHORT,
-      0
-    )
   }
 }

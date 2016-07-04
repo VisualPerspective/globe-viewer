@@ -4,10 +4,10 @@ https://github.com/wdas/brdf/blob/master/src/brdfs/disney.brdf
 */
 
 vec3 baseColor = vec3(0.82, 0.67, 0.16);
-float metallic = 0.0;
-float subsurface = 0.0;
-float specular = 0.5;
-float roughness = 0.75;
+//float metallic = 0.0;
+//float subsurface = 0.5;
+//float specular = 0.5;
+//float roughness = 0.75;
 float specularTint = 0.0;
 float anisotropic = 0.0;
 float sheen = 0.0;
@@ -55,10 +55,16 @@ vec3 mon2lin(vec3 x) {
   return vec3(pow(x[0], 2.2), pow(x[1], 2.2), pow(x[2], 2.2));
 }
 
-vec3 brdf(vec3 baseColor, vec3 L, vec3 V, vec3 N) {
+vec3 brdf(
+  vec3 baseColor,
+  float metallic,
+  float subsurface,
+  float specular,
+  float roughness,
+  vec3 L, vec3 V, vec3 N
+) {
   float NdotL = dot(N, L);
   float NdotV = dot(N, V);
-  if (NdotL < 0.0 || NdotV < 0.0) return vec3(0);
 
   vec3 H = normalize(L + V);
   float NdotH = dot(N, H);

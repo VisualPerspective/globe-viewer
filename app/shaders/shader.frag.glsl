@@ -41,7 +41,7 @@ void main() {
   float oceanDepth = 1.0 - texture2D(topographyMap, vUv).r;
 
   vec2 dHdxy = heightDerivative(vUv, topographyMap) *
-    terrainBumpScale(landness, -0.05, vNdotL, vNdotV, vEye, vPosition);
+    terrainBumpScale(landness, 0.0, vNdotL, vNdotV, vEye, vPosition);
 
   vec3 pNormal = perturbNormal(
     normalize(vPosition),
@@ -50,8 +50,8 @@ void main() {
   );
 
   vec3 oceanColor = mix(
-    vec3(0.0, 0.00, 0.3),
-    vec3(0.0, 0.05, 0.3),
+    vec3(0.0, 0.0, 0.3),
+    vec3(0.0, 0.0, 0.35),
     pow(oceanDepth, 0.5)
   );
 
@@ -70,35 +70,38 @@ void main() {
   float NdotV_clamped = max(NdotV, 0.000001);
 
   float roughness = landness > 0.5 ?
-    (0.5 + diffuseColor.r * 0.5) :
-    0.3;
+    (1.0 - diffuseColor.r * 0.5) :
+    mix(0.75, 0.65, oceanDepth);
 
-  float atmosphere = (NdotL_clamped * pow(1.0 - NdotV_clamped, 5.0)) * 0.1;
+  vec3 atmosphere = vec3(0.0);
+  vec3 lightColor = vec3(1.0, 1.0, 1.0) * 10.0;
 
-  float atmosphere = 0.0;
-  vec3 lightColor = vec3(1.0, 1.0, 0.99);
-  float atmosphere = 0.0;
-  vec3 lightColor = vec3(1.0, 1.0, 1.0) * 1.0;
   vec3 color = vec3(0.0, 0.0, 0.0);
 
   if (dot(vNormal, L) > 0.0) {
     atmosphere = (
-      max(vNdotL_clamped, 0.0) * pow(1.0 - vNdotV_clamped, 5.0)
-    ) * 0.2;
+      max(pow(vNdotL_clamped, 5.0), 0.0) *
+      pow(1.0 - vNdotV_clamped, 12.0)
+    ) * vec3(0.1, 0.1, 1.0) * 20.0;
 
-    color = lightColor * NdotL * brdf(diffuseColor, L, V, N);
+    color = lightColor * pow(NdotL, 1.5) * brdf(
+      diffuseColor,
+      0.0, //metallic
+      0.5, //subsurface
+      landness > 0.5 ? 0.3 : 0.3, //specular
+      roughness, //roughness
+      L, V, N
+    );
   }
 
-  vec3 colorAmbient = 0.01 *
-    pow(texture2D(lightsMap, vUv).r, 1.0) *
-    vec3(0.8, 0.8, 0.5) +
-    0.001 * vec3(0.1, 0.1, 1.0) * diffuseColor +
-    atmosphere;
+  vec3 colorAmbient = 0.1 * (
+    texture2D(lightsMap, vUv).r * vec3(0.8, 0.8, 0.5) +
+    0.3 * vec3(0.1, 0.1, 1.0) * diffuseColor
+  ) * clamp((-vNdotL + 0.01) * 2.0, 0.0, 1.0);
 
-  color += colorAmbient;
+  color += colorAmbient + atmosphere;
 
   vec3 tonemapped = tonemap(color * exposure(vEye, L));
   vec3 gamma = toGamma(tonemapped);
-
   gl_FragColor = vec4(gamma, 1.0);
 }

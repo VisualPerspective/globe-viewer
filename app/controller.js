@@ -9,7 +9,7 @@ import PerformanceStats from './performanceStats'
 import registerRangeSlider from 'components/rangeSlider'
 import registerDebugPanel from 'components/debugPanel'
 
-export default class Controls {
+export default class Controller {
   constructor(gl) {
     this.scene = new Scene(gl)
     this.renderer = new Renderer(gl, this.scene)

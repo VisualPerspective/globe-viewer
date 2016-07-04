@@ -1,7 +1,7 @@
 import Vue from 'vue'
 
 export default function registerRangeSlider(
-  controls,
+  controller,
   propertyMap
 ) {
   Vue.component('range-slider', Vue.extend({
@@ -35,7 +35,7 @@ export default function registerRangeSlider(
     `,
     watch: {
       '$data': {
-        handler: () => { controls.updated() },
+        handler: () => { controller.updated() },
         deep:true
       }
     }

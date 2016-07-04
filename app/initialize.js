@@ -1,11 +1,11 @@
 import twgl from 'twgl.js'
-import Controls from './controls'
+import Controller from './controller'
 
 document.addEventListener('DOMContentLoaded', () => {
   let gl = twgl.getWebGLContext(
     document.querySelector(".map-canvas canvas")
   )
 
-  new Controls(gl)
+  new Controller(gl)
 })
 

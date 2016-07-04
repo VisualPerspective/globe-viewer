@@ -1,6 +1,8 @@
 import twgl from 'twgl.js'
 import moment from 'moment'
 
+import sunCoordinates from 'coordinates.js'
+
 const m4 = twgl.m4
 
 export default class Scene {
@@ -39,5 +41,15 @@ export default class Scene {
       .utcOffset(0)
       .dayOfYear(this.dayOfYear.value)
       .add(this.hourOfDay.value * 60 * 60, 'seconds')
+  }
+
+  getSunVector() {
+    let moment = this.calculatedMoment()
+    let sun = sunCoordinates(_.toInteger(moment.format('x')))
+
+    let light = m4.identity()
+    light = m4.rotateY(light, -sun.hourAngle)
+    light = m4.rotateZ(light, -sun.declination)
+    return light
   }
 }

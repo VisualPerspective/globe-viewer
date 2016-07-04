@@ -1,5 +1,4 @@
 import twgl from 'twgl.js'
-import sunCoordinates from 'coordinates.js'
 import globeVert from './shaders/globe.vert.glsl'
 import frag from './shaders/shader.frag.glsl'
 
@@ -50,13 +49,7 @@ export default class Renderer {
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT)
 
     let model = m4.identity()
-    let light = m4.identity()
-
-    let moment = scene.calculatedMoment()
-    let sun = sunCoordinates(_.toInteger(moment.format('x')))
-
-    light = m4.rotateY(light, -sun.hourAngle)
-    light = m4.rotateZ(light, -sun.declination)
+    let light = scene.getSunVector()
 
     Object.assign(
       this.uniforms,

@@ -29,6 +29,8 @@ export default class Scene {
       topographyMap: { src: 'data/topo-bathy-4096.png' },
       landmaskMap: { src: 'data/landmask-4096.png' },
       lightsMap: { src: 'data/lights-4096.png' }
+    }, () => {
+      window.dispatchEvent(new Event('texture-loaded'))
     })
   }
 

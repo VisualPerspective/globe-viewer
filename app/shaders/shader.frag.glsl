@@ -52,7 +52,7 @@ void main() {
   vec3 oceanColor = mix(
     vec3(0.0, 0.0, 0.3),
     vec3(0.0, 0.0, 0.35),
-    pow(oceanDepth, 0.5)
+    oceanDepth
   );
 
   vec3 diffuseColor = mix(
@@ -71,16 +71,15 @@ void main() {
 
   float roughness = landness > 0.5 ?
     (1.0 - diffuseColor.r * 0.5) :
-    mix(0.75, 0.65, oceanDepth);
+    mix(0.75, 0.55, oceanDepth);
 
   vec3 atmosphere = vec3(0.0);
   vec3 lightColor = vec3(1.0, 1.0, 1.0) * 10.0;
-
   vec3 color = vec3(0.0, 0.0, 0.0);
 
   if (dot(vNormal, L) > 0.0) {
     atmosphere = (
-      max(pow(vNdotL_clamped, 5.0), 0.0) *
+      max(pow(vNdotL_clamped, 2.0), 0.0) *
       pow(1.0 - vNdotV_clamped, 12.0)
     ) * vec3(0.1, 0.1, 1.0) * 20.0;
 
@@ -88,13 +87,13 @@ void main() {
       diffuseColor,
       0.0, //metallic
       0.5, //subsurface
-      landness > 0.5 ? 0.3 : 0.3, //specular
+      0.3, //specular
       roughness, //roughness
       L, V, N
     );
   }
 
-  vec3 colorAmbient = 0.1 * (
+  vec3 colorAmbient = 0.01 * (
     texture2D(lightsMap, vUv).r * vec3(0.8, 0.8, 0.5) +
     0.3 * vec3(0.1, 0.1, 1.0) * diffuseColor
   ) * clamp((-vNdotL + 0.01) * 2.0, 0.0, 1.0);

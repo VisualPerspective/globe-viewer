@@ -4,7 +4,11 @@ import numeral from 'numeral'
 import registerRangeSlider from 'components/rangeSlider'
 
 export default class Controls {
-  constructor(scene, camera) {
+  constructor(renderer, scene, camera) {
+    this.renderer = renderer
+    this.scene = scene
+    this.camera = camera
+
     var noFormat = function() {
       return ''
     }
@@ -44,9 +48,30 @@ export default class Controls {
       }
     }
 
-    registerRangeSlider(propertyMap)
+    registerRangeSlider(this, propertyMap)
 
-    this.vue = new Vue({ el: '.map-container' })
-    window.vue = this.vue
+    this.vue = new Vue({
+      el: '.map-container'
+    })
+
+    this.updateQueued = false
+    this.modelUpdated()
+  }
+
+  modelUpdated() {
+    if (!this.updateQueued) {
+      this.updateQueued = true
+      window.requestAnimationFrame(() => {
+        var time = window.performance.now()
+        this.renderer.render(
+          time,
+          this.scene,
+          this.camera,
+          this.renderer
+        )
+
+        this.updateQueued = false
+      })
+    }
   }
 }

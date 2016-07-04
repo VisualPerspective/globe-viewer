@@ -1,6 +1,9 @@
 import Vue from 'vue'
 
-export default function registerRangeSlider(propertyMap) {
+export default function registerRangeSlider(
+  controls,
+  propertyMap
+) {
   Vue.component('range-slider', Vue.extend({
     data: function () {
       return propertyMap[this.property].data
@@ -29,6 +32,14 @@ export default function registerRangeSlider(propertyMap) {
             v-model='value'>
         </div>
       </div>
-    `
+    `,
+    watch: {
+      '$data': {
+        handler:function() {
+          controls.modelUpdated()
+        },
+        deep:true
+      }
+    }
   }))
 }

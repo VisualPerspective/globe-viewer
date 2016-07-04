@@ -30,8 +30,6 @@ export default class Camera {
     this.dragStart = undefined
     this.mousePosition = undefined
 
-    this.sphereMode = true
-
     document.addEventListener('mousemove', (e) => {
       this.handleMouseMove(e)
     })

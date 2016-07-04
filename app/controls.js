@@ -60,6 +60,7 @@ export default class Controls {
     this.updateQueued = false
     this.updated()
     window.addEventListener('resize', () => { this.updated() })
+    window.addEventListener('texture-loaded', () => { this.updated() })
   }
 
   updated() {

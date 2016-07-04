@@ -17,15 +17,7 @@ export default class Scene {
       max: 365
     }
 
-    this.planeBuffer = twgl.primitives.createPlaneBufferInfo(
-      gl,
-      2, // width
-      1, // height
-      50, // width subdivisions
-      50  // height subdivisions
-    )
-
-    this.sphereBuffer = twgl.primitives.createSphereBufferInfo(
+    this.globeBuffer = twgl.primitives.createSphereBufferInfo(
       gl,
       1, // radius
       75, // subdivisions around

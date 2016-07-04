@@ -1,7 +1,6 @@
 import twgl from 'twgl.js'
 import sunCoordinates from 'coordinates.js'
-import planeVert from './shaders/plane.vert.glsl'
-import sphereVert from './shaders/sphere.vert.glsl'
+import globeVert from './shaders/globe.vert.glsl'
 import frag from './shaders/shader.frag.glsl'
 
 var m4 = twgl.m4
@@ -75,61 +74,38 @@ export default class Renderer {
       10
     )
 
-    var sphereEye = [0, 0, -(4.5 - camera.zoom.value * 3)]
-    var sphereCamera = m4.identity()
-    sphereCamera = m4.rotateY(sphereCamera,
+    let eye = [0, 0, -(4.5 - camera.zoom.value * 3)]
+    let cameraMatrix = m4.rotateY(m4.identity(),
       -(camera.longitude.value / 180 * Math.PI) + Math.PI / 2
     )
-    sphereCamera = m4.rotateX(sphereCamera, (camera.latitude.value / 180 * Math.PI))
-    sphereEye = m4.transformPoint(sphereCamera, sphereEye)
-    var sphereUp = m4.transformPoint(sphereCamera, [0, 1, 0])
-    var sphereTarget = [0, 0, 0]
 
-    var planeEye = [0, (2.2 - camera.zoom.value * 2), 0]
-    var planeCamera = m4.identity()
-    planeCamera = m4.translate(planeCamera, [
-      (camera.longitude.value / 180),
-      0,
-      (camera.latitude.value / 180)
-    ])
-    planeEye = m4.transformPoint(planeCamera, planeEye)
-    var planeUp = [0, 0, 1]
-    var planeTarget = m4.transformPoint(planeCamera, [0, 0, 0])
+    cameraMatrix = m4.rotateX(cameraMatrix,
+      camera.latitude.value / 180 * Math.PI
+    )
 
-    var program = this.planeProgram
-    var buffer = scene.planeBuffer
-    var eye = planeEye
-    var up = planeUp
-    var target = planeTarget
+    eye = m4.transformPoint(cameraMatrix, eye)
+    let up = m4.transformPoint(cameraMatrix, [0, 1, 0])
+    let target = [0, 0, 0]
 
-    if (camera.sphereMode) {
-      program = this.sphereProgram
-      buffer = scene.sphereBuffer
-      eye = sphereEye
-      up = sphereUp
-      target = sphereTarget
-    }
-
-    var view = m4.inverse(m4.lookAt(eye, target, up))
-    var viewProjection = m4.multiply(view, projection)
+    let view = m4.inverse(m4.lookAt(eye, target, up))
+    let viewProjection = m4.multiply(view, projection)
 
     Object.assign(this.uniforms, {
       model: model,
       view: view,
       projection: projection,
-      planeEye: planeEye,
-      sphereEye: sphereEye,
+      eye: eye,
       time: time,
       lightDirection: m4.transformPoint(light, [-1, 0, 0])
     })
 
-    gl.useProgram(program.program)
-    twgl.setBuffersAndAttributes(gl, program, buffer)
-    twgl.setUniforms(program, this.uniforms)
+    gl.useProgram(this.globeProgram.program)
+    twgl.setBuffersAndAttributes(gl, this.globeProgram, scene.globeBuffer)
+    twgl.setUniforms(this.globeProgram, this.uniforms)
 
     gl.drawElements(
       gl.TRIANGLES,
-      buffer.numElements,
+      scene.globeBuffer.numElements,
       gl.UNSIGNED_SHORT,
       0
     )

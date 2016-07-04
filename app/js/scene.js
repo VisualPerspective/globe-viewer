@@ -1,7 +1,7 @@
 import twgl from 'twgl.js'
 import moment from 'moment'
 
-import sunCoordinates from 'coordinates.js'
+import sunCoordinates from './coordinates.js'
 
 const m4 = twgl.m4
 

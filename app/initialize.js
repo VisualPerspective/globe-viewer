@@ -1,5 +1,5 @@
 import twgl from 'twgl.js'
-import Controller from './controller'
+import Controller from 'js/controller'
 
 document.addEventListener('DOMContentLoaded', () => {
   let gl = twgl.getWebGLContext(

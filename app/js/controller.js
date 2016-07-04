@@ -6,8 +6,8 @@ import Scene from './scene'
 import Renderer from './renderer'
 import Camera from './camera'
 import PerformanceStats from './performanceStats'
-import registerRangeSlider from 'components/rangeSlider'
-import registerDebugPanel from 'components/debugPanel'
+import registerRangeSlider from './components/rangeSlider'
+import registerDebugPanel from './components/debugPanel'
 
 export default class Controller {
   constructor(gl) {

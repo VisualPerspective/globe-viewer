@@ -1,6 +1,6 @@
 import twgl from 'twgl.js'
-import globeVert from './shaders/globe.vert.glsl'
-import frag from './shaders/shader.frag.glsl'
+import globeVert from '../shaders/globe.vert.glsl'
+import frag from '../shaders/shader.frag.glsl'
 
 const m4 = twgl.m4
 

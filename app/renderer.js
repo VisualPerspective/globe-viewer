@@ -3,7 +3,7 @@ import sunCoordinates from 'coordinates.js'
 import globeVert from './shaders/globe.vert.glsl'
 import frag from './shaders/shader.frag.glsl'
 
-var m4 = twgl.m4
+const m4 = twgl.m4
 
 export default class Renderer {
   constructor(gl, scene) {
@@ -12,14 +12,14 @@ export default class Renderer {
     gl.clearColor(0, 0, 0, 0);
 
     gl.getExtension("OES_standard_derivatives")
-    var ext = gl.getExtension("EXT_texture_filter_anisotropic")
+    let ext = gl.getExtension("EXT_texture_filter_anisotropic")
 
     gl.texParameterf(gl.TEXTURE_2D,
       ext.TEXTURE_MAX_ANISOTROPY_EXT, 16)
 
     this.uniforms = {}
     for (name in scene.textures) {
-      var texture = scene.textures[name]
+      let texture = scene.textures[name]
       gl.bindTexture(gl.TEXTURE_2D, texture)
       gl.texParameterf(gl.TEXTURE_2D, ext.TEXTURE_MAX_ANISOTROPY_EXT, 16)
       gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.REPEAT)
@@ -29,17 +29,16 @@ export default class Renderer {
       this.uniforms[name] = texture
     }
 
-    this.planeProgram = twgl.createProgramInfo(gl, [planeVert, frag])
-    this.sphereProgram = twgl.createProgramInfo(gl, [sphereVert, frag])
+    this.globeProgram = twgl.createProgramInfo(gl, [globeVert, frag])
 
     gl.enable(gl.DEPTH_TEST)
     gl.enable(gl.CULL_FACE)
   }
 
   render(time, scene, camera) {
-    var gl = this.gl
-    var width = gl.canvas.parentNode.offsetWidth
-    var height = gl.canvas.parentNode.offsetHeight
+    let gl = this.gl
+    let width = gl.canvas.parentNode.offsetWidth
+    let height = gl.canvas.parentNode.offsetHeight
 
     if (width + 'px' != gl.canvas.style.width ||
         height + 'px' != gl.canvas.style.height) {
@@ -48,7 +47,7 @@ export default class Renderer {
       gl.canvas.style.height = height + "px";
 
       // set the size of the drawingBuffer
-      var devicePixelRatio = window.devicePixelRatio || 1;
+      let devicePixelRatio = window.devicePixelRatio || 1;
       gl.canvas.width = Math.floor(width * devicePixelRatio);
       gl.canvas.height = Math.floor(height * devicePixelRatio);
 
@@ -58,16 +57,16 @@ export default class Renderer {
 
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT)
 
-    var model = m4.identity()
-    var light = m4.identity()
+    let model = m4.identity()
+    let light = m4.identity()
 
-    var time = scene.calculatedMoment()
-    var sun = sunCoordinates(_.toInteger(time.format('x')))
+    let moment = scene.calculatedMoment()
+    let sun = sunCoordinates(_.toInteger(moment.format('x')))
 
     light = m4.rotateY(light, -sun.hourAngle)
     light = m4.rotateZ(light, -sun.declination)
 
-    var projection = m4.perspective(
+    let projection = m4.perspective(
       30 * Math.PI / 180,
       gl.canvas.clientWidth / gl.canvas.clientHeight,
       0.01,

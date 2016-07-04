@@ -1,57 +1,62 @@
 import Vue from 'vue'
 import moment from 'moment'
 import numeral from 'numeral'
+
+import Scene from './scene'
+import Renderer from './renderer'
+import Camera from './camera'
+import PerformanceStats from './performanceStats'
 import registerRangeSlider from 'components/rangeSlider'
 import registerDebugPanel from 'components/debugPanel'
 
 export default class Controls {
-  constructor(renderer, scene, camera, performanceStats) {
-    this.renderer = renderer
-    this.scene = scene
-    this.camera = camera
-    this.performanceStats = performanceStats
+  constructor(gl) {
+    this.scene = new Scene(gl)
+    this.renderer = new Renderer(gl, this.scene)
+    this.camera = new Camera(gl)
+    this.performanceStats = new PerformanceStats()
 
-    var noFormat = function () {
+    let noFormat = function () {
       return ''
     }
 
-    var degrees = function () {
+    let degrees = function () {
       return numeral(this.value).format('0.00') + '°'
     }
 
-    var hour = function () {
-      return scene.calculatedMoment().format('h:mm a') + ' UTC'
+    let hour = () => {
+      return this.scene.calculatedMoment().format('h:mm a') + ' UTC'
     }
 
-    var days = function () {
-      return scene.calculatedMoment().format('YYYY-MM-DD')
+    let days = () => {
+      return this.scene.calculatedMoment().format('YYYY-MM-DD')
     }
 
-    var propertyMap = {
+    let propertyMap = {
       'latitude': {
-        data: camera.latitude,
+        data: this.camera.latitude,
         formatted: degrees
       },
       'longitude': {
-        data: camera.longitude,
+        data: this.camera.longitude,
         formatted: degrees
       },
       'zoom': {
-        data: camera.zoom,
+        data: this.camera.zoom,
         formatted: noFormat
       },
       'hourOfDay': {
-        data: scene.hourOfDay,
+        data: this.scene.hourOfDay,
         formatted: hour
       },
       'dayOfYear': {
-        data: scene.dayOfYear,
+        data: this.scene.dayOfYear,
         formatted: days
       }
     }
 
     registerRangeSlider(this, propertyMap)
-    registerDebugPanel(performanceStats)
+    registerDebugPanel(this.performanceStats)
 
     this.vue = new Vue({
       el: '.map-container'

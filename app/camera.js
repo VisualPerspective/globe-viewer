@@ -60,12 +60,12 @@ export default class Camera {
   }
 
   handleMouseMove(e) {
-    var newMousePosition = { x: e.screenX, y: e.screenY }
+    let newMousePosition = { x: e.screenX, y: e.screenY }
 
     if (this.mousePosition !== undefined && this.dragging) {
-      var deltaX = newMousePosition.x - this.mousePosition.x
-      var deltaY = newMousePosition.y - this.mousePosition.y
-      var zoomFactor = 1 - (this.zoom.value * 0.8);
+      let deltaX = newMousePosition.x - this.mousePosition.x
+      let deltaY = newMousePosition.y - this.mousePosition.y
+      let zoomFactor = 1 - (this.zoom.value * 0.8);
 
       this.changeLongitude(
         deltaX * zoomFactor *
@@ -90,9 +90,9 @@ export default class Camera {
   }
 
   changeLongitude(amount) {
-    var value = this.longitude.value + amount;
+    let value = this.longitude.value + amount;
     if (value > this.longitude.max) {
-      var remainder = value % this.longitude.max
+      let remainder = value % this.longitude.max
       value = this.longitude.min + remainder
     }
     else if (value < this.longitude.min) {

@@ -1,7 +1,7 @@
 import twgl from 'twgl.js'
 import moment from 'moment'
 
-var m4 = twgl.m4
+const m4 = twgl.m4
 
 export default class Scene {
   constructor(gl) {

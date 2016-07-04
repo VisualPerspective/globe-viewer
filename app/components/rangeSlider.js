@@ -35,9 +35,7 @@ export default function registerRangeSlider(
     `,
     watch: {
       '$data': {
-        handler:function() {
-          controls.modelUpdated()
-        },
+        handler: () => { controls.updated() },
         deep:true
       }
     }

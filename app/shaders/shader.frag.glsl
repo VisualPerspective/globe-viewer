@@ -3,7 +3,6 @@ precision highp float;
 
 #pragma glslify: toLinear = require(glsl-gamma/in)
 #pragma glslify: toGamma = require(glsl-gamma/out)
-#pragma glslify: luma = require(glsl-luma)
 #pragma glslify: heightDerivative = require(./functions/heightDerivative)
 #pragma glslify: perturbNormal = require(./functions/perturbNormal)
 #pragma glslify: tonemap = require(./functions/tonemap)
@@ -11,28 +10,20 @@ precision highp float;
 #pragma glslify: terrainBumpScale = require(./functions/terrainBumpScale)
 #pragma glslify: brdf = require(./functions/brdf)
 
-uniform float time;
-uniform mat4 view;
 uniform sampler2D topographyMap;
 uniform sampler2D diffuseMap;
 uniform sampler2D landmaskMap;
 uniform sampler2D lightsMap;
+uniform vec3 lightDirection;
+uniform vec3 eye;
 
 varying vec2 vUv;
 varying vec3 vPosition;
 varying vec3 vNormal;
-varying vec3 vLightDirection;
-varying vec3 vEye;
-
-const float PI = 3.141592653589793;
-
-bool isNan(float val) {
-  return (val <= 0.0 || 0.0 <= val) ? false : true;
-}
 
 void main() {
-  vec3 V = normalize(vEye - vPosition);
-  float vNdotL = dot(vNormal, vLightDirection);
+  vec3 V = normalize(eye - vPosition);
+  float vNdotL = dot(vNormal, lightDirection);
   float vNdotL_clamped = clamp(vNdotL, 0.0, 1.0);
   float vNdotV = dot(vNormal, V);
   float vNdotV_clamped = clamp(vNdotV, 0.0, 1.0);
@@ -41,13 +32,7 @@ void main() {
   float oceanDepth = 1.0 - texture2D(topographyMap, vUv).r;
 
   vec2 dHdxy = heightDerivative(vUv, topographyMap) *
-    terrainBumpScale(landness, 0.0, vNdotL, vNdotV, vEye, vPosition);
-
-  vec3 pNormal = perturbNormal(
-    normalize(vPosition),
-    normalize(vNormal),
-    dHdxy
-  );
+    terrainBumpScale(landness, 0.0, vNdotL, vNdotV, eye, vPosition);
 
   vec3 oceanColor = mix(
     vec3(0.0, 0.0, 0.3),
@@ -61,17 +46,15 @@ void main() {
     landness
   );
 
-  vec3 N = normalize(pNormal);
-  vec3 L = normalize(vLightDirection);
+  vec3 N = perturbNormal(normalize(vPosition), vNormal, dHdxy);
+  vec3 L = normalize(lightDirection);
   vec3 H = normalize(L + V);
-  float NdotL = dot(N, L);
-  float NdotV = dot(N, V);
-  float NdotL_clamped = max(NdotL, 0.000001);
-  float NdotV_clamped = max(NdotV, 0.000001);
 
-  float roughness = landness > 0.5 ?
-    (1.0 - diffuseColor.r * 0.5) :
-    mix(0.75, 0.55, oceanDepth);
+  float roughness = mix(
+    mix(0.75, 0.55, oceanDepth),
+    (1.0 - diffuseColor.r * 0.5),
+    step(0.5, landness)
+  );
 
   vec3 atmosphere = vec3(0.0);
   vec3 lightColor = vec3(1.0, 1.0, 1.0) * 10.0;
@@ -83,7 +66,7 @@ void main() {
       pow(1.0 - vNdotV_clamped, 12.0)
     ) * vec3(0.1, 0.1, 1.0) * 20.0;
 
-    color = lightColor * pow(NdotL, 1.5) * brdf(
+    color = lightColor * pow(dot(N, L), 1.5) * brdf(
       diffuseColor,
       0.0, //metallic
       0.5, //subsurface
@@ -100,7 +83,7 @@ void main() {
 
   color += colorAmbient + atmosphere;
 
-  vec3 tonemapped = tonemap(color * exposure(vEye, L));
+  vec3 tonemapped = tonemap(color * exposure(eye, L));
   vec3 gamma = toGamma(tonemapped);
   gl_FragColor = vec4(gamma, 1.0);
 }

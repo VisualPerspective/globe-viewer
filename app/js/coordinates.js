@@ -1,5 +1,4 @@
-const RAD2DEG = 180 / Math.PI
-const DEG2RAD = Math.PI / 180
+import { toRadians } from './utils'
 
 // https://www.npmjs.com/package/mod-loop
 function loop(value, divisor) {
@@ -21,16 +20,16 @@ export default function sunCoordinates(time) {
   let L = 280.459 + 0.98564736 * D
 
   let lambda = L +
-          1.915 * Math.sin(g * DEG2RAD) +
-          0.020 * Math.sin(2 * g * DEG2RAD)
+          1.915 * Math.sin(toRadians(g)) +
+          0.020 * Math.sin(toRadians(2 * g))
 
   let e = 23.439 - 0.00000036 * D
-  let y = Math.cos(e * DEG2RAD) * Math.sin(lambda * DEG2RAD)
-  let x = Math.cos(lambda * DEG2RAD)
+  let y = Math.cos(toRadians(e)) * Math.sin(toRadians(lambda))
+  let x = Math.cos(toRadians(lambda))
 
   let rightAscension = Math.atan2(y, x)
   let declination = Math.asin(
-    Math.sin(e * DEG2RAD) * Math.sin(lambda * DEG2RAD)
+    Math.sin(toRadians(e)) * Math.sin(toRadians(lambda))
   )
 
   let gmst = 18.697374558 + 24.06570982441908 * D;

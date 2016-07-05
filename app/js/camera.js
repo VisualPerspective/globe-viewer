@@ -2,6 +2,7 @@ import _ from 'lodash'
 import twgl from 'twgl.js'
 
 import ControlRange from './controlRange'
+import { toRadians } from './utils'
 
 const m4 = twgl.m4
 
@@ -66,23 +67,19 @@ export default class Camera {
 
   getRenderValues(gl) {
     let projection = m4.perspective(
-      30 * Math.PI / 180,
+      toRadians(30),
       gl.canvas.clientWidth / gl.canvas.clientHeight,
       0.01,
       10
     )
 
     let eye = [0, 0, -(4.5 - this.zoom.value * 3)]
-    let cameraMatrix = m4.rotateY(m4.identity(),
-      -(this.longitude.value / 180 * Math.PI) + Math.PI / 2
-    )
+    let camera = m4.identity()
+    m4.rotateY(camera, -toRadians(this.longitude.value - 90), camera)
+    m4.rotateX(camera, toRadians(this.latitude.value), camera)
 
-    cameraMatrix = m4.rotateX(cameraMatrix,
-      this.latitude.value / 180 * Math.PI
-    )
-
-    eye = m4.transformPoint(cameraMatrix, eye)
-    let up = m4.transformPoint(cameraMatrix, [0, 1, 0])
+    eye = m4.transformPoint(camera, eye)
+    let up = m4.transformPoint(camera, [0, 1, 0])
     let target = [0, 0, 0]
     let view = m4.inverse(m4.lookAt(eye, target, up))
 

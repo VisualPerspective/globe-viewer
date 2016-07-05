@@ -51,10 +51,12 @@ export default class Camera {
       this.dragging = false
     })
 
-    gl.canvas.addEventListener('mousewheel', (e) => {
-      this.changeZoom(e.wheelDelta * this.zoom.mouseSpeed)
-      e.preventDefault()
-      return false
+    window.addEventListener('wheel', (e) => {
+      if (e.target == gl.canvas) {
+        this.changeZoom(-e.deltaY * this.zoom.mouseSpeed)
+        e.preventDefault()
+        return false
+      }
     })
 
     gl.canvas.addEventListener('scroll', () => {

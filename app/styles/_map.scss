@@ -5,6 +5,7 @@ $gray-bg: #fff;
   width: 100%;
   border-radius: 5px;
   display: flex;
+  flex-direction: row-reverse;
 
   .map-controls {
     flex: 0 0 20rem;
@@ -39,17 +40,14 @@ $gray-bg: #fff;
   }
 
   .map-canvas {
-    flex-basis: 100%;
+    flex: 1 1;
+    overflow: hidden;
     -ms-user-select: none;
     -webkit-user-select: none;
     -moz-user-select: none;
     user-select: none;
 
-    canvas {
-      display: block;
-      width: 100%;
-      height: 100%;
-    }
+    canvas { display: block; }
   }
 
   .range-control {

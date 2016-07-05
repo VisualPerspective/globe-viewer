@@ -27,10 +27,27 @@ export default class Scene {
     )
 
     this.textures = twgl.createTextures(gl, {
-      diffuseMap: { src: 'data/color-4096.jpg' },
-      topographyMap: { src: 'data/topo-bathy-4096.jpg' },
-      landmaskMap: { src: 'data/landmask-4096.png' },
-      lightsMap: { src: 'data/lights-4096.png' }
+      diffuseMap: {
+        format: gl.RGB,
+        internalFormat: gl.RGB,
+        type: gl.UNSIGNED_SHORT_5_6_5,
+        src: 'data/color-4096.jpg'
+      },
+      topographyMap: {
+        format: gl.LUMINANCE,
+        internalFormat: gl.LUMINANCE,
+        src: 'data/topo-bathy-4096.jpg'
+      },
+      landmaskMap: {
+        src: 'data/landmask-4096.png',
+        format: gl.LUMINANCE,
+        internalFormat: gl.LUMINANCE,
+      },
+      lightsMap: {
+        src: 'data/lights-4096.png',
+        format: gl.LUMINANCE,
+        internalFormat: gl.LUMINANCE,
+      }
     }, () => {
       window.dispatchEvent(new Event('texture-loaded'))
     })

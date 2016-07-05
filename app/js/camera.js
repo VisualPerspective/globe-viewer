@@ -1,6 +1,8 @@
 import _ from 'lodash'
 import twgl from 'twgl.js'
 
+import ControlRange from './controlRange'
+
 const m4 = twgl.m4
 
 export default class Camera {
@@ -8,26 +10,9 @@ export default class Camera {
     this.gl = gl
     this.fov = 50
 
-    this.longitude = {
-      value: 0,
-      min: -180,
-      max: 180,
-      mouseSpeed: 0.3
-    }
-
-    this.latitude = {
-      value: 0,
-      min: -90,
-      max: 90,
-      mouseSpeed: 0.3
-    }
-
-    this.zoom = {
-      value: 0.5,
-      min: 0.0,
-      max: 1.0,
-      mouseSpeed: 0.001
-    }
+    this.longitude = new ControlRange(0, -180, 180, true)
+    this.latitude = new ControlRange(0, -90, 90)
+    this.zoom = new ControlRange(0.5, 0, 1)
 
     this.dragging = false
     this.dragStart = undefined
@@ -53,7 +38,7 @@ export default class Camera {
 
     window.addEventListener('wheel', (e) => {
       if (e.target == gl.canvas) {
-        this.changeZoom(-e.deltaY * this.zoom.mouseSpeed)
+        this.zoom.changeBy(-e.deltaY * 0.001)
         e.preventDefault()
         return false
       }
@@ -72,47 +57,11 @@ export default class Camera {
       let deltaY = newMousePosition.y - this.mousePosition.y
       let zoomFactor = 1 - (this.zoom.value * 0.8);
 
-      this.changeLongitude(
-        deltaX * zoomFactor *
-        this.longitude.mouseSpeed
-      )
-
-      this.changeLatitude(
-        deltaY * zoomFactor *
-        this.latitude.mouseSpeed
-      )
+      this.longitude.changeBy(deltaX * zoomFactor * 0.3)
+      this.latitude.changeBy(deltaY * zoomFactor * 0.3)
     }
 
     this.mousePosition = newMousePosition
-  }
-
-  changeLatitude(amount) {
-    this.latitude.value = _.clamp(
-      this.latitude.value + amount,
-      this.latitude.min,
-      this.latitude.max
-    )
-  }
-
-  changeLongitude(amount) {
-    let value = this.longitude.value + amount;
-    if (value > this.longitude.max) {
-      let remainder = value % this.longitude.max
-      value = this.longitude.min + remainder
-    }
-    else if (value < this.longitude.min) {
-      value = this.longitude.max - (this.longitude.min - value)
-    }
-
-    this.longitude.value = value
-  }
-
-  changeZoom(amount) {
-    this.zoom.value = _.clamp(
-      this.zoom.value + amount,
-      this.zoom.min,
-      this.zoom.max
-    )
   }
 
   getRenderValues(gl) {

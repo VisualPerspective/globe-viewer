@@ -1,3 +1,4 @@
+@import "range";
 $gray-bg: #fff;
 
 .map-container {
@@ -6,11 +7,6 @@ $gray-bg: #fff;
   border-radius: 5px;
   display: flex;
   flex-direction: row-reverse;
-
-  @media (max-width: 48rem) {
-    flex-direction: column-reverse;
-    .map-controls { flex: 1 1 auto; }
-  }
 
   .map-controls {
     flex: 0 0 20rem;
@@ -56,13 +52,12 @@ $gray-bg: #fff;
   }
 
   .range-control {
-    @import "range";
+    @include range-styles(12px);
 
     input { box-sizing: border-box; }
 
     input[type=range] {
       flex: 1 1 100%;
-      -webkit-appearance: none;
     }
 
     input[type=number] {
@@ -77,5 +72,19 @@ $gray-bg: #fff;
 
   .map-controls>.debug-panel>.top-row {
     label, span { color: #7a7; }
+  }
+}
+
+@media (max-width: 45rem) {
+  .map-container {
+    flex-direction: column-reverse;
+    height: auto;
+    .map-controls {
+      flex: 0 0 auto;
+      @include range-styles(32px);
+    }
+    .map-canvas {
+      min-height: 20rem;
+    }
   }
 }

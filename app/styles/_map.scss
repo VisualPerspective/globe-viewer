@@ -7,6 +7,11 @@ $gray-bg: #fff;
   display: flex;
   flex-direction: row-reverse;
 
+  @media (max-width: 48rem) {
+    flex-direction: column-reverse;
+    .map-controls { flex: 1 1 auto; }
+  }
+
   .map-controls {
     flex: 0 0 20rem;
 
@@ -31,7 +36,7 @@ $gray-bg: #fff;
     }
 
     >h1 {
-      color: #00156b;
+      color: #222;
       font-size: 16px;
       letter-spacing: 0;
       margin: 0;

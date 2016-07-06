@@ -1,6 +1,8 @@
 import twgl from 'twgl.js'
 import globeVert from '../shaders/globe.vert.glsl'
-import frag from '../shaders/shader.frag.glsl'
+import dayAndNightFrag from '../shaders/dayAndNight.frag.glsl'
+import dayFrag from '../shaders/day.frag.glsl'
+import nightFrag from '../shaders/night.frag.glsl'
 
 const m4 = twgl.m4
 
@@ -20,7 +22,11 @@ export default class Renderer {
       this.uniforms[name] = texture
     }
 
-    this.globeProgram = twgl.createProgramInfo(gl, [globeVert, frag])
+    this.programs = {
+      'dayAndNight': twgl.createProgramInfo(gl, [globeVert, dayAndNightFrag]),
+      'day': twgl.createProgramInfo(gl, [globeVert, dayFrag]),
+      'night': twgl.createProgramInfo(gl, [globeVert, nightFrag])
+    }
 
     gl.enable(gl.DEPTH_TEST)
     gl.enable(gl.CULL_FACE)
@@ -61,9 +67,10 @@ export default class Renderer {
       }
     )
 
-    gl.useProgram(this.globeProgram.program)
-    twgl.setBuffersAndAttributes(gl, this.globeProgram, scene.globeBuffer)
-    twgl.setUniforms(this.globeProgram, this.uniforms)
+    let program = this.programs[scene.renderMode]
+    gl.useProgram(program.program)
+    twgl.setBuffersAndAttributes(gl, program, scene.globeBuffer)
+    twgl.setUniforms(program, this.uniforms)
 
     gl.drawElements(
       gl.TRIANGLES,

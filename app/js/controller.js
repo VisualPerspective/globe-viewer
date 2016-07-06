@@ -7,6 +7,7 @@ import Renderer from './renderer'
 import Camera from './camera'
 import PerformanceStats from './performanceStats'
 import registerRangeSlider from './components/rangeSlider'
+import registerRenderModes from './components/renderModes'
 import registerDebugPanel from './components/debugPanel'
 
 export default class Controller {
@@ -56,6 +57,7 @@ export default class Controller {
     }
 
     registerRangeSlider(this, propertyMap)
+    registerRenderModes(this, this.scene)
     registerDebugPanel(this.performanceStats)
 
     this.vue = new Vue({

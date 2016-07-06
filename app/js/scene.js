@@ -26,6 +26,8 @@ export default class Scene {
       75 // vertical subdivisions
     )
 
+    this.renderMode = 'dayAndNight'
+
     this.textures = twgl.createTextures(gl, {
       diffuseMap: {
         format: gl.RGB,

@@ -15,12 +15,12 @@ $thumb-color: #8895b3;
   flex-direction: row-reverse;
 
   .map-controls {
-    flex: 0 0 20rem;
+    flex: 0 0 320px;
     font-size: 13px;
     overflow-y: auto;
 
     >div {
-      padding: 0.75rem 1.5rem;
+      padding: 8px 24px;
 
       .top-row {
         display: flex;
@@ -39,8 +39,10 @@ $thumb-color: #8895b3;
     }
 
     .sub-group {
-      padding: 0.25rem 0 0 0;
-      >div { padding: 0.75rem 0; }
+      padding: 4px 0 0 0;
+      >div {
+        padding: 6px 0 8px 0;
+      }
       .top-row {
         color: #222;
         text-transform: none;
@@ -53,7 +55,7 @@ $thumb-color: #8895b3;
       font-size: 16px;
       letter-spacing: 0;
       margin: 0;
-      padding: 0.75rem 1.5rem 0.25rem;
+      padding: 12px 24px 4px;
     }
   }
 
@@ -76,22 +78,13 @@ $thumb-color: #8895b3;
     input[type=range] {
       flex: 1 1 100%;
     }
-
-    input[type=number] {
-      flex: 0 0 5rem;
-      min-width: 0;
-      border-radius: 4px;
-      border: 1px solid #ddd;
-      padding: 6px 8px;
-      margin: 0 0 0 0.5rem;
-    }
   }
 
   .radio-buttons {
     padding-top: 8px;
 
     .radio-button {
-      margin: 3px 0;
+      margin: 0 0 6px 0;
       background: #f4f4f4;
       border-radius: 5px;
       overflow: hidden;
@@ -112,8 +105,7 @@ $thumb-color: #8895b3;
         >.sub-group {
           background: #fff;
           border-radius: 0 0 4px 4px;
-          padding-left: 16px;
-          padding-right: 16px;
+          padding: 4px 16px 8px;
           margin: 1px;
         }
       }
@@ -130,17 +122,17 @@ $thumb-color: #8895b3;
   }
 }
 
-@media (max-width: 45rem) {
+@media (max-width: 640px) {
   .map-container {
     flex-direction: column-reverse;
     height: auto;
     .map-controls {
       flex: 0 0 auto;
-      @include range-styles(32px, $thumb-color);
-      input[type=range] { margin: 18px 0 4px 0; }
+      @include range-styles(30px, $thumb-color);
+      input[type=range] { margin: 18px 0 10px 0; }
     }
     .map-canvas {
-      min-height: 20rem;
+      min-height: 320px;
     }
   }
 }

@@ -91,7 +91,7 @@ export default class Renderer {
       gl.canvas.style.height = height + "px";
 
       // set the size of the drawingBuffer
-      let devicePixelRatio = window.devicePixelRatio || 1;
+      let devicePixelRatio = (window.devicePixelRatio || 1);
       gl.canvas.width = Math.floor(width * devicePixelRatio);
       gl.canvas.height = Math.floor(height * devicePixelRatio);
 

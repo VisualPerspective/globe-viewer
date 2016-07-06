@@ -16,32 +16,41 @@ export default function registerRenderModes(
           <label>Mode</label>
         </div>
         <div class="radio-buttons">
-          <label>
-            <input type="radio" name="render-mode"
-              value="dayAndNight" v-model="renderMode"
-              checked>
-            Day and Night
-          </label>
-          <div v-if="renderMode == 'dayAndNight'" class="sub-group">
-            <range-slider
-              label="Hour of Day"
-              property="hourOfDay">
-            </range-slider>
-            <range-slider
-              label="Day of Year"
-              property="dayOfYear">
-            </range-slider>
+          <div class="radio-button"
+            v-bind:class="{ active: renderMode == 'dayAndNight' }">
+            <label>
+              <input type="radio" name="render-mode"
+                value="dayAndNight" v-model="renderMode"
+                checked>
+              Day and Night
+            </label>
+            <div v-if="renderMode == 'dayAndNight'" class="sub-group">
+              <range-slider
+                label="Hour of Day"
+                property="hourOfDay">
+              </range-slider>
+              <range-slider
+                label="Day of Year"
+                property="dayOfYear">
+              </range-slider>
+            </div>
           </div>
-          <label>
-            <input type="radio" name="render-mode"
-              value="day" v-model="renderMode">
-            Day
-          </label>
-          <label>
-            <input type="radio" name="render-mode"
-              value="night" v-model="renderMode">
-            Night
-          </label>
+          <div class="radio-button"
+            v-bind:class="{ active: renderMode == 'day' }">
+            <label>
+              <input type="radio" name="render-mode"
+                value="day" v-model="renderMode">
+              Day
+            </label>
+          </div>
+          <div class="radio-button"
+            v-bind:class="{ active: renderMode == 'night' }">
+            <label>
+              <input type="radio" name="render-mode"
+                value="night" v-model="renderMode">
+              Night
+            </label>
+          </div>
         </div>
       </div>
     `,

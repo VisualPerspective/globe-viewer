@@ -38,8 +38,8 @@ void main() {
     terrainBumpScale(landness, 0.0, vNdotL, vNdotV, eye, vPosition);
 
   vec3 oceanColor = mix(
-    vec3(0.0, 0.0, 0.3),
     vec3(0.0, 0.0, 0.35),
+    vec3(0.0, 0.0, 0.45),
     oceanDepth
   );
 
@@ -74,10 +74,8 @@ void main() {
       roughness, //roughness
       L, V, N
     );
-
-    color += atmosphere(vNdotL_clamped, vNdotV_clamped) * 0.1;
   }
 
-  vec3 tonemapped = tonemap(color * 1.0);
+  vec3 tonemapped = tonemap(color * 1.25);
   gl_FragColor = vec4(toGamma(tonemapped), 1.0);
 }

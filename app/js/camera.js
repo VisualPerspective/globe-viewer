@@ -66,13 +66,9 @@ export default class Camera {
   }
 
   getRenderValues(gl) {
-    let projection = m4.perspective(
-      toRadians(30),
-      gl.canvas.clientWidth / gl.canvas.clientHeight,
-      0.01,
-      10
-    )
-
+    let aspect = gl.canvas.clientWidth / gl.canvas.clientHeight
+    let fov = toRadians(30) / _.clamp(aspect, 0.0, 1.0)
+    let projection = m4.perspective(fov, aspect, 0.01, 10)
     let eye = [0, 0, -(4.5 - this.zoom.value * 3)]
     let camera = m4.identity()
     m4.rotateY(camera, -toRadians(this.longitude.value - 90), camera)

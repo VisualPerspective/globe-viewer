@@ -132,7 +132,7 @@ $thumb-color: #8895b3;
       input[type=range] { margin: 18px 0 10px 0; }
     }
     .map-canvas {
-      min-height: 320px;
+      height: 100vw;
     }
   }
 }

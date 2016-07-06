@@ -1,9 +1,23 @@
 /*
-Modified from:
-https://github.com/wdas/brdf/blob/master/src/brdfs/disney.brdf
+Modified from https://github.com/wdas/brdf/blob/master/src/brdfs/disney.brdf
+
+Original license notice:
+# Copyright Disney Enterprises, Inc.  All rights reserved.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License
+# and the following modification to it: Section 6 Trademarks.
+# deleted and replaced with:
+#
+# 6. Trademarks. This License does not grant permission to use the
+# trade names, trademarks, service marks, or product names of the
+# Licensor and its affiliates, except as required for reproducing
+# the content of the NOTICE file.
+#
+# You may obtain a copy of the License at
+# http://www.apache.org/licenses/LICENSE-2.0
 */
 
-vec3 baseColor = vec3(0.82, 0.67, 0.16);
 //float metallic = 0.0;
 //float subsurface = 0.5;
 //float specular = 0.5;

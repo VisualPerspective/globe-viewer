@@ -16,18 +16,25 @@
     </div>
     <div class="map-controls">
       <h1>Globe Viewer</h1>
-      <range-slider
-        label="Latitude"
-        property="latitude">
-      </range-slider>
-      <range-slider
-        label="Longitude"
-        property="longitude">
-      </range-slider>
-      <range-slider
-        label="Zoom"
-        property="zoom">
-      </range-slider>
+      <div>
+        <div class="top-row">
+          <label>Location</label>
+        </div>
+        <div class="sub-group">
+          <range-slider
+            label="Latitude"
+            property="latitude">
+          </range-slider>
+          <range-slider
+            label="Longitude"
+            property="longitude">
+          </range-slider>
+          <range-slider
+            label="Zoom"
+            property="zoom">
+          </range-slider>
+        </div>
+      </div>
       <render-modes></render-modes>
       <!-- debug-panel / -->
     </div>

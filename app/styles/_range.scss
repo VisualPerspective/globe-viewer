@@ -1,6 +1,6 @@
 /* Generated from http://danielstern.ca/range.css/#/ */
 
-@mixin range-styles($thumb-size) {
+@mixin range-styles($thumb-size, $thumb-color) {
   input[type=range] {
     -webkit-appearance: none;
     width: 100%;
@@ -27,7 +27,7 @@
     height: $thumb-size;
     width: $thumb-size;
     border-radius: $thumb-size / 2;
-    background: #334499;
+    background: $thumb-color;
     cursor: pointer;
     -webkit-appearance: none;
     margin-top: 2px - $thumb-size / 2;
@@ -52,7 +52,7 @@
     height: $thumb-size;
     width: $thumb-size;
     border-radius: $thumb-size / 2;
-    background: #334499;
+    background: $thumb-color;
     cursor: pointer;
   }
   input[type=range]::-ms-track {
@@ -84,7 +84,7 @@
     height: $thumb-size;
     width: $thumb-size;
     border-radius: $thumb-size / 2;
-    background: #334499;
+    background: $thumb-color;
     cursor: pointer;
     height: 4px;
   }

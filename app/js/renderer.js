@@ -3,6 +3,7 @@ import globeVert from '../shaders/globe.vert.glsl'
 import dayAndNightFrag from '../shaders/dayAndNight.frag.glsl'
 import dayFrag from '../shaders/day.frag.glsl'
 import nightFrag from '../shaders/night.frag.glsl'
+import elevationFrag from '../shaders/elevation.frag.glsl'
 
 const m4 = twgl.m4
 
@@ -25,7 +26,8 @@ export default class Renderer {
     this.programs = {
       'dayAndNight': twgl.createProgramInfo(gl, [globeVert, dayAndNightFrag]),
       'day': twgl.createProgramInfo(gl, [globeVert, dayFrag]),
-      'night': twgl.createProgramInfo(gl, [globeVert, nightFrag])
+      'night': twgl.createProgramInfo(gl, [globeVert, nightFrag]),
+      'elevation': twgl.createProgramInfo(gl, [globeVert, elevationFrag])
     }
 
     gl.enable(gl.DEPTH_TEST)

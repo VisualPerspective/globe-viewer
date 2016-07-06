@@ -46,6 +46,6 @@ void main() {
   );
 
   vec3 color = nightAmbient(-1.0, diffuseColor, lightsMap, vUv);
-  vec3 tonemapped = tonemap(color * 300.0);
+  vec3 tonemapped = tonemap(color * 200.0);
   gl_FragColor = vec4(toGamma(tonemapped), 1.0);
 }

@@ -32,36 +32,45 @@ void main() {
   float vNdotV_clamped = clamp(vNdotV, 0.0, 1.0);
 
   float landness = texture2D(landmaskMap, vUv).r;
-  float oceanDepth = 1.0 - texture2D(topographyMap, vUv).r;
+  float elevation = texture2D(topographyMap, vUv).r;
 
   vec2 dHdxy = heightDerivative(vUv, topographyMap) *
     terrainBumpScale(landness, 0.0, vNdotL, vNdotV, eye, vPosition);
 
-  vec3 oceanColor = mix(
-    vec3(0.0, 0.0, 0.25),
-    vec3(0.0, 0.0, 0.35),
-    oceanDepth
+  float highestPoint = 8848.0;
+  float lowestPoint = 11034.0;
+  float seaLevel = lowestPoint / (highestPoint + lowestPoint);
+
+  float steps = 10.0;
+  vec3 diffuseColor = mix(
+    mix(
+      vec3(seaLevel),
+      vec3(0.0),
+      floor(elevation * steps) / steps
+    ),
+    mix(
+      vec3(seaLevel),
+      vec3(1.0),
+      floor(elevation * steps) / steps
+    ),
+    landness
   );
 
-  vec3 diffuseColor = mix(
-    oceanColor,
-    toLinear(texture2D(diffuseMap, vUv).rgb),
-    landness
+  diffuseColor = mix(
+    diffuseColor,
+    vec3(0.0, 0.0, 0.5),
+    pow(1.0 - abs(landness - 0.5) * 2.0, 1.0)
   );
 
   vec3 N = perturbNormal(normalize(vPosition), vNormal, dHdxy);
   vec3 L = normalize(constantLight);
   vec3 H = normalize(L + V);
 
-  float roughness = mix(
-    mix(0.75, 0.55, oceanDepth),
-    (1.0 - diffuseColor.r * 0.5),
-    step(0.5, landness)
-  );
+  float roughness = 0.99;
 
-  vec3 color = nightAmbient(vNdotL, diffuseColor, lightsMap, vUv);
+  vec3 color = vec3(0.0);
   if (dot(vNormal, L) > 0.0) {
-    vec3 lightColor = vec3(10.0);
+    vec3 lightColor = vec3(20.0);
 
     // Accurate would just be NdotL, pow makes falloff more gradual
     float incidence = pow(dot(N, L), 1.5);
@@ -70,12 +79,12 @@ void main() {
       diffuseColor,
       0.0, //metallic
       0.5, //subsurface
-      0.0, //specular
+      0.3, //specular
       roughness, //roughness
       L, V, N
     );
   }
 
-  vec3 tonemapped = tonemap(color * 1.25);
+  vec3 tonemapped = tonemap(color * 0.5);
   gl_FragColor = vec4(toGamma(tonemapped), 1.0);
 }

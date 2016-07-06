@@ -51,6 +51,14 @@ export default function registerRenderModes(
               Night
             </label>
           </div>
+          <div class="radio-button"
+            v-bind:class="{ active: renderMode == 'elevation' }">
+            <label>
+              <input type="radio" name="render-mode"
+                value="elevation" v-model="renderMode">
+              Elevation
+            </label>
+          </div>
         </div>
       </div>
     `,

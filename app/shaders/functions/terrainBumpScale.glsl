@@ -23,8 +23,8 @@ float terrainBumpScale(
   ) / 10.0 + 0.5;
 
   float bumpScale = mix(
-    0.002,
-    0.03,
+    0.009,
+    0.09,
     vNdotL * vNdotL * vNdotV * distanceFactor
   ) * bumpFalloff;
 

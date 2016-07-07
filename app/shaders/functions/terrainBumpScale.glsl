@@ -18,14 +18,11 @@ float terrainBumpScale(
 ) {
   float shadowStart = 0.25;
   float bumpFalloff = clamp(vNdotL / shadowStart, 0.0, 0.5);
-  float distanceFactor = clamp(
-    distance(vEye, vPosition), 0.0, 5.0
-  ) / 10.0 + 0.5;
 
   float bumpScale = mix(
-    0.009,
-    0.09,
-    vNdotL * vNdotL * vNdotV * distanceFactor
+    0.002,
+    0.02,
+    vNdotL * vNdotL * vNdotV
   ) * bumpFalloff;
 
   if (landness < 0.5) {

@@ -13,8 +13,8 @@ export default class Renderer {
 
     gl.clearColor(0, 0, 0, 0)
 
-    gl.getExtension("OES_standard_derivatives")
-    this.anisotropic = gl.getExtension("EXT_texture_filter_anisotropic")
+    this.derivatives = gl.getExtension('OES_standard_derivatives')
+    this.anisotropic = gl.getExtension('EXT_texture_filter_anisotropic')
 
     this.uniforms = {}
     for (name in scene.textures) {

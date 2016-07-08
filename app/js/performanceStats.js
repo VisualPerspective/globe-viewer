@@ -1,6 +1,6 @@
 export default class PerformanceStats {
   constructor() {
-    this.fps = 0;
+    this.fps = 0
     this.frames = 0
     this.totalFrames = 0
     this.updated = 0

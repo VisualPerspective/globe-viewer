@@ -56,7 +56,7 @@ export default class Camera {
     if (this.mousePosition !== undefined && this.dragging) {
       let deltaX = newMousePosition.x - this.mousePosition.x
       let deltaY = newMousePosition.y - this.mousePosition.y
-      let zoomFactor = 1 - (this.zoom.value * 0.8);
+      let zoomFactor = 1 - (this.zoom.value * 0.8)
 
       this.longitude.changeBy(deltaX * zoomFactor * 0.3)
       this.latitude.changeBy(deltaY * zoomFactor * 0.3)

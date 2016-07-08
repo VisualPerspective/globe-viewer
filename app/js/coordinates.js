@@ -2,7 +2,7 @@ import { toRadians } from './utils'
 
 // https://www.npmjs.com/package/mod-loop
 function loop(value, divisor) {
-  let n = value % divisor;
+  let n = value % divisor
   return n < 0 ? (divisor + n) : n
 }
 
@@ -20,8 +20,8 @@ export default function sunCoordinates(time) {
   let L = 280.459 + 0.98564736 * D
 
   let lambda = L +
-          1.915 * Math.sin(toRadians(g)) +
-          0.020 * Math.sin(toRadians(2 * g))
+    1.915 * Math.sin(toRadians(g)) +
+    0.020 * Math.sin(toRadians(2 * g))
 
   let e = 23.439 - 0.00000036 * D
   let y = Math.cos(toRadians(e)) * Math.sin(toRadians(lambda))
@@ -32,7 +32,7 @@ export default function sunCoordinates(time) {
     Math.sin(toRadians(e)) * Math.sin(toRadians(lambda))
   )
 
-  let gmst = 18.697374558 + 24.06570982441908 * D;
+  let gmst = 18.697374558 + 24.06570982441908 * D
   let hourAngle = (gmst / 24 * Math.PI * 2) - rightAscension
 
   return {

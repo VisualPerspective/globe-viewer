@@ -1,5 +1,4 @@
 @import "range";
-$gray-bg: #fff;
 $thumb-color: #8895b3;
 
 @mixin antialias() {
@@ -9,8 +8,7 @@ $thumb-color: #8895b3;
 
 .map-container {
   height: 100vh;
-  width: 100%;
-  border-radius: 5px;
+  width: 100vw;
   display: flex;
   flex-direction: row-reverse;
 
@@ -29,6 +27,7 @@ $thumb-color: #8895b3;
         letter-spacing: 0px;
         margin-bottom: -4px;
         text-transform: uppercase;
+
         span {
           flex: 1;
           color: #6d6d6d;
@@ -40,9 +39,11 @@ $thumb-color: #8895b3;
 
     .sub-group {
       padding: 4px 0 0 0;
+
       >div {
         padding: 6px 0 8px 0;
       }
+
       .top-row {
         color: #222;
         text-transform: none;
@@ -75,9 +76,7 @@ $thumb-color: #8895b3;
 
     input { box-sizing: border-box; }
 
-    input[type=range] {
-      flex: 1 1 100%;
-    }
+    input[type=range] { flex: 1 1 100%; }
   }
 
   .radio-buttons {
@@ -92,11 +91,13 @@ $thumb-color: #8895b3;
       >label {
         display: block;
         padding: 6px;
+
         input { display: none; }
       }
 
       &.active {
         background: #8895b3;
+
         >label {
           @include antialias();
           color: white;
@@ -105,7 +106,7 @@ $thumb-color: #8895b3;
         >.sub-group {
           background: #fff;
           border-radius: 0 0 4px 4px;
-          padding: 4px 16px 8px;
+          padding: 6px 16px;
           margin: 1px;
         }
       }

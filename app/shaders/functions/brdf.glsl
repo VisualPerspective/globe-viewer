@@ -18,10 +18,6 @@ Original license notice:
 # http://www.apache.org/licenses/LICENSE-2.0
 */
 
-//float metallic = 0.0;
-//float subsurface = 0.5;
-//float specular = 0.5;
-//float roughness = 0.75;
 float specularTint = 0.0;
 float anisotropic = 0.0;
 float sheen = 0.0;

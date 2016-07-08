@@ -1,4 +1,3 @@
-//
 // Scale bump map effect to produce relatively even relief
 // shading across surface. Goal is to avoid too much shading
 // at glancing angles and too little shading in the center.
@@ -7,7 +6,7 @@
 // is inverted and allow for an additional bump scale factor with
 // `oceanFactor`. This allows ocean floor rendering to show
 // full bumps vs ocean surface rendering being flat.
-//
+
 float terrainBumpScale(
   float landness,
   float oceanFactor,

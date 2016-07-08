@@ -16,8 +16,6 @@ varying vec2 vUv;
 varying vec3 vPosition;
 varying vec3 vNormal;
 
-const float PI = 3.141592653589793;
-
 void main(void) {
   mat4 modelView = view * model;
   vUv = texcoord;

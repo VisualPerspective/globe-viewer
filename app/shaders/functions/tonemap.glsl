@@ -1,4 +1,4 @@
-//Based on https://github.com/vorg/pragmatic-pbr/blob/master/local_modules/glsl-tonemap-uncharted2/index.glsl
+// Based on https://github.com/vorg/pragmatic-pbr/blob/master/local_modules/glsl-tonemap-uncharted2/index.glsl
 float A = 0.15;
 float B = 0.50;
 float C = 0.10;
@@ -11,7 +11,7 @@ vec3 Uncharted2Tonemap(vec3 x) {
    return ((x * (A * x + C * B) + D * E) / (x * (A * x + B) + D * F)) - E / F;
 }
 
-//Based on Filmic Tonemapping Operators http://filmicgames.com/archives/75
+// Based on Filmic Tonemapping Operators http://filmicgames.com/archives/75
 vec3 tonemap(vec3 color) {
     float ExposureBias = 2.0;
     vec3 curr = Uncharted2Tonemap(ExposureBias * color);

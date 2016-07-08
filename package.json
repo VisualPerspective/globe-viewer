@@ -1,12 +1,12 @@
 {
-  "name": "your-app",
-  "description": "Description",
-  "author": "Your Name",
+  "name": "globe-viewer",
+  "description": "Render the globe in different ways using WebGL",
+  "author": "Kevin James (http://www.kwjames.com)",
   "version": "0.0.1",
-  "license": "MIT",
+  "license": "Apache 2",
   "repository": {
     "type": "git",
-    "url": ""
+    "url": "https://github.com/k9/globe-viewer"
   },
   "scripts": {
     "start": "brunch watch --server",

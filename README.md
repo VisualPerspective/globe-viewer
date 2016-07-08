@@ -21,23 +21,23 @@ The viewer should now be available at `http://localhost:3333`
 
 ## Data Sources
 
-##### Land color (data/color-\*)
+##### Land color (app/assets/data/color-\*)
 Natural Earth Cross Blended Hypsometry
 http://www.naturalearthdata.com/downloads/10m-cross-blend-hypso/cross-blended-hypso/
 
-##### Topography and bathymetry (data/topo-bathy-\*)
+##### Topography and bathymetry (app/assets/data/topo-bathy-\*)
 Blue Marble
 http://visibleearth.nasa.gov/view_cat.php?categoryID=1484
 
-##### Night Sky Lights
+##### Night Sky Lights (app/assets/data/lights-\*)
 Blue Marble
 http://visibleearth.nasa.gov/view_cat.php?categoryID=1484
 
-##### Mask for Land vs Water (data/landmask-\*)
+##### Mask for Land vs Water (app/assets/data/landmask-\*)
 Natural Earth Physical Vectors
 http://www.naturalearthdata.com/downloads/10m-physical-vectors/
 
-Combined and processed using Blender with https://github.com/domlysz/BlenderGIS
+These physical vectors were combined and processed using Blender with https://github.com/domlysz/BlenderGIS
 
 ## Other Globe Visualizations / Platforms on the Web
 

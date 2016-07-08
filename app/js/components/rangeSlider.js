@@ -10,7 +10,7 @@ export default function registerRangeSlider(
     },
     computed: {
       formatted: function () {
-        return propertyMap[this.property].formatted.apply(this)
+        return propertyMap[this.property].formatted(this)
       }
     },
     props: [

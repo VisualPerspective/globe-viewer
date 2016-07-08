@@ -17,19 +17,17 @@ export default class Controller {
     this.camera = new Camera(gl)
     this.performanceStats = new PerformanceStats()
 
-    let noFormat = function () {
-      return ''
-    }
+    let noFormat = () => ''
 
-    let degrees = function () {
-      return numeral(this.value).format('0.00') + '°'
+    let degrees = (vm) => {
+      return numeral(vm.value).format('0.00') + '°'
     }
 
     let hour = () => {
       return this.scene.calculatedMoment().format('h:mm a') + ' UTC'
     }
 
-    let days = () => {
+    let day = () => {
       return this.scene.calculatedMoment().format('YYYY-MM-DD')
     }
 
@@ -52,7 +50,7 @@ export default class Controller {
       },
       'dayOfYear': {
         data: this.scene.dayOfYear,
-        formatted: days
+        formatted: day
       }
     }
 

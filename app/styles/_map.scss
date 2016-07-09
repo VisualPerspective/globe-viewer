@@ -127,13 +127,14 @@ $thumb-color: #8895b3;
   .map-container {
     flex-direction: column-reverse;
     height: auto;
+
     .map-controls {
       flex: 0 0 auto;
       @include range-styles(30px, $thumb-color);
+
       input[type=range] { margin: 18px 0 10px 0; }
     }
-    .map-canvas {
-      height: 100vw;
-    }
+
+    .map-canvas { height: 100vw; }
   }
 }

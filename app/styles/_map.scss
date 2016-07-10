@@ -58,6 +58,15 @@ $thumb-color: #8895b3;
       margin: 0;
       padding: 12px 24px 4px;
     }
+
+    .info {
+      text-align: right;
+      a {
+        color: #586cbf;
+        padding-left: 1em;
+        text-decoration: none;
+      }
+    }
   }
 
   .map-canvas {

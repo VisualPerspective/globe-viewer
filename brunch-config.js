@@ -14,5 +14,9 @@ module.exports = {
       presets: ['es2015'],
       plugins: ['transform-object-assign']
     }
+  },
+
+  server: {
+    hostname: '0.0.0.0'
   }
 };

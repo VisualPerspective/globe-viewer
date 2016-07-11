@@ -1,4 +1,5 @@
 import _ from 'lodash'
+import hammer from 'hammerjs'
 import twgl from 'twgl.js'
 
 import ControlRange from './controlRange'
@@ -19,6 +20,9 @@ export default class Camera {
     this.dragStart = undefined
     this.mousePosition = undefined
 
+    this.hammer = new Hammer(gl.canvas)
+    this.hammer.get('pinch').set({ enable: true })
+
     document.addEventListener('mousemove', (e) => {
       this.handleMouseMove(e)
     })
@@ -37,16 +41,39 @@ export default class Camera {
       this.dragging = false
     })
 
-    window.addEventListener('wheel', (e) => {
-      if (e.target == gl.canvas) {
-        this.zoom.changeBy(-e.deltaY * 0.001)
-        e.preventDefault()
-        return false
+    gl.canvas.addEventListener('scroll', () => {
+      return false
+    })
+
+    this.hammer.on('pan', (e) => {
+      this.handlePan(e.velocityX * 8, e.velocityY * 8)
+      return false
+    });
+
+    this.hammer.on('pinchstart', (e) => {
+      this.lastZoom = this.zoom.value
+      this.pinching = true
+    })
+
+    this.hammer.on('pinchend', (e) => {
+      this.pinching = false
+    })
+
+    this.hammer.on('pinch', (e) => {
+      if (this.pinching) {
+        this.zoom.changeTo(this.lastZoom + (e.scale - 1) * 0.5)
       }
     })
 
-    gl.canvas.addEventListener('scroll', () => {
-      return false
+    window.addEventListener('wheel', (e) => {
+      // Chrome reports pinch on trackpad as wheel
+      // plus ctrlKey, but scrolls too slow, so speed it up
+      let y = e.ctrlKey ? e.deltaY * 5 : e.deltaY
+
+      if (e.target == gl.canvas) {
+        this.zoom.changeBy(-y * 0.001)
+        e.preventDefault()
+      }
     })
   }
 
@@ -56,13 +83,18 @@ export default class Camera {
     if (this.mousePosition !== undefined && this.dragging) {
       let deltaX = newMousePosition.x - this.mousePosition.x
       let deltaY = newMousePosition.y - this.mousePosition.y
-      let zoomFactor = 1 - (this.zoom.value * 0.8)
-
-      this.longitude.changeBy(deltaX * zoomFactor * 0.3)
-      this.latitude.changeBy(deltaY * zoomFactor * 0.3)
+      this.handlePan(deltaX * 0.3, deltaY * 0.3)
+      e.stopPropagation()
     }
 
     this.mousePosition = newMousePosition
+  }
+
+  handlePan(deltaX, deltaY) {
+    let zoomFactor = 1 - (this.zoom.value * 0.8)
+
+    this.longitude.changeBy(deltaX * zoomFactor )
+    this.latitude.changeBy(deltaY * zoomFactor)
   }
 
   getRenderValues(gl) {

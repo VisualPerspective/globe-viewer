@@ -23,6 +23,7 @@
     "glsl-transpose": "^1.0.0",
     "glslify": "^5.0.2",
     "glslify-brunch": "^1.0.0",
+    "hammerjs": "^2.0.8",
     "lodash": "^4.13.1",
     "moment": "^2.13.0",
     "numeral": "^1.5.3",

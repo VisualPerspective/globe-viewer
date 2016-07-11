@@ -76,6 +76,7 @@ $thumb-color: #8895b3;
     -webkit-user-select: none;
     -moz-user-select: none;
     user-select: none;
+    touch-action: none;
 
     canvas { display: block; }
   }

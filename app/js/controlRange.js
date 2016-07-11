@@ -7,7 +7,10 @@ export default class ControlRange {
   }
 
   changeBy(amount) {
-    let value = this.value + amount
+    this.changeTo(this.value + amount)
+  }
+
+  changeTo(value) {
     if (this.wrap) {
       this.setWrap(value)
     }

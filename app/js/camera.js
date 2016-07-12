@@ -46,7 +46,10 @@ export default class Camera {
     })
 
     this.hammer.on('pan', (e) => {
-      this.handlePan(e.velocityX * 8, e.velocityY * 8)
+      if (e.pointerType != 'mouse') {
+        this.handlePan(e.velocityX * 8, e.velocityY * 8)
+      }
+
       return false
     });
 
@@ -66,12 +69,15 @@ export default class Camera {
     })
 
     window.addEventListener('wheel', (e) => {
-      // Chrome reports pinch on trackpad as wheel
-      // plus ctrlKey, but scrolls too slow, so speed it up
-      let y = e.ctrlKey ? e.deltaY * 5 : e.deltaY
+      let amount = -e.deltaY * 0.001
+
+      // Deal with Firefox mousewheel speed being slower
+      if (e.mozInputSource === 1) {
+        amount *= 50;
+      }
 
       if (e.target == gl.canvas) {
-        this.zoom.changeBy(-y * 0.001)
+        this.zoom.changeBy(amount)
         e.preventDefault()
       }
     })

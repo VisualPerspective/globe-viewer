@@ -40,7 +40,7 @@ void main() {
   float roughness = mix(
     mix(0.75, 0.55, oceanDepth),
     (1.0 - diffuseColor.r * 0.5),
-    step(0.5, landness)
+    landness
   );
 
   vec3 color = vec3(0.0);
@@ -57,6 +57,6 @@ void main() {
     );
   }
 
-  vec3 tonemapped = tonemap(color * 1.25);
+  vec3 tonemapped = tonemap(color * 1.0);
   gl_FragColor = vec4(toGamma(tonemapped), 1.0);
 }

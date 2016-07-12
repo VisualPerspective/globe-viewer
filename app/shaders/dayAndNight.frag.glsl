@@ -45,24 +45,24 @@ void main() {
   vec3 diffuseColor = mix(
     oceanColor,
     toLinear(texture2D(diffuseMap, vUv).rgb),
-    landness
+    smoothstep(0.25, 0.75, landness)
   );
+
 
   vec3 N = perturbNormal(normalize(vPosition), vNormal, dHdxy);
   vec3 L = normalize(lightDirection);
   vec3 H = normalize(L + V);
 
   float roughness = mix(
-    mix(0.75, 0.55, oceanDepth),
+    mix(0.8, 0.6, oceanDepth),
     (1.0 - diffuseColor.r * 0.5),
-    step(0.5, landness)
+    smoothstep(0.25, 0.75, landness)
   );
 
   vec3 color = nightAmbient(vNdotL, diffuseColor, lightsMap, vUv);
   if (dot(vNormal, L) > 0.0) {
-    vec3 lightColor = vec3(10.0);
+    vec3 lightColor = vec3(8.0);
 
-    // Accurate would just be NdotL, pow makes falloff more gradual
     float incidence = pow(dot(N, L), 1.5);
 
     color = lightColor * incidence * brdf(

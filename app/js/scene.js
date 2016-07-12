@@ -32,7 +32,6 @@ export default class Scene {
       diffuseMap: {
         format: gl.RGB,
         internalFormat: gl.RGB,
-        type: gl.UNSIGNED_SHORT_5_6_5,
         src: 'data/color-4096.jpg'
       },
       topographyMap: {

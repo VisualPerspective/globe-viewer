@@ -99,7 +99,7 @@ export default class Camera {
   handlePan(deltaX, deltaY) {
     let zoomFactor = 1 - (this.zoom.value * 0.8)
 
-    this.longitude.changeBy(deltaX * zoomFactor )
+    this.longitude.changeBy(-deltaX * zoomFactor )
     this.latitude.changeBy(deltaY * zoomFactor)
   }
 
@@ -109,7 +109,7 @@ export default class Camera {
     let projection = m4.perspective(fov, aspect, 0.01, 10)
     let eye = [0, 0, -(4.5 - this.zoom.value * 3)]
     let camera = m4.identity()
-    m4.rotateY(camera, -toRadians(this.longitude.value - 90), camera)
+    m4.rotateY(camera, toRadians(this.longitude.value + 90), camera)
     m4.rotateX(camera, toRadians(this.latitude.value), camera)
 
     eye = m4.transformPoint(camera, eye)

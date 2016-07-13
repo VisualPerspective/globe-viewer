@@ -1,6 +1,7 @@
 import twgl from 'twgl.js'
 import moment from 'moment'
 
+import octahedronSphere from './octahedronSphere'
 import sunCoordinates from './coordinates.js'
 
 const m4 = twgl.m4
@@ -19,12 +20,12 @@ export default class Scene {
       max: 365
     }
 
-    this.globeBuffer = twgl.primitives.createSphereBufferInfo(
-      gl,
-      1, // radius
-      75, // subdivisions around
-      75 // vertical subdivisions
-    )
+    let sphere = octahedronSphere(6) // approx 30k vertices
+
+    this.globeBuffer = twgl.createBufferInfoFromArrays(gl, {
+      position: { numComponents: 3, data: _.flattenDeep(sphere.triangles) },
+      texcoord: { numComponents: 2, data: _.flattenDeep(sphere.uvs) }
+    })
 
     this.renderMode = 'dayAndNight'
 

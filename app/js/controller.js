@@ -31,6 +31,15 @@ export default class Controller {
       return this.scene.calculatedMoment().format('YYYY-MM-DD')
     }
 
+    let multiple = (vm) => {
+      if (vm.value === 1) {
+        return '(Realistic) 1x'
+      }
+      else {
+        return numeral(vm.value).format('0.00') + 'X'
+      }
+    }
+
     let propertyMap = {
       'latitude': {
         data: this.camera.latitude,
@@ -51,6 +60,10 @@ export default class Controller {
       'dayOfYear': {
         data: this.scene.dayOfYear,
         formatted: day
+      },
+      'elevationScale': {
+        data: this.scene.elevationScale,
+        formatted: multiple
       }
     }
 

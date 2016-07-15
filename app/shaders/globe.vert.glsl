@@ -7,10 +7,14 @@ attribute vec3 position;
 attribute vec2 texcoord;
 
 uniform sampler2D topographyMap;
+uniform sampler2D landmaskMap;
 
 uniform mat4 model;
 uniform mat4 view;
 uniform mat4 projection;
+
+uniform float oceanElevationScale;
+uniform float landElevationScale;
 
 varying vec2 vUv;
 varying vec3 vPosition;
@@ -23,9 +27,17 @@ void main(void) {
 
   vUv = texcoord;
 
+  float lod = 6.0;
+  float landness = texture2DLod(landmaskMap, vUv, lod).r;
+  float elevationScale = mix(
+    oceanElevationScale,
+    landElevationScale,
+    landness
+  );
+
   float scale = 1.0 + (
-    texture2D(topographyMap, vUv).r
-  ) * 0.0;
+    texture2DLod(topographyMap, vUv, lod).r
+  ) * elevationScale;
 
   vec3 spherePosition = scale * position;
 

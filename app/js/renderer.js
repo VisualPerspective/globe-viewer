@@ -62,6 +62,7 @@ export default class Renderer {
     Object.assign(
       this.uniforms,
       camera.getRenderValues(gl),
+      scene.getElevationScales(),
       {
         model: model,
         time: time,

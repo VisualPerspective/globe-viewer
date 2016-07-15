@@ -1,6 +1,7 @@
 import twgl from 'twgl.js'
 import moment from 'moment'
 
+import ControlRange from './controlRange'
 import octahedronSphere from './octahedronSphere'
 import sunCoordinates from './coordinates.js'
 
@@ -8,17 +9,10 @@ const m4 = twgl.m4
 
 export default class Scene {
   constructor(gl) {
-    this.hourOfDay = {
-      value: 12, //UTC
-      min: 0.001,
-      max: 23.999
-    }
+    this.hourOfDay = new ControlRange(12, 0.001, 23.999)
+    this.dayOfYear = new ControlRange(182, 1, 365)
 
-    this.dayOfYear = {
-      value: 182,
-      min: 1,
-      max: 365
-    }
+    this.elevationScale = new ControlRange(25, 1, 50)
 
     let sphere = octahedronSphere(6) // approx 30k vertices
 
@@ -70,5 +64,20 @@ export default class Scene {
     light = m4.rotateY(light, -sun.hourAngle)
     light = m4.rotateZ(light, -sun.declination)
     return light
+  }
+
+  getElevationScales() {
+    var land = 8848 / 6371000
+    var ocean = 0
+
+    if (this.renderMode === 'elevation') {
+      land = this.elevationScale.value * land
+      ocean = -this.elevationScale.value * (10034 / 6371000)
+    }
+
+    return {
+      oceanElevationScale: ocean,
+      landElevationScale: land
+    }
   }
 }

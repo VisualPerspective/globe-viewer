@@ -31,14 +31,14 @@ void main() {
   float vNdotV_clamped = clamp(vNdotV, 0.0, 1.0);
 
   float landness = texture2D(landmaskMap, vUv).r;
-  float oceanDepth = 1.0 - texture2D(topographyMap, vUv).r;
+  float oceanDepth = (0.5 - texture2D(topographyMap, vUv).r) * 2.0;
 
   vec2 dHdxy = heightDerivative(vUv, topographyMap) *
     terrainBumpScale(landness, 0.0, vNdotL, vNdotV, eye, vPosition);
 
   vec3 oceanColor = mix(
-    vec3(0.0, 0.0, 0.3),
     vec3(0.0, 0.0, 0.35),
+    vec3(0.0, 0.0, 0.3),
     oceanDepth
   );
 
@@ -54,7 +54,7 @@ void main() {
   vec3 H = normalize(L + V);
 
   float roughness = mix(
-    mix(0.8, 0.6, oceanDepth),
+    mix(0.6, 0.8, oceanDepth),
     (1.0 - diffuseColor.r * 0.5),
     smoothstep(0.25, 0.75, landness)
   );

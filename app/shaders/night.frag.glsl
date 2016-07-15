@@ -19,7 +19,7 @@ varying vec3 vNormal;
 
 void main() {
   float landness = texture2D(landmaskMap, vUv).r;
-  float oceanDepth = 1.0 - texture2D(topographyMap, vUv).r;
+  float oceanDepth = (0.5 - texture2D(topographyMap, vUv).r) * 2.0;
 
   vec3 oceanColor = mix(
     vec3(0.0, 0.0, 0.3),

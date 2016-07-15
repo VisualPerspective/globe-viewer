@@ -14,3 +14,4 @@ convert topo-16bit.tiff bathy-16bit.tiff \
   topo-bathy-16bit.png
 
 convert topo-bathy-16bit.png -depth 8 -quality 95 topo-bathy-4096.jpg
+convert topo-bathy-16bit.png -resize 256x256\! -depth 8 -quality 95 topo-bathy-256.jpg

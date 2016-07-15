@@ -60,8 +60,6 @@ export default function octahedronSphere(divisions) {
     }
   }
 
-  window.rfz = points.length + ', ' + indexedPoints.length
-
   return {
     indices: indices,
     position: indexedPoints,

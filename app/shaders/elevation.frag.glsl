@@ -30,23 +30,9 @@ void main() {
   float landness = texture2D(landmaskMap, vUv).r;
   float elevation = texture2D(topographyMap, vUv).r;
 
-  float highestPoint = 8848.0;
-  float lowestPoint = 11034.0;
-  float seaLevel = lowestPoint / (highestPoint + lowestPoint);
-
-  float steps = 10.0;
-  vec3 diffuseColor = mix(
-    mix(
-      vec3(seaLevel),
-      vec3(0.0),
-      floor(elevation * steps) / steps
-    ),
-    mix(
-      vec3(seaLevel),
-      vec3(1.0),
-      floor(elevation * steps) / steps
-    ),
-    landness
+  float steps = 20.0;
+  vec3 diffuseColor = vec3(
+    floor((elevation / 0.9) * steps) / steps
   );
 
   // Outline the transition from land to sea

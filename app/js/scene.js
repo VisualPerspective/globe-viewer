@@ -14,11 +14,12 @@ export default class Scene {
 
     this.elevationScale = new ControlRange(25, 1, 50)
 
-    let sphere = octahedronSphere(6) // approx 30k vertices
+    let sphere = octahedronSphere(5)
 
     this.globeBuffer = twgl.createBufferInfoFromArrays(gl, {
-      position: { numComponents: 3, data: _.flattenDeep(sphere.triangles) },
-      texcoord: { numComponents: 2, data: _.flattenDeep(sphere.uvs) }
+      indices: { numComponents: 3, data: sphere.indices },
+      position: { numComponents: 3, data: _.flatten(sphere.position) },
+      texcoord: { numComponents: 2, data: _.flatten(sphere.texcoord) }
     })
 
     this.renderMode = 'dayAndNight'
@@ -61,7 +62,7 @@ export default class Scene {
     let sun = sunCoordinates(_.toInteger(moment.format('x')))
 
     let light = m4.identity()
-    light = m4.rotateY(light, -sun.hourAngle)
+    light = m4.rotateY(light, (Math.PI / 2) - sun.hourAngle)
     light = m4.rotateZ(light, -sun.declination)
     return light
   }

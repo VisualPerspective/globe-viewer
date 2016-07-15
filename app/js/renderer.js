@@ -31,7 +31,7 @@ export default class Renderer {
     }
 
     gl.enable(gl.DEPTH_TEST)
-    gl.disable(gl.CULL_FACE)
+    gl.enable(gl.CULL_FACE)
   }
 
   setupGlobeTexture(gl, texture) {
@@ -75,10 +75,11 @@ export default class Renderer {
     twgl.setBuffersAndAttributes(gl, program, scene.globeBuffer)
     twgl.setUniforms(program, this.uniforms)
 
-    gl.drawArrays(
+    gl.drawElements(
       gl.TRIANGLES,
-      0,
-      scene.globeBuffer.numElements
+      scene.globeBuffer.numElements,
+      gl.UNSIGNED_SHORT,
+      0
     )
   }
 

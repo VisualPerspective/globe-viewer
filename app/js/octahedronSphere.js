@@ -8,60 +8,86 @@ const v3 = twgl.v3
 // https://github.com/hughsk/icosphere/blob/master/index.js
 
 export default function octahedronSphere(divisions) {
-  var triangles = [
-    [
-      [[0,1,0], [0,0,-1], [-1,0,0]],
-      [[0,1,0], [-1,0,0], [0,0,1]],
-      [[0,1,0], [0,0,1], [1,0,0]],
-      [[0,1,0], [1,0,0], [0,0,-1]],
-      [[0,-1,0], [0,0,-1], [-1,0,0]],
-      [[0,-1,0], [-1,0,0], [0,0,1]],
-      [[0,-1,0], [0,0,1], [1,0,0]],
-      [[0,-1,0], [1,0,0], [0,0,-1]]
-    ]
+  let initialPoints = [
+    [0,1,0], [-1,0,0], [0,0,-1],
+    [0,1,0], [0,0,1], [-1,0,0],
+    [0,1,0], [1,0,0], [0,0,1],
+    [0,1,0], [0,0,-1], [1,0,0],
+    [0,-1,0], [0,0,-1], [-1,0,0],
+    [0,-1,0], [-1,0,0], [0,0,1],
+    [0,-1,0], [0,0,1], [1,0,0],
+    [0,-1,0], [1,0,0], [0,0,-1]
   ]
 
-  for (var i = 0; i < divisions; i++) {
-    let current = triangles[i]
+  let pointLODs = [initialPoints]
+  for (let i = 0; i < divisions; i++) {
+    let current = pointLODs[i]
     let split = []
 
-    for (var j = 0; j < current.length; j++) {
-      split = split.concat(splitTriangle(current[j]))
+    for (let j = 0; j < current.length; j+=3) {
+      split = split.concat(splitTriangle(current, j))
     }
 
-    triangles.push(split)
+    pointLODs.push(split)
   }
 
-  var uvs = []
-  for (let triangle of triangles[triangles.length - 1]) {
-    uvs.push(calculateUvs(triangle))
+  let points = pointLODs[pointLODs.length - 1]
+  var pointUvs = []
+  for (let i = 0; i < points.length; i+=3) {
+    pointUvs = pointUvs.concat(calculateUvs(points, i))
   }
+
+  let index = 0
+  let indices = []
+  let indexedPoints = []
+  let indexedUvs = []
+  let pointMap = {}
+
+  for (var i = 0; i < points.length; i++) {
+    let point = points[i]
+    let uv = pointUvs[i]
+    let key = JSON.stringify([point, uv])
+    let existingIndex = pointMap[key]
+    if (existingIndex === undefined) {
+      pointMap[key] = index
+      indexedPoints.push(point)
+      indexedUvs.push(uv)
+      indices.push(index)
+      index += 1;
+    }
+    else {
+      indices.push(existingIndex)
+    }
+  }
+
+  window.rfz = points.length + ', ' + indexedPoints.length
 
   return {
-    triangles: triangles[triangles.length - 1],
-    uvs: uvs
+    indices: indices,
+    position: indexedPoints,
+    texcoord: indexedUvs
   }
 }
 
-function splitTriangle(triangle) {
-  var a = triangle[0]
-  var b = triangle[1]
-  var c = triangle[2]
-  var ab = Array.from(v3.normalize(v3.add(a, b)))
-  var bc = Array.from(v3.normalize(v3.add(b, c)))
-  var ca = Array.from(v3.normalize(v3.add(c, a)))
+function splitTriangle(points, offset) {
+  var a = points[offset]
+  var b = points[offset + 1]
+  var c = points[offset + 2]
+  var ab = Array.prototype.slice.call(v3.normalize(v3.add(a, b)))
+  var bc = Array.prototype.slice.call(v3.normalize(v3.add(b, c)))
+  var ca = Array.prototype.slice.call(v3.normalize(v3.add(c, a)))
   return [
-    [ca, ab, a],
-    [c, bc, ca],
-    [bc, ab, ca],
-    [b, ab, bc]
+    ca, ab, a,
+    c, bc, ca,
+    bc, ab, ca,
+    b, ab, bc
   ]
 }
 
-function calculateUvs(triangle) {
-  let a = uvPoint(...triangle[0])
-  let b = uvPoint(...triangle[1])
-  let c = uvPoint(...triangle[2])
+function calculateUvs(points, offset) {
+  let a = uvPoint(...points[offset])
+  let b = uvPoint(...points[offset + 1])
+  let c = uvPoint(...points[offset + 2])
 
   let min = Math.min(a[0], b[0], c[0])
   let max = Math.max(a[0], b[0], c[0])

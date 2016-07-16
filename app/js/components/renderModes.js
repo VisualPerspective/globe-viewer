@@ -24,7 +24,7 @@ export default function registerRenderModes(
                 checked>
               Day and Night
             </label>
-            <div v-if="renderMode == 'dayAndNight'" class="sub-group">
+            <div v-show="renderMode == 'dayAndNight'" class="sub-group">
               <range-slider
                 label="Hour of Day"
                 property="hourOfDay">
@@ -58,7 +58,7 @@ export default function registerRenderModes(
                 value="elevation" v-model="renderMode">
               Elevation
             </label>
-            <div v-if="renderMode == 'elevation'" class="sub-group">
+            <div v-show="renderMode == 'elevation'" class="sub-group">
               <range-slider
                 label="Elevation Scale"
                 property="elevationScale">

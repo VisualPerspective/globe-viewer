@@ -14,7 +14,7 @@ export default class Scene {
 
     this.hourOfDay = new ControlRange(12, 0.001, 23.999)
     this.dayOfYear = new ControlRange(182, 1, 365)
-    this.elevationScale = new ControlRange(10, 1, 25)
+    this.elevationScale = new ControlRange(10, 1, 30)
 
     this.sphere = octahedronSphere(6)
 
@@ -100,6 +100,7 @@ export default class Scene {
       canvas.height = img.height
       let ctx = canvas.getContext('2d')
       ctx.drawImage(img, 0, 0, img.width, img.height)
+      let data = ctx.getImageData(0, 0, img.width, img.height).data
 
       let w = img.width - 1
       let h = img.height - 1
@@ -108,7 +109,7 @@ export default class Scene {
         let v = this.sphere.texcoord[i * 2 + 1]
         let x = _.clamp(_.floor((u == 1 ? 0 : u) * w), 0, w)
         let y = _.clamp(_.floor((v == 1 ? 0 : v) * h), 0, h)
-        let sample = ctx.getImageData(x, y, 1, 1).data[0]
+        let sample = data[[x + y * img.width] * 4]
         this.sphere.elevation[i] = (sample / 255) - 0.5
       }
 

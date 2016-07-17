@@ -47,33 +47,34 @@ export default function octahedronSphere(divisions) {
   }
 
   let index = 0
-  let indices = []
+  let indices = new Int16Array(points.length)
   let indexedPoints = new Vec3Array(new Float32Array(points.data.length))
   let indexedUvs = new Vec2Array(new Float32Array(pointUvs.data.length))
   let pointMap = {}
 
-  for (let i = 0; i < points.length; i++) {
+  var i = 0;
+  for (i; i < points.length; i++) {
     let point = points.get(i)
     let uv = pointUvs.get(i)
-    let key = JSON.stringify([point[0], point[1], point[2], uv[0], uv[1]])
+    let key = [point[0], point[1], point[2], uv[0], uv[1]].join(',')
     let existingIndex = pointMap[key]
     if (existingIndex === undefined) {
       pointMap[key] = index
       indexedPoints.set(index, point)
       indexedUvs.set(index, uv)
-      indices.push(index)
-      index += 1;
+      indices[i] = index
+      index += 1
     }
     else {
-      indices.push(existingIndex)
+      indices[i] = existingIndex
     }
   }
 
   return {
-    indices: indices,
+    indices: indices.subarray(0, i),
     position: indexedPoints.data.subarray(0, index * 3),
     texcoord: indexedUvs.data.subarray(0, index * 2),
-    elevation: _.fill(Array(index), 0)
+    elevation: new Float32Array(index)
   }
 }
 

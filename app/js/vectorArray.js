@@ -9,7 +9,11 @@ export class Vec2Array {
 
   get(offset) {
     let begin = offset * 2
-    return this.data.slice(begin, begin + 2)
+
+    return [
+      this.data[begin],
+      this.data[begin + 1]
+    ]
   }
 
   setRange(offset, range) {
@@ -33,7 +37,12 @@ export class Vec3Array {
 
   get(offset) {
     let begin = offset * 3
-    return this.data.slice(begin, begin + 3)
+
+    return [
+      this.data[begin],
+      this.data[begin + 1],
+      this.data[begin + 2]
+    ]
   }
 
   setRange(offset, range) {

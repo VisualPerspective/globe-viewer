@@ -17,9 +17,10 @@ export default class Scene {
     let sphere = octahedronSphere(5)
 
     this.globeBuffer = twgl.createBufferInfoFromArrays(gl, {
-      indices: { numComponents: 3, data: sphere.indices },
-      position: { numComponents: 3, data: _.flatten(sphere.position) },
-      texcoord: { numComponents: 2, data: _.flatten(sphere.texcoord) }
+      indices: { numComponents: 3, data: this.sphere.indices },
+      position: { numComponents: 3, data: this.sphere.position },
+      texcoord: { numComponents: 2, data: this.sphere.texcoord },
+      elevation: { numComponents: 1, data: this.sphere.elevation }
     })
 
     this.renderMode = 'dayAndNight'

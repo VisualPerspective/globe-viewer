@@ -11,12 +11,12 @@ const m4 = twgl.m4
 export default class Scene {
   constructor(gl) {
     this.gl = gl
+
     this.hourOfDay = new ControlRange(12, 0.001, 23.999)
     this.dayOfYear = new ControlRange(182, 1, 365)
-
     this.elevationScale = new ControlRange(10, 1, 25)
 
-    this.sphere = octahedronSphere(5)
+    this.sphere = octahedronSphere(6)
 
     this.globeBuffer = twgl.createBufferInfoFromArrays(gl, {
       indices: { numComponents: 3, data: this.sphere.indices },

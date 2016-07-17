@@ -1,6 +1,11 @@
 import twgl from 'twgl.js'
 import _ from 'lodash'
 
+import {
+  Vec2Array,
+  Vec3Array
+} from './vectorArray'
+
 const v3 = twgl.v3
 
 // icosphere-like sphere, except based on octahedron
@@ -9,7 +14,7 @@ const v3 = twgl.v3
 // https://github.com/hughsk/icosphere/blob/master/index.js
 
 export default function octahedronSphere(divisions) {
-  let initialPoints = [
+  let initialPoints = new Float32Array(_.flatten([
     [0,1,0], [0,0,-1], [-1,0,0],
     [0,1,0], [-1,0,0], [0,0,1],
     [0,1,0], [0,0,1], [1,0,0],
@@ -18,12 +23,14 @@ export default function octahedronSphere(divisions) {
     [0,-1,0], [0,0,1], [-1,0,0],
     [0,-1,0], [1,0,0], [0,0,1],
     [0,-1,0], [0,0,-1], [1,0,0]
-  ]
+  ]))
 
-  let pointLODs = [new Float32Array(_.flatten(initialPoints))]
+  let pointLODs = [new Vec3Array(initialPoints)]
   for (let i = 0; i < divisions; i++) {
     let current = pointLODs[i]
-    let split = new Float32Array(current.length * 4)
+    let split = new Vec3Array(
+      new Float32Array(current.data.length * 4)
+    )
 
     for (let j = 0; j < current.length; j+=3) {
       splitTriangle(current, split, j)
@@ -33,27 +40,27 @@ export default function octahedronSphere(divisions) {
   }
 
   let points = pointLODs[pointLODs.length - 1]
-  let pointUvs = new Float32Array(points.length / 3 * 2)
+  let pointUvs = new Vec2Array(new Float32Array(points.length * 2))
 
-  for (let i = 0; i < points.length / 3; i+=3) {
+  for (let i = 0; i < points.length; i+=3) {
     calculateUvs(pointUvs, points, i)
   }
 
   let index = 0
   let indices = []
-  let indexedPoints = new Float32Array(points.length * 3)
-  let indexedUvs = new Float32Array(points.length * 2)
+  let indexedPoints = new Vec3Array(new Float32Array(points.data.length))
+  let indexedUvs = new Vec2Array(new Float32Array(pointUvs.data.length))
   let pointMap = {}
 
-  for (let i = 0; i < points.length / 3; i++) {
-    let point = getVec3(points, i)
-    let uv = getVec2(pointUvs, i)
+  for (let i = 0; i < points.length; i++) {
+    let point = points.get(i)
+    let uv = pointUvs.get(i)
     let key = JSON.stringify([point[0], point[1], point[2], uv[0], uv[1]])
     let existingIndex = pointMap[key]
     if (existingIndex === undefined) {
       pointMap[key] = index
-      setVec3(indexedPoints, index, point)
-      setVec2(indexedUvs, index, uv)
+      indexedPoints.set(index, point)
+      indexedUvs.set(index, uv)
       indices.push(index)
       index += 1;
     }
@@ -64,21 +71,21 @@ export default function octahedronSphere(divisions) {
 
   return {
     indices: indices,
-    position: indexedPoints.subarray(0, index * 3),
-    texcoord: indexedUvs.subarray(0, index * 2),
+    position: indexedPoints.data.subarray(0, index * 3),
+    texcoord: indexedUvs.data.subarray(0, index * 2),
     elevation: _.fill(Array(index), 0)
   }
 }
 
 function splitTriangle(points, target, offset) {
-  var a = getVec3(points, offset)
-  var b = getVec3(points, offset + 1)
-  var c = getVec3(points, offset + 2)
+  var a = points.get(offset)
+  var b = points.get(offset + 1)
+  var c = points.get(offset + 2)
   var ab = Array.prototype.slice.call(v3.normalize(v3.add(a, b)))
   var bc = Array.prototype.slice.call(v3.normalize(v3.add(b, c)))
   var ca = Array.prototype.slice.call(v3.normalize(v3.add(c, a)))
 
-  setVec3Range(target, offset * 4, [
+  target.setRange(offset * 4, [
     a, ab, ca,
     ab, bc, ca,
     ab, b, bc,
@@ -87,9 +94,9 @@ function splitTriangle(points, target, offset) {
 }
 
 function calculateUvs(pointUvs, points, offset) {
-  let a = uvPoint(getVec3(points, offset))
-  let b = uvPoint(getVec3(points, offset + 1))
-  let c = uvPoint(getVec3(points, offset + 2))
+  let a = uvPoint(points.get(offset))
+  let b = uvPoint(points.get(offset + 1))
+  let c = uvPoint(points.get(offset + 2))
 
   let min = Math.min(a[0], b[0], c[0])
   let max = Math.max(a[0], b[0], c[0])
@@ -102,7 +109,7 @@ function calculateUvs(pointUvs, points, offset) {
     c[0] = c[0] == 1 ? 0 : c[0]
   }
 
-  setVec2Range(pointUvs, offset, [a, b, c])
+  pointUvs.setRange(offset, [a, b, c])
 }
 
 function uvPoint(p) {
@@ -110,37 +117,4 @@ function uvPoint(p) {
     (Math.atan2(p[0], p[2]) / (2 * Math.PI)) + 0.5,
     1.0 - ((Math.asin(p[1]) / Math.PI) + 0.5)
   ]
-}
-
-function getVec2(data, offset) {
-  let begin = offset * 2
-  return data.slice(begin, begin +2)
-}
-
-function setVec2Range(data, offset, range) {
-  for (let i = 0; i < range.length; i++) {
-    setVec2(data, offset + i, range[i])
-  }
-}
-
-function setVec2(data, offset, entry) {
-  data[offset * 2] = entry[0]
-  data[offset * 2 + 1] = entry[1]
-}
-
-function getVec3(data, offset) {
-  let begin = offset * 3
-  return data.slice(begin, begin + 3)
-}
-
-function setVec3Range(data, offset, range) {
-  for (let i = 0; i < range.length; i++) {
-    setVec3(data, offset + i, range[i])
-  }
-}
-
-function setVec3(data, offset, entry) {
-  data[offset * 3] = entry[0]
-  data[offset * 3 + 1] = entry[1]
-  data[offset * 3 + 2] = entry[2]
 }

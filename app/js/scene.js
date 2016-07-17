@@ -1,5 +1,6 @@
 import twgl from 'twgl.js'
 import moment from 'moment'
+import _ from 'lodash'
 
 import ControlRange from './controlRange'
 import octahedronSphere from './octahedronSphere'
@@ -9,12 +10,13 @@ const m4 = twgl.m4
 
 export default class Scene {
   constructor(gl) {
+    this.gl = gl
     this.hourOfDay = new ControlRange(12, 0.001, 23.999)
     this.dayOfYear = new ControlRange(182, 1, 365)
 
-    this.elevationScale = new ControlRange(25, 1, 50)
+    this.elevationScale = new ControlRange(10, 1, 25)
 
-    let sphere = octahedronSphere(5)
+    this.sphere = octahedronSphere(5)
 
     this.globeBuffer = twgl.createBufferInfoFromArrays(gl, {
       indices: { numComponents: 3, data: this.sphere.indices },
@@ -22,6 +24,8 @@ export default class Scene {
       texcoord: { numComponents: 2, data: this.sphere.texcoord },
       elevation: { numComponents: 1, data: this.sphere.elevation }
     })
+
+    this.fillInElevations()
 
     this.renderMode = 'dayAndNight'
 
@@ -82,5 +86,39 @@ export default class Scene {
       oceanElevationScale: ocean,
       landElevationScale: land
     }
+  }
+
+  // Sample texture to fill in vertex attribute.
+  // This could just be a texture lookup in the vertex
+  // shader, but that results in visible gaps between
+  // triangles on iphone.
+  fillInElevations() {
+    let img = new Image()
+    img.onload = () => {
+      let canvas = document.createElement('canvas')
+      canvas.width = img.width
+      canvas.height = img.height
+      let ctx = canvas.getContext('2d')
+      ctx.drawImage(img, 0, 0, img.width, img.height)
+
+      let w = img.width - 1
+      let h = img.height - 1
+      for (let i = 0; i < this.sphere.elevation.length; i++) {
+        let u = this.sphere.texcoord[i * 2]
+        let v = this.sphere.texcoord[i * 2 + 1]
+        let x = _.clamp(_.floor((u == 1 ? 0 : u) * w), 0, w)
+        let y = _.clamp(_.floor((v == 1 ? 0 : v) * h), 0, h)
+        let sample = ctx.getImageData(x, y, 1, 1).data[0]
+        this.sphere.elevation[i] = (sample / 255) - 0.5
+      }
+
+      twgl.setAttribInfoBufferFromArray(
+        this.gl,
+        this.globeBuffer.attribs.elevation,
+        this.sphere.elevation
+      )
+    }
+
+    img.src = 'data/topo-bathy-256.jpg'
   }
 }

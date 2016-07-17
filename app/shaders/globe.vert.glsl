@@ -5,8 +5,7 @@ precision highp float;
 
 attribute vec3 position;
 attribute vec2 texcoord;
-
-uniform sampler2D topographyMap;
+attribute float elevation;
 
 uniform mat4 model;
 uniform mat4 view;
@@ -26,14 +25,7 @@ void main(void) {
 
   vUv = texcoord;
 
-  float lod = 6.0;
-
-  float elevation = (
-    texture2DLod(topographyMap, vUv, lod).r - 0.5
-  );
-
   float scale = 1.0;
-
   if (elevation > 0.0) {
     scale += elevation * landElevationScale;
   }

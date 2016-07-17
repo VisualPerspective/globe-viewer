@@ -22,8 +22,8 @@ void main() {
   float oceanDepth = (0.5 - texture2D(topographyMap, vUv).r) * 2.0;
 
   vec3 oceanColor = mix(
-    vec3(0.0, 0.0, 0.25),
-    vec3(0.0, 0.0, 0.35),
+    vec3(0.1, 0.15, 0.45),
+    vec3(0.1, 0.15, 0.35),
     oceanDepth
   );
 

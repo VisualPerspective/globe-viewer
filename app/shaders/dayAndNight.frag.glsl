@@ -74,7 +74,11 @@ void main() {
       L, V, N
     );
 
-    color += atmosphere(vNdotL_clamped, vNdotV_clamped);
+    color += atmosphere(
+      vNdotL_clamped,
+      vNdotV_clamped,
+      vec3(0.1, 0.1, 1.0) * 20.0
+    );
   }
 
   vec3 tonemapped = tonemap(color * exposure(eye, L));

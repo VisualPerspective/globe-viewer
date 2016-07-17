@@ -30,10 +30,14 @@ void main() {
   float landness = texture2D(landmaskMap, vUv).r;
   float elevation = texture2D(topographyMap, vUv).r;
 
-  float steps = 20.0;
-  vec3 diffuseColor = vec3(
-    floor((elevation / 0.9) * steps) / steps
-  );
+  float steps = 16.0;
+  vec3 diffuseColor = vec3(1.0, 0.75, 0.5) *
+    floor((elevation / 0.9) * steps) / steps;
+
+  if (landness < 0.5) {
+    diffuseColor =vec3(0.25, 0.5, 1.0) *
+    floor((elevation / 0.9) * steps) / steps;
+  }
 
   // Outline the transition from land to sea
   diffuseColor = mix(
@@ -57,6 +61,12 @@ void main() {
       0.3, //specular
       0.99, //roughness
       L, V, N
+    );
+
+    color += atmosphere(
+      dot(vNormal, L),
+      dot(vNormal, normalize(eye - vPosition)),
+      vec3(5.0)
     );
   }
 

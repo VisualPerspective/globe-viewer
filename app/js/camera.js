@@ -72,7 +72,7 @@ export default class Camera {
       let amount = -e.deltaY * 0.001
 
       // Deal with Firefox mousewheel speed being slower
-      if (e.mozInputSource === 1) {
+      if (e.mozInputSource === 1 && e.deltaMode === 1) {
         amount *= 50;
       }
 

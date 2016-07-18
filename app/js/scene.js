@@ -120,6 +120,6 @@ export default class Scene {
       )
     }
 
-    img.src = 'data/topo-bathy-256.jpg'
+    img.src = 'data/topo-bathy-128.jpg'
   }
 }

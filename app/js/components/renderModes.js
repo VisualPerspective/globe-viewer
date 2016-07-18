@@ -69,9 +69,8 @@ export default function registerRenderModes(
       </div>
     `,
     watch: {
-      '$data': {
-        handler: () => { controller.updated() },
-        deep:true
+      'renderMode': {
+        handler: () => { controller.updated() }
       }
     }
   }))

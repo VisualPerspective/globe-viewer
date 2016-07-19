@@ -30,7 +30,10 @@ void main() {
   float vNdotV = dot(vNormal, V);
   float vNdotV_clamped = clamp(vNdotV, 0.0, 1.0);
 
-  float landness = texture2D(landmaskMap, vUv).r;
+  vec3 infoSample = texture2D(landmaskMap, vUv, -0.5).rgb;
+  float landness = max(infoSample.r, infoSample.b);
+  float countryBorder = infoSample.b;
+
   float oceanDepth = (0.5 - texture2D(topographyMap, vUv).r) * 2.0;
 
   vec2 dHdxy = heightDerivative(vUv, topographyMap) *
@@ -45,7 +48,7 @@ void main() {
   vec3 diffuseColor = mix(
     oceanColor,
     toLinear(texture2D(diffuseMap, vUv).rgb),
-    smoothstep(0.25, 0.75, landness)
+    landness
   );
 
 
@@ -81,6 +84,7 @@ void main() {
     );
   }
 
-  vec3 tonemapped = tonemap(color * exposure(eye, L));
-  gl_FragColor = vec4(toGamma(tonemapped), 1.0);
+  vec3 shaded = toGamma(tonemap(color * exposure(eye, L)));
+  vec3 final = mix(shaded, vec3(1.0), countryBorder);
+  gl_FragColor = vec4(final, 1.0);
 }

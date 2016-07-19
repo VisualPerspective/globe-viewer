@@ -27,7 +27,10 @@ void main() {
   vec3 constantLight = vNormal;
   vec3 V = vNormal;
 
-  float landness = texture2D(landmaskMap, vUv).r;
+  vec3 infoSample = texture2D(landmaskMap, vUv, -0.5).rgb;
+  float landness = max(infoSample.r, infoSample.b);
+  float countryBorder = infoSample.b;
+
   float elevation = texture2D(topographyMap, vUv).r;
 
   float steps = 16.0;
@@ -70,6 +73,7 @@ void main() {
     );
   }
 
-  vec3 tonemapped = tonemap(color * 0.5);
-  gl_FragColor = vec4(toGamma(tonemapped), 1.0);
+  vec3 shaded = toGamma(tonemap(color * 0.5));
+  vec3 final = mix(shaded, vec3(1.0), countryBorder);
+  gl_FragColor = vec4(final, 1.0);
 }

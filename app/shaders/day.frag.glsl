@@ -18,7 +18,10 @@ void main() {
   vec3 constantLight = vNormal;
   vec3 V = vNormal;
 
-  float landness = texture2D(landmaskMap, vUv).r;
+  vec3 infoSample = texture2D(landmaskMap, vUv).rgb;
+  float landness = max(infoSample.r, infoSample.b);
+  float countryBorder = infoSample.b;
+
   float oceanDepth = (0.5 - texture2D(topographyMap, vUv).r) * 2.0;
 
   vec3 oceanColor = mix(
@@ -57,6 +60,7 @@ void main() {
     );
   }
 
-  vec3 tonemapped = tonemap(color * 1.0);
-  gl_FragColor = vec4(toGamma(tonemapped), 1.0);
+  vec3 shaded = toGamma(tonemap(color * 1.0));
+  vec3 final = mix(shaded, vec3(1.0), countryBorder);
+  gl_FragColor = vec4(final, 1.0);
 }

@@ -7,7 +7,6 @@ export default function registerCheckboxOption(
 ) {
   Vue.component('checkbox-option', Vue.extend({
     data: function () {
-      console.log(propertyMap[this.property].data)
       return propertyMap[this.property].data
     },
     props: [

@@ -2,6 +2,7 @@ import twgl from 'twgl.js'
 import moment from 'moment'
 import _ from 'lodash'
 
+import  { dispatchEvent } from './utils'
 import ControlRange from './controlRange'
 import octahedronSphere from './octahedronSphere'
 import sunCoordinates from './coordinates.js'
@@ -37,7 +38,7 @@ export default class Scene {
         this.vectorLayer.layer.node()
       )
 
-      window.dispatchEvent(new Event('texture-loaded'))
+      dispatchEvent('texture-loaded')
     })
   }
 
@@ -63,9 +64,7 @@ export default class Scene {
         format: this.gl.LUMINANCE,
         internalFormat: this.gl.LUMINANCE,
       }
-    }, () => {
-      window.dispatchEvent(new Event('texture-loaded'))
-    })
+    }, () => { dispatchEvent('texture-loaded') })
   }
 
   calculatedMoment() {

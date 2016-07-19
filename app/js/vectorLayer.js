@@ -2,6 +2,11 @@ import * as d3 from 'd3'
 import * as topojson from 'topojson'
 import _ from 'lodash'
 
+import {
+  compositeOperation,
+  dispatchEvent
+} from './utils'
+
 export default class VectorLayer {
   constructor(gl) {
     this.options = {
@@ -44,7 +49,7 @@ export default class VectorLayer {
   }
 
   draw() {
-    this.ctx.globalCompositeOperation = 'source-over'
+    compositeOperation(this.ctx, 'source-over')
     this.ctx.fillStyle = '#000'
     this.ctx.fillRect(0, 0, this.width, this.height)
 
@@ -71,7 +76,7 @@ export default class VectorLayer {
 
     //countries
     if (this.options.countries.enabled) {
-      this.ctx.globalCompositeOperation = 'lighten'
+      compositeOperation(this.ctx, 'lighten')
       this.ctx.beginPath()
       this.path(this.countries)
       this.ctx.lineWidth = 3.0 * this.scale
@@ -79,8 +84,6 @@ export default class VectorLayer {
       this.ctx.stroke()
     }
 
-    _.defer(() => {
-      window.dispatchEvent(new Event('vector-layer-updated'))
-    })
+    _.defer(() => { dispatchEvent('vector-layer-updated') })
   }
 }

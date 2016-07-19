@@ -15,6 +15,7 @@
   "dependencies": {
     "babel-plugin-glslify": "^1.0.2",
     "babel-plugin-transform-object-assign": "^6.8.0",
+    "d3": "^4.0.0-rc.2",
     "glsl-diffuse-lambert": "^1.0.0",
     "glsl-gamma": "^2.0.0",
     "glsl-inverse": "^1.0.0",
@@ -29,6 +30,7 @@
     "numeral": "^1.5.3",
     "raw-loader": "^0.5.1",
     "sass-brunch": "^2.6.3",
+    "topojson": "^1.6.26",
     "twgl.js": "^1.7.0",
     "vue": "^1.0.25"
   },

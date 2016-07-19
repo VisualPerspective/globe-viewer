@@ -25,5 +25,5 @@ node_modules/
 # Brunch output folder.
 public/
 
-# Scratch folder for unprocessed data
-srcdata/
+# Temporary data folder
+tmpdata/

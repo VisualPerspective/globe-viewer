@@ -28,7 +28,7 @@ void main() {
   vec3 V = vNormal;
 
   vec3 infoSample = texture2D(landmaskMap, vUv, -0.5).rgb;
-  float landness = max(infoSample.r, infoSample.b);
+  float landness = infoSample.r;
   float countryBorder = infoSample.b;
 
   float elevation = texture2D(topographyMap, vUv).r;

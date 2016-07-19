@@ -2,9 +2,17 @@ import * as d3 from 'd3'
 import * as topojson from 'topojson'
 
 export default class VectorLayer {
-  constructor() {
-    this.width = 8192
-    this.height = 4096
+  constructor(gl) {
+    if (gl.getParameter(gl.MAX_TEXTURE_SIZE) >= 8192) {
+      this.width = 8192
+      this.height = 4096
+      this.scale = 1.0
+    }
+    else {
+      this.width = 4096
+      this.height = 2048
+      this.scale = 0.5
+    }
 
     let projection = d3.geoEquirectangular()
       .scale(this.height / Math.PI)
@@ -29,6 +37,7 @@ export default class VectorLayer {
   }
 
   draw() {
+    this.ctx.globalCompositeOperation = 'source-over'
     this.ctx.fillStyle = '#000'
     this.ctx.fillRect(0, 0, this.width, this.height)
 
@@ -47,15 +56,16 @@ export default class VectorLayer {
     // rivers
     this.ctx.beginPath()
     this.path(this.rivers)
-    this.ctx.lineWidth = 1.0
+    this.ctx.lineWidth = 0.5 * this.scale
     this.ctx.strokeStyle = '#000'
     this.ctx.stroke()
 
     //countries
+    this.ctx.globalCompositeOperation = 'lighten'
     this.ctx.beginPath()
     this.path(this.countries)
-    this.ctx.lineWidth = 2.0
-    this.ctx.strokeStyle = '#00f'
+    this.ctx.lineWidth = 3.0 * this.scale
+    this.ctx.strokeStyle = 'rgba(0, 0, 255, 0.4)'
     this.ctx.stroke()
 
     window.dispatchEvent(new Event('vector-layer-updated'))

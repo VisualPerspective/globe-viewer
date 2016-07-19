@@ -19,7 +19,7 @@ void main() {
   vec3 V = vNormal;
 
   vec3 infoSample = texture2D(landmaskMap, vUv).rgb;
-  float landness = max(infoSample.r, infoSample.b);
+  float landness = infoSample.r;
   float countryBorder = infoSample.b;
 
   float oceanDepth = (0.5 - texture2D(topographyMap, vUv).r) * 2.0;

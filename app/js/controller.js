@@ -13,7 +13,7 @@ import registerDebugPanel from './components/debugPanel'
 
 export default class Controller {
   constructor(gl) {
-    this.vectorLayer = new VectorLayer()
+    this.vectorLayer = new VectorLayer(gl)
     this.scene = new Scene(gl, this.vectorLayer)
     this.renderer = new Renderer(gl, this.scene)
     this.camera = new Camera(gl)

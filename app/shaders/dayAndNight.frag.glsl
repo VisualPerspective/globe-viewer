@@ -31,7 +31,7 @@ void main() {
   float vNdotV_clamped = clamp(vNdotV, 0.0, 1.0);
 
   vec3 infoSample = texture2D(landmaskMap, vUv, -0.5).rgb;
-  float landness = max(infoSample.r, infoSample.b);
+  float landness = infoSample.r;
   float countryBorder = infoSample.b;
 
   float oceanDepth = (0.5 - texture2D(topographyMap, vUv).r) * 2.0;

@@ -29,6 +29,7 @@ export default class VectorLayer {
       .attr('width', this.width)
       .attr('height', this.height);
 
+    // based on https://bost.ocks.org/mike/map/
     this.ctx = this.layer.node().getContext('2d')
     this.path = d3.geoPath().projection(projection).context(this.ctx);
 

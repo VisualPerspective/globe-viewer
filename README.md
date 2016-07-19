@@ -5,11 +5,17 @@ Renders the globe in different ways using WebGL ([Live Demo](http://k9.github.co
 
 ## Installing and Running
 
-Requires a recent version of nodejs and [brunch](http://brunch.io/)
+Requires:
 
-To install:
+* a recent version of nodejs
+* [brunch](http://brunch.io/)
+* topojson (npm install -g topojson)
+
+To install, clone the repo and:
 ```
 npm install
+chmod +x script/make_vectors.sh
+./script/make_vectors.sh
 ```
 
 To run:
@@ -33,11 +39,14 @@ http://visibleearth.nasa.gov/view_cat.php?categoryID=1484
 Blue Marble
 http://visibleearth.nasa.gov/view_cat.php?categoryID=1484
 
-##### Mask for Land vs Water (app/assets/data/landmask-\*)
+##### Land, Ocean, Rivers, and Borders (app/assets/data/vectors.json)
 Natural Earth Physical Vectors
-http://www.naturalearthdata.com/downloads/10m-physical-vectors/
+http://www.naturalearthdata.com/downloads/50m-physical-vectors/
 
-These physical vectors were combined and processed using Blender with https://github.com/domlysz/BlenderGIS
+These physical vectors can be downloaded and processed
+using ./scripts/make-vectors.sh The resulting json is then
+drawn to an offscreen
+canvas in the browser using vectorLayer.js
 
 ## Other Globe Visualizations / Platforms on the Web
 

@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import moment from 'moment'
 import numeral from 'numeral'
+import _ from 'lodash'
 
 import Scene from './scene'
 import Renderer from './renderer'
@@ -94,7 +95,9 @@ export default class Controller {
 
   updated(updateVectorLayer) {
     if (updateVectorLayer) {
-      this.vectorLayer.draw()
+      _.defer(() => {
+        this.vectorLayer.draw()
+      })
     }
     else {
       if (!this.updateQueued) {

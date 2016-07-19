@@ -27,6 +27,6 @@ if [ ! -f ne_50m_admin_0_countries.zip ]; then
 fi
 unzip -o ne_50m_admin_0_countries.zip
 
-topojson -o vectors.json -- land=ne_50m_land.shp lakes=ne_50m_lakes.shp rivers=ne_50m_rivers_lake_centerlines_scale_rank.shp countries=ne_50m_admin_0_countries.shp
+topojson --simplify-proportion 0.4 -o vectors.json -- land=ne_50m_land.shp lakes=ne_50m_lakes.shp rivers=ne_50m_rivers_lake_centerlines_scale_rank.shp countries=ne_50m_admin_0_countries.shp
 
 cp vectors.json ../app/assets/data/

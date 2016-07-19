@@ -1,5 +1,6 @@
 import * as d3 from 'd3'
 import * as topojson from 'topojson'
+import _ from 'lodash'
 
 export default class VectorLayer {
   constructor(gl) {
@@ -62,8 +63,8 @@ export default class VectorLayer {
     if (this.options.rivers.enabled) {
       this.ctx.beginPath()
       this.path(this.rivers)
-      this.ctx.lineWidth = 0.5 * this.scale
-      this.ctx.strokeStyle = '#000'
+      this.ctx.lineWidth = 1.0 * this.scale
+      this.ctx.strokeStyle = 'rgba(0, 0, 0, 0.75)'
       this.ctx.stroke()
     }
 
@@ -77,6 +78,8 @@ export default class VectorLayer {
       this.ctx.stroke()
     }
 
-    window.dispatchEvent(new Event('vector-layer-updated'))
+    _.defer(() => {
+      window.dispatchEvent(new Event('vector-layer-updated'))
+    })
   }
 }

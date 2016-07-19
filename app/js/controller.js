@@ -8,6 +8,7 @@ import Camera from './camera'
 import VectorLayer from './vectorLayer'
 import PerformanceStats from './performanceStats'
 import registerRangeSlider from './components/rangeSlider'
+import registerCheckboxOption from './components/checkboxOption'
 import registerRenderModes from './components/renderModes'
 import registerDebugPanel from './components/debugPanel'
 
@@ -66,10 +67,18 @@ export default class Controller {
       'elevationScale': {
         data: this.scene.elevationScale,
         formatted: multiple
+      },
+      'rivers': {
+        data: this.vectorLayer.options.rivers
+      },
+      'countries': {
+        data: this.vectorLayer.options.countries
       }
+
     }
 
     registerRangeSlider(this, propertyMap)
+    registerCheckboxOption(this, propertyMap)
     registerRenderModes(this, this.scene)
     registerDebugPanel(this.performanceStats)
 
@@ -83,13 +92,18 @@ export default class Controller {
     window.addEventListener('texture-loaded', () => { this.updated() })
   }
 
-  updated() {
-    if (!this.updateQueued) {
-      this.updateQueued = true
-      window.requestAnimationFrame(() => {
-        this.renderFrame()
-        this.updateQueued = false
-      })
+  updated(updateVectorLayer) {
+    if (updateVectorLayer) {
+      this.vectorLayer.draw()
+    }
+    else {
+      if (!this.updateQueued) {
+        this.updateQueued = true
+        window.requestAnimationFrame(() => {
+          this.renderFrame()
+          this.updateQueued = false
+        })
+      }
     }
   }
 

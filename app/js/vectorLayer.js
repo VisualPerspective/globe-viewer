@@ -3,6 +3,11 @@ import * as topojson from 'topojson'
 
 export default class VectorLayer {
   constructor(gl) {
+    this.options = {
+      rivers: { enabled: false },
+      countries: { enabled: true }
+    }
+
     if (gl.getParameter(gl.MAX_TEXTURE_SIZE) >= 8192) {
       this.width = 8192
       this.height = 4096
@@ -54,19 +59,23 @@ export default class VectorLayer {
     this.ctx.fill()
 
     // rivers
-    this.ctx.beginPath()
-    this.path(this.rivers)
-    this.ctx.lineWidth = 0.5 * this.scale
-    this.ctx.strokeStyle = '#000'
-    this.ctx.stroke()
+    if (this.options.rivers.enabled) {
+      this.ctx.beginPath()
+      this.path(this.rivers)
+      this.ctx.lineWidth = 0.5 * this.scale
+      this.ctx.strokeStyle = '#000'
+      this.ctx.stroke()
+    }
 
     //countries
-    this.ctx.globalCompositeOperation = 'lighten'
-    this.ctx.beginPath()
-    this.path(this.countries)
-    this.ctx.lineWidth = 3.0 * this.scale
-    this.ctx.strokeStyle = 'rgba(0, 0, 255, 0.4)'
-    this.ctx.stroke()
+    if (this.options.countries.enabled) {
+      this.ctx.globalCompositeOperation = 'lighten'
+      this.ctx.beginPath()
+      this.path(this.countries)
+      this.ctx.lineWidth = 3.0 * this.scale
+      this.ctx.strokeStyle = 'rgba(0, 0, 255, 0.4)'
+      this.ctx.stroke()
+    }
 
     window.dispatchEvent(new Event('vector-layer-updated'))
   }

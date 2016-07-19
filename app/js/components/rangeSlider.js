@@ -34,7 +34,6 @@ export default function registerRangeSlider(
           <input type='range'
             min='{{min}}'
             max='{{max}}'
-            property='{{property}}'
             step="any"
             v-model="value">
         </div>

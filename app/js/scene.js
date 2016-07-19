@@ -55,8 +55,8 @@ export default class Scene {
       },
       landmaskMap: {
         src: this.vectorLayer.layer.node(),
-        format: this.gl.LUMINANCE,
-        internalFormat: this.gl.LUMINANCE,
+        format: this.gl.RGB,
+        internalFormat: this.gl.RGB,
       },
       lightsMap: {
         src: 'data/lights-4096.png',

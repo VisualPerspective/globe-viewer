@@ -15,12 +15,10 @@ export default function registerCheckboxOption(
       'property'
     ],
     template: `
-      <div class="checkbox-option">
-        <label>
-          <input type="checkbox" v-model="enabled">
-          {{label}}
-        </label>
-      </div>
+      <label class="checkbox-option">
+        <input type="checkbox" v-model="enabled">
+        {{label}}
+      </label>
     `,
     watch: {
       'enabled': {

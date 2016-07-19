@@ -89,6 +89,21 @@ $thumb-color: #8895b3;
     input[type=range] { flex: 1 1 100%; }
   }
 
+  .checkbox-options {
+    padding-top: 8px;
+    margin-right: -8px;
+    display: flex;
+
+    .checkbox-option {
+      flex: 1 1 50%;
+      margin: 0 6px 6px 0;
+      padding: 6px;
+      border-radius: 5px;
+      background-color: #f4f4f4;
+      cursor: pointer;
+    }
+  }
+
   .radio-buttons {
     padding-top: 8px;
 

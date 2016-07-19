@@ -9,8 +9,9 @@ import sunCoordinates from './coordinates.js'
 const m4 = twgl.m4
 
 export default class Scene {
-  constructor(gl) {
+  constructor(gl, vectorLayer) {
     this.gl = gl
+    this.vectorLayer = vectorLayer
 
     this.hourOfDay = new ControlRange(12, 0.001, 23.999)
     this.dayOfYear = new ControlRange(182, 1, 365)
@@ -25,30 +26,42 @@ export default class Scene {
       elevation: { numComponents: 1, data: this.sphere.elevation }
     })
 
-    this.fillInElevations()
-
     this.renderMode = 'dayAndNight'
+    this.fillInElevations()
+    this.initTextures()
 
-    this.textures = twgl.createTextures(gl, {
+    window.addEventListener('vector-layer-updated', () => {
+      twgl.setTextureFromElement(
+        this.gl,
+        this.textures.landmaskMap,
+        this.vectorLayer.layer.node()
+      )
+
+      window.dispatchEvent(new Event('texture-loaded'))
+    })
+  }
+
+  initTextures() {
+    this.textures = twgl.createTextures(this.gl, {
       diffuseMap: {
-        format: gl.RGB,
-        internalFormat: gl.RGB,
+        format: this.gl.RGB,
+        internalFormat: this.gl.RGB,
         src: 'data/color-4096.jpg'
       },
       topographyMap: {
-        format: gl.LUMINANCE,
-        internalFormat: gl.LUMINANCE,
+        format: this.gl.LUMINANCE,
+        internalFormat: this.gl.LUMINANCE,
         src: 'data/topo-bathy-4096.jpg'
       },
       landmaskMap: {
-        src: 'data/landmask-4096.png',
-        format: gl.LUMINANCE,
-        internalFormat: gl.LUMINANCE,
+        src: this.vectorLayer.layer.node(),
+        format: this.gl.LUMINANCE,
+        internalFormat: this.gl.LUMINANCE,
       },
       lightsMap: {
         src: 'data/lights-4096.png',
-        format: gl.LUMINANCE,
-        internalFormat: gl.LUMINANCE,
+        format: this.gl.LUMINANCE,
+        internalFormat: this.gl.LUMINANCE,
       }
     }, () => {
       window.dispatchEvent(new Event('texture-loaded'))

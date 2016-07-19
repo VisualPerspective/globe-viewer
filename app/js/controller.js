@@ -5,6 +5,7 @@ import numeral from 'numeral'
 import Scene from './scene'
 import Renderer from './renderer'
 import Camera from './camera'
+import VectorLayer from './vectorLayer'
 import PerformanceStats from './performanceStats'
 import registerRangeSlider from './components/rangeSlider'
 import registerRenderModes from './components/renderModes'
@@ -12,7 +13,8 @@ import registerDebugPanel from './components/debugPanel'
 
 export default class Controller {
   constructor(gl) {
-    this.scene = new Scene(gl)
+    this.vectorLayer = new VectorLayer()
+    this.scene = new Scene(gl, this.vectorLayer)
     this.renderer = new Renderer(gl, this.scene)
     this.camera = new Camera(gl)
     this.performanceStats = new PerformanceStats()

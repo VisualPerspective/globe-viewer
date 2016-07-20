@@ -76,7 +76,7 @@ export default class VectorLayer {
 
     //countries
     if (this.options.countries.enabled) {
-      compositeOperation(this.ctx, 'lighten')
+      compositeOperation(this.ctx, 'lighter')
       this.ctx.beginPath()
       this.path(this.countries)
       this.ctx.lineWidth = 3.0 * this.scale

@@ -1,4 +1,5 @@
 import platform from 'platform'
+import _  from 'lodash'
 
 export function toRadians(degrees) {
   return degrees / 180 * Math.PI
@@ -11,9 +12,11 @@ export function dispatchEvent(name) {
   window.dispatchEvent(evt)
 }
 
-// Edge becomes unstable if this is used
+// globalCompositeOperation doesn't work as expected
+// on some platforms, so for now just skip it which results
+// in somewhat blurrier borders/rivers
 export function compositeOperation(ctx, mode) {
-  if (platform.name == 'IE' || platform.name == 'Edge') {
+  if (!_.contains(platform.name, ['IE', 'Edge', 'Chrome Mobile']) {
     ctx.globalCompositeOperation = mode
   }
 }

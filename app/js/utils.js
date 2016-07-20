@@ -16,7 +16,7 @@ export function dispatchEvent(name) {
 // on some platforms, so for now just skip it which results
 // in somewhat blurrier borders/rivers
 export function compositeOperation(ctx, mode) {
-  if (!_.includes(platform.name, ['IE', 'Edge', 'Chrome Mobile'])) {
+  if (!_.includes(['IE', 'Microsoft Edge', 'Chrome Mobile'], platform.name)) {
     ctx.globalCompositeOperation = mode
   }
 }

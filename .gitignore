@@ -18,6 +18,7 @@
 .tmproj
 nbproject
 Thumbs.db
+.exrc
 
 # NPM packages folder.
 node_modules/

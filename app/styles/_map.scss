@@ -1,5 +1,5 @@
 @import "range";
-$thumb-color: #8895b3;
+$thumb-color: darken(#8895b3, 20);
 
 @mixin antialias() {
   -webkit-font-smoothing: antialiased;
@@ -16,12 +16,15 @@ $thumb-color: #8895b3;
     flex: 0 0 320px;
     font-size: 13px;
     overflow-y: auto;
+    box-shadow: 0 0 3px #d3d3d3;
+
+    img { height: 1.25em; }
 
     >div {
       padding: 8px 24px;
 
       .top-row {
-        display: flex;
+        display: none;
         font-weight: bold;
         color: #405060;
         letter-spacing: 0px;
@@ -45,25 +48,33 @@ $thumb-color: #8895b3;
       }
 
       .top-row {
+        display: flex;
         color: #222;
         text-transform: none;
         font-weight: normal;
       }
     }
 
-    >h1 {
-      color: #222;
+    .header-row {
+      display: flex;
+      background: #f1f1f1;
+      padding: 6px 10px 6px 14px;
+    }
+
+    h1 {
+      flex: 1 1;
+      color: desaturate($thumb-color, 10);
       font-size: 16px;
       letter-spacing: 0;
       margin: 0;
-      padding: 12px 24px 4px;
+      padding: 0;
     }
 
     .info {
-      text-align: right;
+      align-self: flex-end;
+      position: relative;
+      top: 1px;
       a {
-        color: #586cbf;
-        padding-left: 1em;
         text-decoration: none;
       }
     }
@@ -82,11 +93,38 @@ $thumb-color: #8895b3;
   }
 
   .range-control {
-    @include range-styles(12px, darken($thumb-color, 20));
+    @include range-styles(12px, $thumb-color);
 
     input { box-sizing: border-box; }
 
     input[type=range] { flex: 1 1 100%; }
+  }
+
+  .vertical-slider-layout {
+    margin-right: 65px;
+    position: relative;
+
+    .vertical {
+      position: absolute;
+      top: 4px;
+      right: -65px;
+      width: 40px;
+      padding-top: 0;
+
+      input[type=range] {
+        -webkit-transform: rotate(-90deg);
+        transform: rotate(-90deg);
+        position: relative;
+        top: 24px;
+        left: -8px;
+        width: 62px;
+      }
+
+      .top-row {
+        justify-content: flex-end;
+        span { display: none; }
+      }
+    }
   }
 
   .checkbox-options {
@@ -97,10 +135,16 @@ $thumb-color: #8895b3;
     .checkbox-option {
       flex: 1 1 50%;
       margin: 0 6px 6px 0;
-      padding: 6px;
+      padding: 6px 8px;
       border-radius: 5px;
       background-color: #f4f4f4;
       cursor: pointer;
+
+      &.active {
+        @include antialias();
+        background: #8895b3;
+        color: white;
+      }
     }
   }
 
@@ -115,7 +159,7 @@ $thumb-color: #8895b3;
 
       >label {
         display: block;
-        padding: 6px;
+        padding: 6px 8px;
 
         input { display: none; }
       }
@@ -161,5 +205,7 @@ $thumb-color: #8895b3;
     }
 
     .map-canvas { height: 100vw; }
+
+    .hidden-mobile { display: none; }
   }
 }

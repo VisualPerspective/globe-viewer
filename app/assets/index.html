@@ -15,12 +15,19 @@
       <canvas></canvas>
     </div>
     <div class="map-controls">
-      <h1>Globe Viewer</h1>
-      <div>
-        <div class="top-row">
-          <label>Location</label>
+      <div class="header-row">
+        <h1>Globe Viewer</h1>
+        <div class="info">
+          <a href="https://github.com/k9/globe-viewer">
+            <img alt="Source code" src="/img/github.svg">
+          </a>
+          <a href="http://www.kwjames.com">
+            <img alt="About" src="/img/info-circle.svg">
+          </a>
         </div>
-        <div class="sub-group">
+      </div>
+      <div class="hidden-mobile">
+        <div class="sub-group vertical-slider-layout">
           <range-slider
             label="Latitude"
             property="latitude">
@@ -31,15 +38,13 @@
           </range-slider>
           <range-slider
             label="Zoom"
-            property="zoom">
+            property="zoom"
+            vertical="true">
           </range-slider>
         </div>
       </div>
       <render-modes></render-modes>
       <div>
-        <div class="top-row">
-          <label>Options</label>
-        </div>
         <div class="sub-group">
           <div class="checkbox-options">
             <checkbox-option
@@ -52,10 +57,6 @@
             </checkbox-option>
           </div>
         </div>
-      </div>
-      <div class="info">
-        <a href="https://github.com/k9/globe-viewer">Github</a>
-        <a href="http://www.kwjames.com">About</a>
       </div>
     </div>
   </div>

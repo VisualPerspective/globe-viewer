@@ -12,9 +12,6 @@ export default function registerRenderModes(
     props: [],
     template: `
       <div class="render-modes">
-        <div class="top-row">
-          <label>Mode</label>
-        </div>
         <div class="radio-buttons">
           <div class="radio-button"
             v-bind:class="{ active: renderMode == 'dayAndNight' }">

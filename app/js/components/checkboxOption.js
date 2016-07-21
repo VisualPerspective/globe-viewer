@@ -14,7 +14,7 @@ export default function registerCheckboxOption(
       'property'
     ],
     template: `
-      <label class="checkbox-option">
+      <label v-bind:class="['checkbox-option', { active: enabled }]">
         <input type="checkbox" v-model="enabled">
         {{label}}
       </label>

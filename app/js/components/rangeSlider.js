@@ -22,10 +22,11 @@ export default function registerRangeSlider(
     props: [
       'label',
       'property',
-      'formatted'
+      'formatted',
+      'vertical'
     ],
     template: `
-      <div class="range-slider range-control">
+      <div v-bind:class="['range-slider', 'range-control', { vertical: vertical }]">
         <div class="top-row">
           <label>{{label}}</label>
           <span>{{formatted}}</span>

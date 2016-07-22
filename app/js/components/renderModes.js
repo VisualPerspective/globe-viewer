@@ -16,6 +16,7 @@ export default function registerRenderModes(
           <div class="radio-button"
             v-bind:class="{ active: renderMode == 'dayAndNight' }">
             <label>
+              <img src="img/globe.svg">
               <input type="radio" name="render-mode"
                 value="dayAndNight" v-model="renderMode"
                 checked>
@@ -35,6 +36,7 @@ export default function registerRenderModes(
           <div class="radio-button"
             v-bind:class="{ active: renderMode == 'day' }">
             <label>
+              <img src="img/globe.svg">
               <input type="radio" name="render-mode"
                 value="day" v-model="renderMode">
               Day
@@ -43,6 +45,7 @@ export default function registerRenderModes(
           <div class="radio-button"
             v-bind:class="{ active: renderMode == 'night' }">
             <label>
+              <img src="img/globe.svg">
               <input type="radio" name="render-mode"
                 value="night" v-model="renderMode">
               Night
@@ -51,6 +54,7 @@ export default function registerRenderModes(
           <div class="radio-button"
             v-bind:class="{ active: renderMode == 'elevation' }">
             <label>
+              <img src="img/globe.svg">
               <input type="radio" name="render-mode"
                 value="elevation" v-model="renderMode">
               Elevation

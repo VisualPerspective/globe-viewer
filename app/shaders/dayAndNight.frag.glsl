@@ -15,6 +15,7 @@ precision highp float;
 uniform sampler2D topographyMap;
 uniform sampler2D diffuseMap;
 uniform sampler2D landmaskMap;
+uniform sampler2D bordersMap;
 uniform sampler2D lightsMap;
 uniform vec3 lightDirection;
 uniform vec3 eye;
@@ -30,9 +31,8 @@ void main() {
   float vNdotV = dot(vNormal, V);
   float vNdotV_clamped = clamp(vNdotV, 0.0, 1.0);
 
-  vec3 infoSample = texture2D(landmaskMap, vUv, -0.5).rgb;
-  float landness = infoSample.r;
-  float countryBorder = infoSample.b;
+  float landness = texture2D(landmaskMap, vUv, -0.25).r;
+  float countryBorder = texture2D(bordersMap, vUv, -0.25).r;
 
   float oceanDepth = (0.5 - texture2D(topographyMap, vUv).r) * 2.0;
 
@@ -50,7 +50,6 @@ void main() {
     toLinear(texture2D(diffuseMap, vUv).rgb),
     landness
   );
-
 
   vec3 N = perturbNormal(normalize(vPosition), vNormal, dHdxy);
   vec3 L = normalize(lightDirection);

@@ -10,6 +10,7 @@ precision highp float;
 uniform sampler2D topographyMap;
 uniform sampler2D diffuseMap;
 uniform sampler2D landmaskMap;
+uniform sampler2D bordersMap;
 
 varying vec2 vUv;
 varying vec3 vNormal;
@@ -18,9 +19,8 @@ void main() {
   vec3 constantLight = vNormal;
   vec3 V = vNormal;
 
-  vec3 infoSample = texture2D(landmaskMap, vUv).rgb;
-  float landness = infoSample.r;
-  float countryBorder = infoSample.b;
+  float landness = texture2D(landmaskMap, vUv, -0.25).r;
+  float countryBorder = texture2D(bordersMap, vUv, -0.25).r;
 
   float oceanDepth = (0.5 - texture2D(topographyMap, vUv).r) * 2.0;
 

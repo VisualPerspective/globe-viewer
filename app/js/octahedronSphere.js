@@ -52,7 +52,7 @@ export default function octahedronSphere(divisions) {
   let indexedUvs = new Vec2Array(new Float32Array(pointUvs.data.length))
   let pointMap = {}
 
-  var i = 0;
+  let i = 0
   for (i; i < points.length; i++) {
     let point = points.get(i)
     let uv = pointUvs.get(i)
@@ -79,12 +79,12 @@ export default function octahedronSphere(divisions) {
 }
 
 function splitTriangle(points, target, offset) {
-  var a = points.get(offset)
-  var b = points.get(offset + 1)
-  var c = points.get(offset + 2)
-  var ab = Array.prototype.slice.call(v3.normalize(v3.add(a, b)))
-  var bc = Array.prototype.slice.call(v3.normalize(v3.add(b, c)))
-  var ca = Array.prototype.slice.call(v3.normalize(v3.add(c, a)))
+  let a = points.get(offset)
+  let b = points.get(offset + 1)
+  let c = points.get(offset + 2)
+  let ab = Array.prototype.slice.call(v3.normalize(v3.add(a, b)))
+  let bc = Array.prototype.slice.call(v3.normalize(v3.add(b, c)))
+  let ca = Array.prototype.slice.call(v3.normalize(v3.add(c, a)))
 
   target.setRange(offset * 4, [
     a, ab, ca,

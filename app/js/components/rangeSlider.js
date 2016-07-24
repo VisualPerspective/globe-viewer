@@ -43,7 +43,7 @@ export default function registerRangeSlider(
     watch: {
       'value': {
         handler: function () {
-          this.throttleFormatted(this);
+          this.throttleFormatted(this)
           controller.updated()
         }
       }

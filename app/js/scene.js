@@ -104,9 +104,9 @@ export default class Scene {
   }
 
   getElevationScales() {
-    var base = (10034 * 2) / 6371000
-    var land = base
-    var ocean = 0
+    let base = (10034 * 2) / 6371000
+    let land = base
+    let ocean = 0
 
     if (this.renderMode === 'elevation') {
       land = this.elevationScale.value * base

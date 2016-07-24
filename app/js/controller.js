@@ -113,8 +113,11 @@ export default class Controller {
       window.requestAnimationFrame(() => {
         this.renderFrame()
         this.updateQueued = false
-        let loading = document.querySelector('.loading')
-        loading.parentNode.removeChild(loading)
+        if (!this.loaded) {
+          this.loaded = true
+          let loading = document.querySelector('.loading')
+          loading.parentNode.removeChild(loading)
+        }
       })
     }
   }

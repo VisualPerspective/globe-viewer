@@ -51,7 +51,7 @@ export default class Camera {
       }
 
       return false
-    });
+    })
 
     this.hammer.on('pinchstart', (e) => {
       this.lastZoom = this.zoom.value
@@ -73,7 +73,7 @@ export default class Camera {
 
       // Deal with Firefox mousewheel speed being slower
       if (e.mozInputSource === 1 && e.deltaMode === 1) {
-        amount *= 50;
+        amount *= 50
       }
 
       if (e.target == gl.canvas) {

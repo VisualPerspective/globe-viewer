@@ -1,5 +1,6 @@
 @import "range";
 $thumb-color: darken(#8895b3, 20);
+$ui-background: #f2f2f2;
 
 @mixin antialias() {
   -webkit-font-smoothing: antialiased;
@@ -68,6 +69,11 @@ $thumb-color: darken(#8895b3, 20);
       letter-spacing: 0;
       margin: 0;
       padding: 0;
+
+      img {
+        height: 1.5em;
+        margin: 0 3px -5px 0;
+      }
     }
 
     .info {
@@ -137,13 +143,23 @@ $thumb-color: darken(#8895b3, 20);
       margin: 0 6px 6px 0;
       padding: 6px 8px;
       border-radius: 5px;
-      background-color: #f4f4f4;
+      background-color: $ui-background;
       cursor: pointer;
+      input { display: none }
+
+      &:before {
+        content: "";
+        box-sizing: border-box;
+        display: inline-block;
+        height: 12px;
+        width: 12px;
+        border: 1px solid $thumb-color;
+        border-radius: 3px;
+        vertical-align: -1.5px;
+      }
 
       &.active {
-        @include antialias();
-        background: #8895b3;
-        color: white;
+        &:before { background: $thumb-color; }
       }
     }
   }
@@ -153,7 +169,7 @@ $thumb-color: darken(#8895b3, 20);
 
     .radio-button {
       margin: 0 0 6px 0;
-      background: #f4f4f4;
+      background: $ui-background;
       border-radius: 5px;
       overflow: hidden;
 

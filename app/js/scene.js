@@ -10,11 +10,10 @@ import sunCoordinates from './coordinates.js'
 const m4 = twgl.m4
 
 export default class Scene {
-  constructor(gl, layerCanvas, landMaskLayer, bordersLayer) {
+  constructor(gl, layerCanvas, layers) {
     this.gl = gl
     this.layerCanvas = layerCanvas
-    this.landMaskLayer = landMaskLayer
-    this.bordersLayer = bordersLayer
+    this.layers = layers
 
     this.hourOfDay = new ControlRange(12, 0.001, 23.999)
     this.dayOfYear = new ControlRange(182, 1, 365)
@@ -49,7 +48,7 @@ export default class Scene {
       this.layerCanvas.canvas.node()
     )
 
-    dispatchEvent(texture + '-layer-updated')
+    dispatchEvent('texture-loaded')
   }
 
   initTextures() {

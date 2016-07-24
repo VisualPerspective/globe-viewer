@@ -11,12 +11,3 @@ export function dispatchEvent(name) {
   evt.initCustomEvent(name, false, false, {})
   window.dispatchEvent(evt)
 }
-
-// globalCompositeOperation doesn't work as expected
-// on some platforms, so for now just skip it which results
-// in somewhat blurrier borders/rivers
-export function compositeOperation(ctx, mode) {
-  if (!_.includes(['IE', 'Microsoft Edge', 'Chrome Mobile'], platform.name)) {
-    ctx.globalCompositeOperation = mode
-  }
-}

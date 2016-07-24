@@ -29,6 +29,6 @@ export default class BordersLayer {
       ctx.stroke()
     }
 
-    _.defer(() => { dispatchEvent('borders-updated') })
+    dispatchEvent('borders-updated')
   }
 }

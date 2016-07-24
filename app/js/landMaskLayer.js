@@ -48,6 +48,6 @@ export default class LandMaskLayer {
       ctx.stroke()
     }
 
-    _.defer(() => { dispatchEvent('landmask-updated') })
+    dispatchEvent('landmask-updated')
   }
 }

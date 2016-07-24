@@ -22,7 +22,11 @@ export default function registerCheckboxOption(
     watch: {
       'enabled': {
         handler: function () {
-          controller.updated(true)
+          window.requestAnimationFrame(() => {
+            window.requestAnimationFrame(() => {
+              controller.layerUpdated(propertyMap[this.property].layer)
+            })
+          })
         }
       }
     }

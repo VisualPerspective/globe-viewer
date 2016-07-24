@@ -18,9 +18,12 @@ import registerDebugPanel from './components/debugPanel'
 export default class Controller {
   constructor(gl, vectors) {
     this.layerCanvas = new LayerCanvas(gl)
-    this.landMaskLayer = new LandMaskLayer(gl, vectors, this.layerCanvas)
-    this.bordersLayer = new BordersLayer(gl, vectors, this.layerCanvas)
-    this.scene = new Scene(gl, this.layerCanvas, this.landMaskLayer, this.bordersLayer)
+    this.layers = {
+      landmask: new LandMaskLayer(gl, vectors, this.layerCanvas),
+      borders: new BordersLayer(gl, vectors, this.layerCanvas)
+    }
+
+    this.scene = new Scene(gl, this.layerCanvas, this.layers)
     this.renderer = new Renderer(gl, this.scene)
     this.camera = new Camera(gl)
     this.performanceStats = new PerformanceStats()
@@ -74,10 +77,12 @@ export default class Controller {
         formatted: multiple
       },
       'rivers': {
-        data: this.landMaskLayer.options.rivers
+        data: this.layers['landmask'].options.rivers,
+        layer: 'landmask'
       },
       'countries': {
-        data: this.bordersLayer.options.countries
+        data: this.layers['borders'].options.countries,
+        layer: 'borders'
       }
 
     }
@@ -90,35 +95,23 @@ export default class Controller {
     this.vue = new Vue({ el: '.map-container' })
 
     this.updateQueued = false
-
-    this.updated(true)
+    _.each(this.layers, (layer, name) => { this.layerUpdated(name) })
 
     window.addEventListener('resize', () => { this.updated() })
     window.addEventListener('texture-loaded', () => { this.updated() })
-
-    window.addEventListener('landmask-layer-updated', () => {
-      this.bordersLayer.draw()
-    })
-
-    window.addEventListener('borders-layer-updated', () => {
-      this.updated()
-    })
   }
 
-  updated(updateLayers) {
-    if (updateLayers) {
-      _.defer(() => {
-        this.landMaskLayer.draw()
+  layerUpdated(layer) {
+    this.layers[layer].draw()
+  }
+
+  updated() {
+    if (!this.updateQueued) {
+      this.updateQueued = true
+      window.requestAnimationFrame(() => {
+        this.renderFrame()
+        this.updateQueued = false
       })
-    }
-    else {
-      if (!this.updateQueued) {
-        this.updateQueued = true
-        window.requestAnimationFrame(() => {
-          this.renderFrame()
-          this.updateQueued = false
-        })
-      }
     }
   }
 

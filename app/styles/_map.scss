@@ -7,6 +7,25 @@ $ui-background: #f2f2f2;
   -moz-osx-font-smoothing: grayscale;
 }
 
+.loading {
+  background: white;
+  opacity: 0.75;
+  position: absolute;
+  width: 100vw;
+  height: 100vh;
+  top: 0;
+  left: 0;
+  z-index: 10;
+
+  img {
+    position: absolute;
+    left: 50vw;
+    top: 50vh;
+    margin-left: -19px;
+    margin-top: -19px;
+  }
+}
+
 .map-container {
   height: 100vh;
   width: 100vw;

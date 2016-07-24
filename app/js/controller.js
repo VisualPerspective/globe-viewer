@@ -95,7 +95,9 @@ export default class Controller {
     this.vue = new Vue({ el: '.map-container' })
 
     this.updateQueued = false
-    _.each(this.layers, (layer, name) => { this.layerUpdated(name) })
+    _.each(this.layers, (layer, name) => {
+      _.defer(() => { this.layerUpdated(name) })
+    })
 
     window.addEventListener('resize', () => { this.updated() })
     window.addEventListener('texture-loaded', () => { this.updated() })
@@ -111,6 +113,7 @@ export default class Controller {
       window.requestAnimationFrame(() => {
         this.renderFrame()
         this.updateQueued = false
+        document.querySelector('.loading').remove()
       })
     }
   }

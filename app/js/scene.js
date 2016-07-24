@@ -10,9 +10,11 @@ import sunCoordinates from './coordinates.js'
 const m4 = twgl.m4
 
 export default class Scene {
-  constructor(gl, vectorLayer) {
+  constructor(gl, layerCanvas, landMaskLayer, bordersLayer) {
     this.gl = gl
-    this.vectorLayer = vectorLayer
+    this.layerCanvas = layerCanvas
+    this.landMaskLayer = landMaskLayer
+    this.bordersLayer = bordersLayer
 
     this.hourOfDay = new ControlRange(12, 0.001, 23.999)
     this.dayOfYear = new ControlRange(182, 1, 365)
@@ -31,15 +33,23 @@ export default class Scene {
     this.fillInElevations()
     this.initTextures()
 
-    window.addEventListener('vector-layer-updated', () => {
-      twgl.setTextureFromElement(
-        this.gl,
-        this.textures.landmaskMap,
-        this.vectorLayer.layer.node()
-      )
-
-      dispatchEvent('texture-loaded')
+    window.addEventListener('landmask-updated', () => {
+      this.updateLayerTexture('landmask')
     })
+
+    window.addEventListener('borders-updated', () => {
+      this.updateLayerTexture('borders')
+    })
+  }
+
+  updateLayerTexture(texture) {
+    twgl.setTextureFromElement(
+      this.gl,
+      this.textures[texture + 'Map'],
+      this.layerCanvas.canvas.node()
+    )
+
+    dispatchEvent(texture + '-layer-updated')
   }
 
   initTextures() {
@@ -47,22 +57,32 @@ export default class Scene {
       diffuseMap: {
         format: this.gl.RGB,
         internalFormat: this.gl.RGB,
-        src: 'data/color-4096.jpg'
+        src: 'data/color-4096.jpg',
+        color: [0,0,0,1]
       },
       topographyMap: {
         format: this.gl.LUMINANCE,
         internalFormat: this.gl.LUMINANCE,
-        src: 'data/topo-bathy-4096.jpg'
+        src: 'data/topo-bathy-4096.jpg',
+        color: [0,0,0,1]
       },
       landmaskMap: {
-        src: this.vectorLayer.layer.node(),
-        format: this.gl.RGB,
-        internalFormat: this.gl.RGB,
+        format: this.gl.LUMINANCE,
+        internalFormat: this.gl.LUMINANCE,
+        width: 2,
+        height: 2
+      },
+      bordersMap: {
+        format: this.gl.LUMINANCE,
+        internalFormat: this.gl.LUMINANCE,
+        width: 2,
+        height: 2
       },
       lightsMap: {
         src: 'data/lights-4096.png',
         format: this.gl.LUMINANCE,
         internalFormat: this.gl.LUMINANCE,
+        color: [0,0,0,1]
       }
     }, () => { dispatchEvent('texture-loaded') })
   }

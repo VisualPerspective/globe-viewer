@@ -6,7 +6,9 @@ import _ from 'lodash'
 import Scene from './scene'
 import Renderer from './renderer'
 import Camera from './camera'
-import VectorLayer from './vectorLayer'
+import LayerCanvas from './layerCanvas'
+import LandMaskLayer from './landMaskLayer'
+import BordersLayer from './bordersLayer'
 import PerformanceStats from './performanceStats'
 import registerRangeSlider from './components/rangeSlider'
 import registerCheckboxOption from './components/checkboxOption'
@@ -14,9 +16,11 @@ import registerRenderModes from './components/renderModes'
 import registerDebugPanel from './components/debugPanel'
 
 export default class Controller {
-  constructor(gl) {
-    this.vectorLayer = new VectorLayer(gl)
-    this.scene = new Scene(gl, this.vectorLayer)
+  constructor(gl, vectors) {
+    this.layerCanvas = new LayerCanvas(gl)
+    this.landMaskLayer = new LandMaskLayer(gl, vectors, this.layerCanvas)
+    this.bordersLayer = new BordersLayer(gl, vectors, this.layerCanvas)
+    this.scene = new Scene(gl, this.layerCanvas, this.landMaskLayer, this.bordersLayer)
     this.renderer = new Renderer(gl, this.scene)
     this.camera = new Camera(gl)
     this.performanceStats = new PerformanceStats()
@@ -70,10 +74,10 @@ export default class Controller {
         formatted: multiple
       },
       'rivers': {
-        data: this.vectorLayer.options.rivers
+        data: this.landMaskLayer.options.rivers
       },
       'countries': {
-        data: this.vectorLayer.options.countries
+        data: this.bordersLayer.options.countries
       }
 
     }
@@ -83,20 +87,28 @@ export default class Controller {
     registerRenderModes(this, this.scene)
     registerDebugPanel(this.performanceStats)
 
-    this.vue = new Vue({
-      el: '.map-container'
-    })
+    this.vue = new Vue({ el: '.map-container' })
 
     this.updateQueued = false
-    this.updated()
+
+    this.updated(true)
+
     window.addEventListener('resize', () => { this.updated() })
     window.addEventListener('texture-loaded', () => { this.updated() })
+
+    window.addEventListener('landmask-layer-updated', () => {
+      this.bordersLayer.draw()
+    })
+
+    window.addEventListener('borders-layer-updated', () => {
+      this.updated()
+    })
   }
 
-  updated(updateVectorLayer) {
-    if (updateVectorLayer) {
+  updated(updateLayers) {
+    if (updateLayers) {
       _.defer(() => {
-        this.vectorLayer.draw()
+        this.landMaskLayer.draw()
       })
     }
     else {

@@ -1,4 +1,6 @@
+import * as d3 from 'd3'
 import twgl from 'twgl.js'
+
 import Controller from 'js/controller'
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -6,6 +8,8 @@ document.addEventListener('DOMContentLoaded', () => {
     document.querySelector(".map-canvas canvas")
   )
 
-  new Controller(gl)
+  d3.json('data/vectors.json', (error, vectors) => {
+    new Controller(gl, vectors)
+  })
 })
 

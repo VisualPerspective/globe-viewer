@@ -20,11 +20,14 @@ nbproject
 Thumbs.db
 .exrc
 
-# NPM packages folder.
+# NPM packages folder
 node_modules/
 
-# Brunch output folder.
+# Brunch output folder
 public/
 
 # Temporary data folder
 tmpdata/
+
+# Generated files
+app/assets/data/vectors.json

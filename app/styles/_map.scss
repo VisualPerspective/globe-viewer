@@ -109,6 +109,7 @@ $ui-background: #f2f2f2;
   .map-canvas {
     flex: 1 1;
     overflow: hidden;
+    position: relative;
     -ms-user-select: none;
     -webkit-user-select: none;
     -moz-user-select: none;

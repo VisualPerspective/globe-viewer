@@ -8,8 +8,9 @@ import { toRadians } from './utils'
 const m4 = twgl.m4
 
 export default class Camera {
-  constructor(gl) {
+  constructor(gl, map) {
     this.gl = gl
+    this.map = map
     this.fov = 50
 
     this.longitude = new ControlRange(0, -180, 180, true)
@@ -20,14 +21,14 @@ export default class Camera {
     this.dragStart = undefined
     this.mousePosition = undefined
 
-    this.hammer = new Hammer(gl.canvas)
+    this.hammer = new Hammer(map)
     this.hammer.get('pinch').set({ enable: true })
 
     document.addEventListener('mousemove', (e) => {
       this.handleMouseMove(e)
     })
 
-    gl.canvas.addEventListener('mousedown', () => {
+    map.addEventListener('mousedown', () => {
       this.dragging = true
     })
 
@@ -41,7 +42,7 @@ export default class Camera {
       this.dragging = false
     })
 
-    gl.canvas.addEventListener('scroll', () => {
+    map.addEventListener('scroll', () => {
       return false
     })
 
@@ -76,7 +77,7 @@ export default class Camera {
         amount *= 50
       }
 
-      if (e.target == gl.canvas) {
+      if (map.contains(e.target)) {
         this.zoom.changeBy(amount)
         e.preventDefault()
       }

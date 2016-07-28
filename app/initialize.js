@@ -5,11 +5,13 @@ import Controller from 'js/controller'
 
 document.addEventListener('DOMContentLoaded', () => {
   let gl = twgl.getWebGLContext(
-    document.querySelector(".map-canvas canvas")
+    document.querySelector('.map-canvas canvas')
   )
 
+  let map = document.querySelector('.map-canvas')
+
   d3.json('data/vectors.json', (error, vectors) => {
-    new Controller(gl, vectors)
+    new Controller(gl, map, vectors)
   })
 })
 

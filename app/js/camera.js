@@ -104,11 +104,15 @@ export default class Camera {
     this.latitude.changeBy(deltaY * zoomFactor)
   }
 
+  getDistance() {
+    return 4.5 - this.zoom.value * 3
+  }
+
   getRenderValues(gl) {
     let aspect = gl.canvas.clientWidth / gl.canvas.clientHeight
-    let fov = toRadians(30) / _.clamp(aspect, 0.0, 1.0)
+    let fov = toRadians(30) / _.clamp(aspect, 0, 1)
     let projection = m4.perspective(fov, aspect, 0.01, 10)
-    let eye = [0, 0, -(4.5 - this.zoom.value * 3)]
+    let eye = [0, 0, -this.getDistance()]
     let camera = m4.identity()
     m4.rotateY(camera, toRadians(this.longitude.value + 180), camera)
     m4.rotateX(camera, toRadians(this.latitude.value), camera)
@@ -121,7 +125,9 @@ export default class Camera {
     return {
       view: view,
       projection: projection,
-      eye: eye
+      eye: eye,
+      aspect: aspect,
+      fov: fov
     }
   }
 }

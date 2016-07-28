@@ -8,6 +8,7 @@ import Renderer from './renderer'
 import Camera from './camera'
 import LayerCanvas from './layerCanvas'
 import LandMaskLayer from './landMaskLayer'
+import SVGLayer from './svgLayer'
 import BordersLayer from './bordersLayer'
 import PerformanceStats from './performanceStats'
 import registerRangeSlider from './components/rangeSlider'
@@ -16,7 +17,7 @@ import registerRenderModes from './components/renderModes'
 import registerDebugPanel from './components/debugPanel'
 
 export default class Controller {
-  constructor(gl, vectors) {
+  constructor(gl, map, vectors) {
     this.layerCanvas = new LayerCanvas(gl)
     this.layers = {
       landmask: new LandMaskLayer(gl, vectors, this.layerCanvas),
@@ -25,7 +26,8 @@ export default class Controller {
 
     this.scene = new Scene(gl, this.layerCanvas, this.layers)
     this.renderer = new Renderer(gl, this.scene)
-    this.camera = new Camera(gl)
+    this.camera = new Camera(gl, map)
+    this.svg = new SVGLayer(gl, vectors, this.camera)
     this.performanceStats = new PerformanceStats()
 
     let noFormat = () => ''
@@ -129,6 +131,8 @@ export default class Controller {
       this.camera,
       this.renderer
     )
+
+    this.svg.draw()
 
     this.performanceStats.countFrame()
   }

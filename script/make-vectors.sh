@@ -20,13 +20,12 @@ if [ ! -f ne_50m_rivers_lake_centerlines_scale_rank.zip ]; then
 fi
 unzip -o ne_50m_rivers_lake_centerlines_scale_rank.zip
 
-
 # countries
 if [ ! -f ne_50m_admin_0_countries.zip ]; then
   curl "http://naciscdn.org/naturalearth/50m/cultural/ne_50m_admin_0_countries.zip" -o ne_50m_admin_0_countries.zip
 fi
 unzip -o ne_50m_admin_0_countries.zip
 
-topojson --simplify-proportion 0.4 -o vectors.json -- land=ne_50m_land.shp lakes=ne_50m_lakes.shp rivers=ne_50m_rivers_lake_centerlines_scale_rank.shp countries=ne_50m_admin_0_countries.shp
+topojson --simplify-proportion 0.2 -o vectors.json -- land=ne_50m_land.shp lakes=ne_50m_lakes.shp rivers=ne_50m_rivers_lake_centerlines_scale_rank.shp countries=ne_50m_admin_0_countries.shp oceans=ne_50m_ocean.shp
 
 cp vectors.json ../app/assets/data/

@@ -25,11 +25,10 @@ export default class SVGLayer {
 
     this.path = geo.geoPath().projection(this.projection)
 
-    console.log(this)
-    this.boundaryPaths = this.svg.selectAll('.boundary')
+    this.countryPaths = this.svg.selectAll('.country')
       .data(this.countries.features)
       .enter().insert('path')
-      .attr('class', 'boundary')
+      .attr('class', 'country')
       .attr('d', this.path);
 
     window.addEventListener('resize', () => { this.resize() })
@@ -59,7 +58,7 @@ export default class SVGLayer {
         Math.acos(1 / distance) * 180 / Math.PI - 1e-6
       )
 
-    this.boundaryPaths.attr('d', this.path)
+    this.countryPaths.attr('d', this.path)
   }
 
   resize() {

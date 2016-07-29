@@ -31,6 +31,7 @@
     "platform": "^1.3.1",
     "raw-loader": "^0.5.1",
     "sass-brunch": "^2.6.3",
+    "stats.js": "^0.16.0",
     "topojson": "^1.6.26",
     "twgl.js": "^1.7.0",
     "vue": "^1.0.25"

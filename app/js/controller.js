@@ -135,14 +135,16 @@ export default class Controller {
       this.stats.begin()
     }
 
+    this.svg.project()
+
+    this.svg.draw()
+
     this.renderer.render(
       window.performance.now(),
       this.scene,
       this.camera,
       this.renderer
     )
-
-    this.svg.draw()
 
     if (this.stats) {
       this.stats.end()

@@ -4,6 +4,7 @@ import dayAndNightFrag from '../shaders/dayAndNight.frag.glsl'
 import dayFrag from '../shaders/day.frag.glsl'
 import nightFrag from '../shaders/night.frag.glsl'
 import elevationFrag from '../shaders/elevation.frag.glsl'
+import { updateCanvasSize } from './utils'
 
 const m4 = twgl.m4
 
@@ -11,7 +12,7 @@ export default class Renderer {
   constructor(gl, scene) {
     this.gl = gl
 
-    gl.clearColor(0, 0, 0, 0)
+    gl.clearColor(1, 1, 1, 1)
 
     this.derivatives = gl.getExtension('OES_standard_derivatives')
     this.anisotropic = gl.getExtension('EXT_texture_filter_anisotropic')
@@ -52,7 +53,8 @@ export default class Renderer {
 
   render(time, scene, camera) {
     let gl = this.gl
-    this.updateCanvasSize(gl)
+    updateCanvasSize(gl.canvas)
+    gl.viewport(0, 0, gl.canvas.width, gl.canvas.height)
 
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT)
 
@@ -81,25 +83,5 @@ export default class Renderer {
       gl.UNSIGNED_SHORT,
       0
     )
-  }
-
-  updateCanvasSize(gl) {
-    let width = gl.canvas.parentNode.offsetWidth
-    let height = gl.canvas.parentNode.offsetHeight
-
-    if (width + 'px' != gl.canvas.style.width ||
-        height + 'px' != gl.canvas.style.height) {
-      // set the display size of the canvas
-      gl.canvas.style.width = width + "px"
-      gl.canvas.style.height = height + "px"
-
-      // set the size of the drawingBuffer
-      // https://www.khronos.org/webgl/wiki/HandlingHighDPI
-      let devicePixelRatio = (window.devicePixelRatio || 1)
-      gl.canvas.width = Math.floor(width * devicePixelRatio)
-      gl.canvas.height = Math.floor(height * devicePixelRatio)
-
-      gl.viewport(0, 0, gl.canvas.width, gl.canvas.height)
-    }
   }
 }

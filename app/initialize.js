@@ -5,7 +5,8 @@ import Controller from 'js/controller'
 
 document.addEventListener('DOMContentLoaded', () => {
   let gl = twgl.getWebGLContext(
-    document.querySelector('.map-canvas canvas')
+    document.querySelector('.map-canvas canvas'),
+    { alpha: false }
   )
 
   let map = document.querySelector('.map-canvas')

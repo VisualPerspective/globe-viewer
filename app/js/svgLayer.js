@@ -5,6 +5,8 @@ import * as topojson from 'topojson'
 import _ from 'lodash'
 import twgl from 'twgl.js'
 
+import { updateCanvasSize } from './utils'
+
 const m4 = twgl.m4
 
 export default class SVGLayer {
@@ -14,30 +16,21 @@ export default class SVGLayer {
     this.options = { countries: { enabled: true } }
     this.countries = topojson.feature(vectors, vectors.objects.countries)
 
-    this.svg = d3.select('.map-canvas').append('svg')
+    this.canvas = d3.select('.map-canvas').append('canvas')
       .attr('class', 'svg-layer')
+
+    this.ctx = this.canvas.node().getContext('2d')
 
     this.projection = projection.geoSatellite()
 
-    this.graticule = geo.geoGraticule()
-        .extent([[-93, 27], [-47 + 1e-6, 57 + 1e-6]])
-        .step([3, 3])
-
-    this.path = geo.geoPath().projection(this.projection)
-
-    console.log(this)
-    this.boundaryPaths = this.svg.selectAll('.boundary')
-      .data(this.countries.features)
-      .enter().insert('path')
-      .attr('class', 'boundary')
-      .attr('d', this.path);
+    this.path = geo.geoPath().projection(this.projection).context(this.ctx)
 
     window.addEventListener('resize', () => { this.resize() })
     this.resize()
     this.draw()
   }
 
-  draw() {
+  project() {
     let distance = this.camera.getDistance()
     let renderValues = this.camera.getRenderValues(this.gl)
 
@@ -58,16 +51,25 @@ export default class SVGLayer {
       .clipAngle(
         Math.acos(1 / distance) * 180 / Math.PI - 1e-6
       )
+      .precision(10)
+  }
 
-    this.boundaryPaths.attr('d', this.path)
+  draw() {
+    this.ctx.clearRect(0, 0, this.width, this.height)
+
+    this.ctx.beginPath()
+    this.path(this.countries)
+    this.ctx.lineWidth = 0.25
+    this.ctx.strokeStyle = '#fff'
+    this.ctx.stroke()
   }
 
   resize() {
-    this.width = this.gl.canvas.parentNode.offsetWidth
-    this.height = this.gl.canvas.parentNode.offsetHeight
-    this.svg
-      .attr('width', this.width)
-      .attr('height', this.height)
+    let canvasNode = this.canvas.node()
+    updateCanvasSize(canvasNode)
+    this.width = canvasNode.width
+    this.height = canvasNode.height
+
     this.draw()
   }
 }

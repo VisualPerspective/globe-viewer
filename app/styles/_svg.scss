@@ -7,12 +7,14 @@
 
 .boundary {
   fill: transparent;
-  stroke: #fff;
-  stroke-width: 0.5px;
+  stroke: #f00;
+  stroke-width: 0.25px;
 }
 
 .boundary:hover {
-  fill: rgba(0, 0, 128, 0.5)
+  stroke: #f00;
+  fill: rgba(255, 0, 0, 0.1);
+  stroke-width: 1px;
 }
 
 .graticule {

@@ -2,6 +2,7 @@ import Vue from 'vue'
 import moment from 'moment'
 import numeral from 'numeral'
 import _ from 'lodash'
+import Stats from 'stats.js'
 
 import Scene from './scene'
 import Renderer from './renderer'
@@ -10,11 +11,9 @@ import LayerCanvas from './layerCanvas'
 import LandMaskLayer from './landMaskLayer'
 import SVGLayer from './svgLayer'
 import BordersLayer from './bordersLayer'
-import PerformanceStats from './performanceStats'
 import registerRangeSlider from './components/rangeSlider'
 import registerCheckboxOption from './components/checkboxOption'
 import registerRenderModes from './components/renderModes'
-import registerDebugPanel from './components/debugPanel'
 
 export default class Controller {
   constructor(gl, map, vectors) {
@@ -28,7 +27,6 @@ export default class Controller {
     this.renderer = new Renderer(gl, this.scene)
     this.camera = new Camera(gl, map)
     this.svg = new SVGLayer(gl, vectors, this.camera)
-    this.performanceStats = new PerformanceStats()
 
     let noFormat = () => ''
 
@@ -86,13 +84,13 @@ export default class Controller {
         data: this.layers['borders'].options.countries,
         layer: 'borders'
       }
-
     }
 
     registerRangeSlider(this, propertyMap)
     registerCheckboxOption(this, propertyMap)
     registerRenderModes(this, this.scene)
-    registerDebugPanel(this.performanceStats)
+
+    this.enableStats()
 
     this.vue = new Vue({ el: '.map-container' })
 
@@ -103,6 +101,14 @@ export default class Controller {
 
     window.addEventListener('resize', () => { this.updated() })
     window.addEventListener('texture-loaded', () => { this.updated() })
+  }
+
+  enableStats() {
+    this.stats = new Stats()
+    this.stats.showPanel(0) // 0: fps, 1: ms, 2: mb, 3+: custom
+    this.stats.dom.style.left = 'auto'
+    this.stats.dom.style.right = '0'
+    document.body.appendChild(this.stats.dom)
   }
 
   layerUpdated(layer) {
@@ -125,6 +131,10 @@ export default class Controller {
   }
 
   renderFrame() {
+    if (this.stats) {
+      this.stats.begin()
+    }
+
     this.renderer.render(
       window.performance.now(),
       this.scene,
@@ -134,6 +144,8 @@ export default class Controller {
 
     this.svg.draw()
 
-    this.performanceStats.countFrame()
+    if (this.stats) {
+      this.stats.end()
+    }
   }
 }

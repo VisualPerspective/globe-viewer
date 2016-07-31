@@ -36,8 +36,20 @@ void main() {
 
   float oceanDepth = (0.5 - texture2D(topographyMap, vUv).r) * 2.0;
 
-  vec2 dHdxy = heightDerivative(vUv, topographyMap) *
-    terrainBumpScale(landness, 0.0, vNdotL, vNdotV, eye, vPosition);
+  vec2 dHdxy = heightDerivative(
+    vUv,
+    topographyMap,
+    vec2(4096.0)
+  );
+
+  dHdxy *= terrainBumpScale(
+    landness,
+    0.0,
+    vNdotL,
+    vNdotV,
+    eye,
+    vPosition
+  );
 
   vec3 oceanColor = mix(
     vec3(0.0, 0.0, 0.35),

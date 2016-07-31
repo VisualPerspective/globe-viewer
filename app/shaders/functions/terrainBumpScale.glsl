@@ -2,8 +2,7 @@
 // shading across surface. Goal is to avoid too much shading
 // at glancing angles and too little shading in the center.
 //
-// Also, invert bumps for oceans since the ocean height map
-// is inverted and allow for an additional bump scale factor with
+// Also, allow for an additional bump scale factor with
 // `oceanFactor`. This allows ocean floor rendering to show
 // full bumps vs ocean surface rendering being flat.
 

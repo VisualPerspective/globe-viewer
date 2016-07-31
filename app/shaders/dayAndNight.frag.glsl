@@ -11,6 +11,7 @@ precision highp float;
 #pragma glslify: atmosphere = require(./functions/atmosphere)
 #pragma glslify: nightAmbient = require(./functions/nightAmbient)
 #pragma glslify: brdf = require(./functions/brdf)
+#pragma glslify: texture2DCubic = require(./functions/texture2DCubic)
 
 uniform sampler2D topographyMap;
 uniform sampler2D diffuseMap;
@@ -32,7 +33,11 @@ void main() {
   float vNdotV_clamped = clamp(vNdotV, 0.0, 1.0);
 
   float landness = texture2D(landmaskMap, vUv, -0.25).r;
-  float countryBorder = texture2D(bordersMap, vUv, -0.25).r;
+  float countryBorder = texture2DCubic(
+    bordersMap,
+    vUv,
+    vec2(8192.0, 4096.0)
+  ).r;
 
   float oceanDepth = (0.5 - texture2D(topographyMap, vUv).r) * 2.0;
 
@@ -59,7 +64,7 @@ void main() {
 
   vec3 diffuseColor = mix(
     oceanColor,
-    toLinear(texture2D(diffuseMap, vUv).rgb),
+    toLinear(texture2DCubic(diffuseMap, vUv, vec2(4096.0)).rgb),
     landness
   );
 
@@ -73,7 +78,13 @@ void main() {
     smoothstep(0.25, 0.75, landness)
   );
 
-  vec3 color = nightAmbient(vNdotL, diffuseColor, lightsMap, vUv);
+  vec3 color = nightAmbient(
+    vNdotL,
+    diffuseColor,
+    texture2DCubic(lightsMap, vUv, vec2(4096.0)).x,
+    vUv
+  );
+
   if (dot(vNormal, L) > 0.0) {
     vec3 lightColor = vec3(8.0);
 

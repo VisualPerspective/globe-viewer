@@ -6,6 +6,7 @@ precision highp float;
 #pragma glslify: tonemap = require(./functions/tonemap)
 #pragma glslify: exposure = require(./functions/exposure)
 #pragma glslify: nightAmbient = require(./functions/nightAmbient)
+#pragma glslify: texture2DCubic = require(./functions/texture2DCubic)
 
 uniform sampler2D topographyMap;
 uniform sampler2D diffuseMap;
@@ -36,9 +37,14 @@ void main() {
     landness
   );
 
-  vec3 color = nightAmbient(-1.0, diffuseColor, lightsMap, vUv);
+  vec3 color = nightAmbient(
+    -1.0,
+    diffuseColor,
+    texture2DCubic(lightsMap, vUv, vec2(4096.0)).x,
+    vUv
+  );
 
-  vec3 shaded = toGamma(tonemap(color * 150.0));
+  vec3 shaded = toGamma(tonemap(color * 200.0));
   vec3 final = mix(shaded, vec3(1.0), countryBorder);
   gl_FragColor = vec4(final, 1.0);
 }

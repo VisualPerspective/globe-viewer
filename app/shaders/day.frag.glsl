@@ -6,6 +6,7 @@ precision highp float;
 #pragma glslify: tonemap = require(./functions/tonemap)
 #pragma glslify: exposure = require(./functions/exposure)
 #pragma glslify: brdf = require(./functions/brdf)
+#pragma glslify: texture2DCubic = require(./functions/texture2DCubic)
 
 uniform sampler2D topographyMap;
 uniform sampler2D diffuseMap;
@@ -21,7 +22,6 @@ void main() {
 
   float landness = texture2D(landmaskMap, vUv, -0.25).r;
   float countryBorder = texture2D(bordersMap, vUv, -0.25).r;
-
   float oceanDepth = (0.5 - texture2D(topographyMap, vUv).r) * 2.0;
 
   vec3 oceanColor = mix(

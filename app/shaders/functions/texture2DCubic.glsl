@@ -13,10 +13,11 @@ vec4 cubic(float v) {
 
 vec4 texture2DCubic(
   sampler2D tex,
-  vec2 texcoord,
+  vec2 uv,
   vec2 textureResolution
 ) {
-  texcoord *= textureResolution;
+  vec2 texcoord = uv * textureResolution;
+  texcoord -= vec2(0.5);
   float fx = fract(texcoord.x);
   float fy = fract(texcoord.y);
   texcoord.x -= fx;

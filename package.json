@@ -22,7 +22,7 @@
     "glsl-luma": "^1.0.1",
     "glsl-specular-cook-torrance": "^2.0.1",
     "glsl-transpose": "^1.0.0",
-    "glslify": "^5.0.2",
+    "glslify": "^5.1.0",
     "glslify-brunch": "^1.0.0",
     "hammerjs": "^2.0.8",
     "lodash": "^4.13.1",

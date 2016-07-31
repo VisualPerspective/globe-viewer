@@ -1,3 +1,5 @@
+import _ from 'lodash'
+
 export default class ControlRange {
   constructor(value, min, max, wrap = false) {
     this.value = value

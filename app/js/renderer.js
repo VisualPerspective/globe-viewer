@@ -70,6 +70,10 @@ export default class Renderer {
       }
     )
 
+    for (name in scene.textures) {
+      this.uniforms[name + 'Size'] = scene.textureSizes[name]
+    }
+
     let program = this.programs[scene.renderMode]
     gl.useProgram(program.program)
     twgl.setBuffersAndAttributes(gl, program, scene.globeBuffer)

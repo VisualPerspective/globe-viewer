@@ -6,8 +6,8 @@ export function toRadians(degrees) {
 }
 
 // Needed for IE11 compatibility
-export function dispatchEvent(name) {
+export function dispatchEvent(name, detail) {
   let evt = document.createEvent('CustomEvent')
-  evt.initCustomEvent(name, false, false, {})
+  evt.initCustomEvent(name, false, false, detail || {})
   window.dispatchEvent(evt)
 }

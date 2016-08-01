@@ -12,6 +12,7 @@ uniform sampler2D topographyMap;
 uniform sampler2D diffuseMap;
 uniform sampler2D landmaskMap;
 uniform sampler2D bordersMap;
+uniform vec2 bordersMapSize;
 
 varying vec2 vUv;
 varying vec3 vNormal;
@@ -21,7 +22,13 @@ void main() {
   vec3 V = vNormal;
 
   float landness = texture2D(landmaskMap, vUv, -0.25).r;
-  float countryBorder = texture2D(bordersMap, vUv, -0.25).r;
+  float countryBorder = texture2DCubic(
+    bordersMap,
+    vUv,
+    bordersMapSize
+  ).r;
+
+
   float oceanDepth = (0.5 - texture2D(topographyMap, vUv).r) * 2.0;
 
   vec3 oceanColor = mix(

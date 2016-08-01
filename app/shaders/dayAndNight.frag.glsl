@@ -14,9 +14,11 @@ precision highp float;
 #pragma glslify: texture2DCubic = require(./functions/texture2DCubic)
 
 uniform sampler2D topographyMap;
+uniform vec2 topographyMapSize;
 uniform sampler2D diffuseMap;
 uniform sampler2D landmaskMap;
 uniform sampler2D bordersMap;
+uniform vec2 bordersMapSize;
 uniform sampler2D lightsMap;
 uniform vec3 lightDirection;
 uniform vec3 eye;
@@ -36,7 +38,7 @@ void main() {
   float countryBorder = texture2DCubic(
     bordersMap,
     vUv,
-    vec2(8192.0, 4096.0)
+    bordersMapSize
   ).r;
 
   float oceanDepth = (0.5 - texture2D(topographyMap, vUv).r) * 2.0;
@@ -44,7 +46,7 @@ void main() {
   vec2 dHdxy = heightDerivative(
     vUv,
     topographyMap,
-    vec2(4096.0)
+    topographyMapSize
   );
 
   dHdxy *= terrainBumpScale(
@@ -64,7 +66,7 @@ void main() {
 
   vec3 diffuseColor = mix(
     oceanColor,
-    toLinear(texture2DCubic(diffuseMap, vUv, vec2(4096.0)).rgb),
+    toLinear(texture2D(diffuseMap, vUv).rgb),
     landness
   );
 
@@ -81,7 +83,7 @@ void main() {
   vec3 color = nightAmbient(
     vNdotL,
     diffuseColor,
-    texture2DCubic(lightsMap, vUv, vec2(4096.0)).x,
+    texture2D(lightsMap, vUv).x,
     vUv
   );
 

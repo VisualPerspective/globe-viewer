@@ -39,20 +39,32 @@ export default class Scene {
     window.addEventListener('borders-updated', () => {
       this.updateLayerTexture('borders')
     })
+
+    window.addEventListener('texture-loaded', (e) => {
+      this.textureSizes[e.detail.texture] = new Float32Array([
+        e.detail.width,
+        e.detail.height
+      ])
+    })
   }
 
   updateLayerTexture(texture) {
+    let canvas = this.layerCanvas.canvas.node()
     twgl.setTextureFromElement(
       this.gl,
       this.textures[texture + 'Map'],
-      this.layerCanvas.canvas.node()
+      canvas
     )
 
-    dispatchEvent('texture-loaded')
+    dispatchEvent('texture-loaded', {
+      texture: texture + 'Map',
+      width: canvas.width,
+      height: canvas.height
+    })
   }
 
   initTextures() {
-    this.textures = twgl.createTextures(this.gl, {
+    let textures = {
       diffuseMap: {
         format: this.gl.RGB,
         internalFormat: this.gl.RGB,
@@ -83,7 +95,26 @@ export default class Scene {
         internalFormat: this.gl.LUMINANCE,
         color: [0,0,0,1]
       }
-    }, () => { dispatchEvent('texture-loaded') })
+    }
+
+    this.textureSizes = {}
+    for (let key of Object.keys(textures)) {
+      this.textureSizes[key] = new Float32Array([1, 1])
+    }
+
+    this.textures = twgl.createTextures(
+      this.gl,
+      textures,
+      (err, textures, sources) => {
+        for (let key of Object.keys(sources)) {
+          dispatchEvent('texture-loaded', {
+            texture: key,
+            width: sources[key].width,
+            height: sources[key].height
+          })
+        }
+      }
+    )
   }
 
   calculatedMoment() {

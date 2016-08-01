@@ -12,6 +12,7 @@ uniform sampler2D topographyMap;
 uniform sampler2D diffuseMap;
 uniform sampler2D landmaskMap;
 uniform sampler2D bordersMap;
+uniform vec2 bordersMapSize;
 uniform sampler2D lightsMap;
 uniform vec3 eye;
 
@@ -21,7 +22,11 @@ varying vec3 vNormal;
 
 void main() {
   float landness = texture2D(landmaskMap, vUv, -0.25).r;
-  float countryBorder = texture2D(bordersMap, vUv, -0.25).r;
+  float countryBorder = texture2DCubic(
+    bordersMap,
+    vUv,
+    bordersMapSize
+  ).r;
 
   float oceanDepth = (0.5 - texture2D(topographyMap, vUv).r) * 2.0;
 
@@ -40,7 +45,7 @@ void main() {
   vec3 color = nightAmbient(
     -1.0,
     diffuseColor,
-    texture2DCubic(lightsMap, vUv, vec2(4096.0)).x,
+    texture2D(lightsMap, vUv).x,
     vUv
   );
 

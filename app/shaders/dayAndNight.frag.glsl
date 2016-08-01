@@ -35,12 +35,7 @@ void main() {
   float vNdotV_clamped = clamp(vNdotV, 0.0, 1.0);
 
   float landness = texture2D(landmaskMap, vUv, -0.25).r;
-  float countryBorder = texture2DCubic(
-    bordersMap,
-    vUv,
-    bordersMapSize
-  ).r;
-
+  float countryBorder = texture2D(bordersMap, vUv, -0.25).r;
   float oceanDepth = (0.5 - texture2D(topographyMap, vUv).r) * 2.0;
 
   vec2 dHdxy = heightDerivative(
@@ -109,6 +104,6 @@ void main() {
   }
 
   vec3 shaded = toGamma(tonemap(color * exposure(eye, L)));
-  vec3 final = mix(shaded, vec3(1.0), countryBorder);
+  vec3 final = shaded + countryBorder;
   gl_FragColor = vec4(final, 1.0);
 }

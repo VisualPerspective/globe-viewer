@@ -50,6 +50,6 @@ void main() {
   );
 
   vec3 shaded = toGamma(tonemap(color * 200.0));
-  vec3 final = mix(shaded, vec3(1.0), countryBorder);
+  vec3 final = shaded + countryBorder;
   gl_FragColor = vec4(final, 1.0);
 }

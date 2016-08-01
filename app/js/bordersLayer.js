@@ -9,7 +9,7 @@ import {
 
 export default class BordersLayer {
   constructor(gl, vectors, layerCanvas) {
-    this.options = { countries: { enabled: true } }
+    this.options = { countries: { enabled: false } }
     this.layerCanvas = layerCanvas
     this.countries = topojson.feature(vectors, vectors.objects.countries)
     this.draw()

@@ -104,7 +104,7 @@ export default class Camera {
   }
 
   getRenderValues(gl) {
-    let aspect = gl.canvas.clientWidth / gl.canvas.clientHeight
+    let aspect = gl.canvas.width / gl.canvas.height
     let fov = toRadians(30) / _.clamp(aspect, 0.0, 1.0)
     let projection = m4.perspective(fov, aspect, 0.01, 10)
     let eye = [0, 0, -(4.5 - this.zoom.value * 3)]

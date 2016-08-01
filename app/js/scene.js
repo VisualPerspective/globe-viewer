@@ -39,13 +39,6 @@ export default class Scene {
     window.addEventListener('borders-updated', () => {
       this.updateLayerTexture('borders')
     })
-
-    window.addEventListener('texture-loaded', (e) => {
-      this.textureSizes[e.detail.texture] = new Float32Array([
-        e.detail.width,
-        e.detail.height
-      ])
-    })
   }
 
   updateLayerTexture(texture) {
@@ -97,9 +90,12 @@ export default class Scene {
       }
     }
 
-    this.textureSizes = {}
     for (let key of Object.keys(textures)) {
-      this.textureSizes[key] = new Float32Array([1, 1])
+      dispatchEvent('texture-loaded', {
+        texture: key,
+        width: 1,
+        height: 1
+      })
     }
 
     this.textures = twgl.createTextures(

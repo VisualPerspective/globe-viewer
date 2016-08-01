@@ -32,6 +32,18 @@ export default class Renderer {
 
     gl.enable(gl.DEPTH_TEST)
     gl.enable(gl.CULL_FACE)
+
+    window.addEventListener('texture-loaded', (e) => {
+      this.uniforms[e.detail.texture + 'Size'] = new Float32Array([
+        e.detail.width,
+        e.detail.height
+      ])
+    })
+
+    this.updateCanvasSize(gl)
+    window.addEventListener('resize', () => {
+      this.updateCanvasSize(gl)
+    })
   }
 
   setupGlobeTexture(gl, texture) {
@@ -52,7 +64,6 @@ export default class Renderer {
 
   render(time, scene, camera) {
     let gl = this.gl
-    this.updateCanvasSize(gl)
 
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT)
 
@@ -69,10 +80,6 @@ export default class Renderer {
         lightDirection: m4.transformPoint(light, [-1, 0, 0])
       }
     )
-
-    for (name in scene.textures) {
-      this.uniforms[name + 'Size'] = scene.textureSizes[name]
-    }
 
     let program = this.programs[scene.renderMode]
     gl.useProgram(program.program)
@@ -99,7 +106,13 @@ export default class Renderer {
 
       // set the size of the drawingBuffer
       // https://www.khronos.org/webgl/wiki/HandlingHighDPI
-      let devicePixelRatio = (window.devicePixelRatio || 1)
+      let devicePixelRatio = window.devicePixelRatio || 1
+
+      // Slightly lower res on retina-ish displays
+      if (devicePixelRatio > 1) {
+        devicePixelRatio -= 0.5
+      }
+
       gl.canvas.width = Math.floor(width * devicePixelRatio)
       gl.canvas.height = Math.floor(height * devicePixelRatio)
 

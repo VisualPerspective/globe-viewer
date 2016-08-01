@@ -89,7 +89,7 @@ export default class Controller {
     registerCheckboxOption(this, propertyMap)
     registerRenderModes(this, this.scene)
 
-    this.enableStats()
+    //this.enableStats()
 
     this.vue = new Vue({ el: '.map-container' })
 

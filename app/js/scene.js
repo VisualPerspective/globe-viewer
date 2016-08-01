@@ -90,7 +90,7 @@ export default class Scene {
       }
     }
 
-    for (let key of Object.keys(textures)) {
+    for (let key in textures) {
       dispatchEvent('texture-loaded', {
         texture: key,
         width: 1,
@@ -102,7 +102,7 @@ export default class Scene {
       this.gl,
       textures,
       (err, textures, sources) => {
-        for (let key of Object.keys(sources)) {
+        for (let key in sources) {
           dispatchEvent('texture-loaded', {
             texture: key,
             width: sources[key].width,

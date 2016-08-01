@@ -109,7 +109,7 @@ export default class Renderer {
       let devicePixelRatio = window.devicePixelRatio || 1
 
       // Slightly lower res on retina-ish displays
-      if (devicePixelRatio > 1) {
+      if (devicePixelRatio > 1 && width > 1500) {
         devicePixelRatio -= 0.5
       }
 

@@ -1,4 +1,4 @@
-import Vue from 'vue'
+import Vue from 'vue/dist/vue.js'
 
 export default function registerRenderModes(
   controller,
@@ -17,8 +17,7 @@ export default function registerRenderModes(
             v-bind:class="{ active: renderMode == 'dayAndNight' }">
             <label>
               <input type="radio" name="render-mode"
-                value="dayAndNight" v-model="renderMode"
-                checked>
+                value="dayAndNight" v-model="renderMode">
               Day and Night
             </label>
             <div v-show="renderMode == 'dayAndNight'" class="sub-group">

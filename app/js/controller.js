@@ -1,4 +1,4 @@
-import Vue from 'vue'
+import Vue from 'vue/dist/vue.js'
 import moment from 'moment'
 import numeral from 'numeral'
 import _ from 'lodash'
@@ -91,7 +91,7 @@ export default class Controller {
 
     //this.enableStats()
 
-    this.vue = new Vue({ el: '.map-container' })
+    this.vue = new Vue({ el: '.map-controls' })
 
     this.updateQueued = false
     _.each(this.layers, (layer, name) => {

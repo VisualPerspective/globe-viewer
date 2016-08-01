@@ -1,4 +1,4 @@
-import Vue from 'vue'
+import Vue from 'vue/dist/vue.js'
 import _ from 'lodash'
 
 export default function registerCheckboxOption(

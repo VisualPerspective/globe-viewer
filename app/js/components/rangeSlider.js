@@ -1,4 +1,4 @@
-import Vue from 'vue'
+import Vue from 'vue/dist/vue.js'
 import _ from 'lodash'
 
 export default function registerRangeSlider(
@@ -6,7 +6,7 @@ export default function registerRangeSlider(
   propertyMap
 ) {
   Vue.component('range-slider', Vue.extend({
-    init: function () {
+    beforeCreate: function () {
       this.updateFormatted = function (vm) {
         vm.formatted = propertyMap[vm.property].formatted(vm)
       }
@@ -17,12 +17,14 @@ export default function registerRangeSlider(
       this.updateFormatted(this)
     },
     data: function () {
-      return propertyMap[this.property].data
+      return _.extend(
+        propertyMap[this.property].data,
+        { 'formatted': '' }
+      )
     },
     props: [
       'label',
       'property',
-      'formatted',
       'vertical'
     ],
     template: `
@@ -33,10 +35,10 @@ export default function registerRangeSlider(
         </div>
         <div class="slider">
           <input type='range'
-            min='{{min}}'
-            max='{{max}}'
+            :min='min'
+            :max='max'
             step="any"
-            v-model="value">
+            v-model.number="value">
         </div>
       </div>
     `,

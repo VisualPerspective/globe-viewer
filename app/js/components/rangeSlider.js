@@ -13,7 +13,7 @@ export default function registerRangeSlider(
 
       this.throttleFormatted = _.throttle(this.updateFormatted, 50)
     },
-    ready: function () {
+    created: function () {
       this.updateFormatted(this)
     },
     data: function () {

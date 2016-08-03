@@ -67,7 +67,7 @@ export default class Scene {
       topographyMap: {
         format: this.gl.LUMINANCE,
         internalFormat: this.gl.LUMINANCE,
-        src: 'data/topo-bathy-4096.jpg',
+        src: 'data/topo-bathy-8192.jpg',
         color: [0,0,0,1]
       },
       landmaskMap: {

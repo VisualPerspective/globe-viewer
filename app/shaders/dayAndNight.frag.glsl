@@ -75,6 +75,8 @@ void main() {
     smoothstep(0.25, 0.75, landness)
   );
 
+  diffuseColor = mix(vec3(0.8, 0.85, 0.9), vec3(1.0), landness);
+
   vec3 color = nightAmbient(
     vNdotL,
     diffuseColor,

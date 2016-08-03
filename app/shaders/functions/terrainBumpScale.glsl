@@ -18,8 +18,8 @@ float terrainBumpScale(
   float bumpFalloff = clamp(vNdotL / shadowStart, 0.0, 0.5);
 
   float bumpScale = mix(
-    0.005,
-    0.05,
+    0.0025,
+    0.025,
     vNdotL * vNdotL * vNdotV
   ) * bumpFalloff;
 

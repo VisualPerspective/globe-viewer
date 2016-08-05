@@ -15,7 +15,7 @@
   "dependencies": {
     "babel-plugin-glslify": "^1.0.2",
     "babel-plugin-transform-object-assign": "^6.8.0",
-    "d3": "^4.0.0-rc.2",
+    "d3": "^4.2.1",
     "glsl-diffuse-lambert": "^1.0.0",
     "glsl-gamma": "^2.0.0",
     "glsl-inverse": "^1.0.0",

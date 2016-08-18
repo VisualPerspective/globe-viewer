@@ -1,5 +1,6 @@
 #! /bin/bash
 
+mkdir -p app/assets/data
 mkdir -p tmpdata
 cd tmpdata
 

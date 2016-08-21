@@ -86,7 +86,8 @@ export default class Renderer {
       {
         model: model,
         time: time,
-        lightDirection: m4.transformPoint(light, [-1, 0, 0])
+        lightDirection: m4.transformPoint(light, [-1, 0, 0]),
+        flatProjection: scene.projection == 'plane'
       }
     )
 

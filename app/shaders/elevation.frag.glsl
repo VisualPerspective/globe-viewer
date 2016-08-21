@@ -19,6 +19,7 @@ uniform sampler2D bordersMap;
 uniform sampler2D lightsMap;
 uniform vec3 lightDirection;
 uniform vec3 eye;
+uniform bool flatProjection;
 
 varying vec2 vUv;
 varying vec3 vPosition;
@@ -65,11 +66,13 @@ void main() {
       L, V, N
     );
 
-    color += atmosphere(
-      dot(vNormal, L),
-      dot(vNormal, normalize(eye - vPosition)),
-      vec3(5.0)
-    );
+    if (!flatProjection) {
+      color += atmosphere(
+        dot(vNormal, L),
+        dot(vNormal, normalize(eye - vPosition)),
+        vec3(5.0)
+      );
+    }
   }
 
   vec3 shaded = toGamma(tonemap(color * 0.5));

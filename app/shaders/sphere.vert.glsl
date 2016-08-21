@@ -20,9 +20,6 @@ varying vec3 vNormal;
 
 void main(void) {
   mat4 modelView = view * model;
-
-  float PI = 3.14159265;
-
   vUv = texcoord;
 
   float scale = 1.0;

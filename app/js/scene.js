@@ -21,13 +21,29 @@ export default class Scene {
 
     this.sphere = octahedronSphere(6)
 
-    this.globeBuffer = twgl.createBufferInfoFromArrays(gl, {
+    this.sphereBuffer = twgl.createBufferInfoFromArrays(gl, {
       indices: { numComponents: 3, data: this.sphere.indices },
       position: { numComponents: 3, data: this.sphere.position },
       texcoord: { numComponents: 2, data: this.sphere.texcoord },
       elevation: { numComponents: 1, data: this.sphere.elevation }
     })
 
+    this.plane = twgl.primitives.createPlaneVertices(
+      2, 1, 255, 127
+    )
+
+    this.plane.elevation = new Float32Array(
+      this.sphere.position.length
+    )
+
+    this.planeBuffer = twgl.createBufferInfoFromArrays(gl, {
+      indices: { numComponents: 3, data: this.plane.indices },
+      position: { numComponents: 3, data: this.plane.position },
+      texcoord: { numComponents: 2, data: this.plane.texcoord },
+      elevation: { numComponents: 1, data: this.plane.elevation }
+    })
+
+    this.projection = 'sphere'
     this.renderMode = 'dayAndNight'
     this.fillInElevations()
     this.initTextures()
@@ -173,8 +189,14 @@ export default class Scene {
 
       twgl.setAttribInfoBufferFromArray(
         this.gl,
-        this.globeBuffer.attribs.elevation,
+        this.sphereBuffer.attribs.elevation,
         this.sphere.elevation
+      )
+
+      twgl.setAttribInfoBufferFromArray(
+        this.gl,
+        this.planeBuffer.attribs.elevation,
+        this.plane.elevation
       )
     }
 

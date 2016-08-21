@@ -13,6 +13,7 @@ import BordersLayer from './bordersLayer'
 import registerRangeSlider from './components/rangeSlider'
 import registerCheckboxOption from './components/checkboxOption'
 import registerRenderModes from './components/renderModes'
+import registerProjections from './components/projections'
 
 export default class Controller {
   constructor(gl, vectors) {
@@ -88,6 +89,7 @@ export default class Controller {
     registerRangeSlider(this, propertyMap)
     registerCheckboxOption(this, propertyMap)
     registerRenderModes(this, this.scene)
+    registerProjections(this, this.scene)
 
     //this.enableStats()
 

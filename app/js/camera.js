@@ -103,8 +103,17 @@ export default class Camera {
     this.latitude.changeBy(deltaY * zoomFactor)
   }
 
-  getRenderValues(gl) {
-    let aspect = gl.canvas.width / gl.canvas.height
+  getValues(projection) {
+    if (projection == 'sphere') {
+      return this.getSphereValues()
+    }
+    else {
+      return this.getPlaneValues()
+    }
+  }
+
+  getSphereValues() {
+    let aspect = this.gl.canvas.width / this.gl.canvas.height
     let fov = toRadians(30) / _.clamp(aspect, 0.0, 1.0)
     let projection = m4.perspective(fov, aspect, 0.01, 10)
     let eye = [0, 0, -(4.5 - this.zoom.value * 3)]
@@ -115,6 +124,32 @@ export default class Camera {
     eye = m4.transformPoint(camera, eye)
     let up = m4.transformPoint(camera, [0, 1, 0])
     let target = [0, 0, 0]
+    let view = m4.inverse(m4.lookAt(eye, target, up))
+
+    return {
+      view: view,
+      projection: projection,
+      eye: eye
+    }
+  }
+
+  getPlaneValues() {
+    let aspect = this.gl.canvas.width / this.gl.canvas.height
+    let fov = toRadians(30) / _.clamp(aspect, 0.0, 1.0)
+    let projection = m4.perspective(fov, aspect, 0.01, 10)
+    let target = [
+      this.longitude.value / 180,
+      0,
+      -this.latitude.value / 180
+    ]
+
+    let eye = [
+      target[0],
+      2.0 - this.zoom.value * 1.75,
+      target[2]
+    ]
+
+    let up = [0, 0, -1]
     let view = m4.inverse(m4.lookAt(eye, target, up))
 
     return {

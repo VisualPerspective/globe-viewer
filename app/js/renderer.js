@@ -1,5 +1,6 @@
 import twgl from 'twgl.js'
-import globeVert from '../shaders/globe.vert.glsl'
+import sphereVert from '../shaders/sphere.vert.glsl'
+import planeVert from '../shaders/plane.vert.glsl'
 import dayAndNightFrag from '../shaders/dayAndNight.frag.glsl'
 import dayFrag from '../shaders/day.frag.glsl'
 import nightFrag from '../shaders/night.frag.glsl'
@@ -24,10 +25,18 @@ export default class Renderer {
     }
 
     this.programs = {
-      'dayAndNight': twgl.createProgramInfo(gl, [globeVert, dayAndNightFrag]),
-      'day': twgl.createProgramInfo(gl, [globeVert, dayFrag]),
-      'night': twgl.createProgramInfo(gl, [globeVert, nightFrag]),
-      'elevation': twgl.createProgramInfo(gl, [globeVert, elevationFrag])
+      'sphere': {
+        'dayAndNight': twgl.createProgramInfo(gl, [sphereVert, dayAndNightFrag]),
+        'day': twgl.createProgramInfo(gl, [sphereVert, dayFrag]),
+        'night': twgl.createProgramInfo(gl, [sphereVert, nightFrag]),
+        'elevation': twgl.createProgramInfo(gl, [sphereVert, elevationFrag])
+      },
+      'plane': {
+        'dayAndNight': twgl.createProgramInfo(gl, [planeVert, dayAndNightFrag]),
+        'day': twgl.createProgramInfo(gl, [planeVert, dayFrag]),
+        'night': twgl.createProgramInfo(gl, [planeVert, nightFrag]),
+        'elevation': twgl.createProgramInfo(gl, [planeVert, elevationFrag])
+      }
     }
 
     gl.enable(gl.DEPTH_TEST)
@@ -72,7 +81,7 @@ export default class Renderer {
 
     Object.assign(
       this.uniforms,
-      camera.getRenderValues(gl),
+      camera.getValues(scene.projection),
       scene.getElevationScales(),
       {
         model: model,
@@ -81,14 +90,16 @@ export default class Renderer {
       }
     )
 
-    let program = this.programs[scene.renderMode]
+    let program = this.programs[scene.projection][scene.renderMode]
     gl.useProgram(program.program)
-    twgl.setBuffersAndAttributes(gl, program, scene.globeBuffer)
+    twgl.setBuffersAndAttributes(
+      gl, program, scene[scene.projection + 'Buffer']
+    )
     twgl.setUniforms(program, this.uniforms)
 
     gl.drawElements(
       gl.TRIANGLES,
-      scene.globeBuffer.numElements,
+      scene[scene.projection + 'Buffer'].numElements,
       gl.UNSIGNED_SHORT,
       0
     )

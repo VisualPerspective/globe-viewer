@@ -1,10 +1,5 @@
 import twgl from 'twgl.js'
-import sphereVert from '../shaders/sphere.vert.glsl'
-import planeVert from '../shaders/plane.vert.glsl'
-import dayAndNightFrag from '../shaders/dayAndNight.frag.glsl'
-import dayFrag from '../shaders/day.frag.glsl'
-import nightFrag from '../shaders/night.frag.glsl'
-import elevationFrag from '../shaders/elevation.frag.glsl'
+import Shaders from './shaders.js'
 
 const m4 = twgl.m4
 
@@ -24,20 +19,7 @@ export default class Renderer {
       this.uniforms[name] = texture
     }
 
-    this.programs = {
-      'sphere': {
-        'dayAndNight': twgl.createProgramInfo(gl, [sphereVert, dayAndNightFrag]),
-        'day': twgl.createProgramInfo(gl, [sphereVert, dayFrag]),
-        'night': twgl.createProgramInfo(gl, [sphereVert, nightFrag]),
-        'elevation': twgl.createProgramInfo(gl, [sphereVert, elevationFrag])
-      },
-      'plane': {
-        'dayAndNight': twgl.createProgramInfo(gl, [planeVert, dayAndNightFrag]),
-        'day': twgl.createProgramInfo(gl, [planeVert, dayFrag]),
-        'night': twgl.createProgramInfo(gl, [planeVert, nightFrag]),
-        'elevation': twgl.createProgramInfo(gl, [planeVert, elevationFrag])
-      }
-    }
+    this.shaders = new Shaders(gl)
 
     gl.enable(gl.DEPTH_TEST)
     gl.enable(gl.CULL_FACE)
@@ -91,7 +73,8 @@ export default class Renderer {
       }
     )
 
-    let program = this.programs[scene.projection][scene.renderMode]
+    let program = this.shaders.getProgram(scene.projection, scene.renderMode)
+
     gl.useProgram(program.program)
     twgl.setBuffersAndAttributes(
       gl, program, scene[scene.projection + 'Buffer']

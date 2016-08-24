@@ -26,6 +26,7 @@ uniform vec3 eye;
 
 varying vec2 vUv;
 varying vec3 vPosition;
+varying vec3 vSpherePosition;
 varying vec3 vNormal;
 
 void main() {
@@ -51,12 +52,12 @@ void main() {
     vNdotL,
     vNdotV,
     eye,
-    vPosition
+    vSpherePosition
   );
 
   vec3 oceanColor = mix(
-    vec3(0.0, 0.0, 0.35),
-    vec3(0.0, 0.0, 0.3),
+    vec3(0.1, 0.1, 0.35),
+    vec3(0.1, 0.1, 0.3),
     oceanDepth
   );
 
@@ -66,7 +67,7 @@ void main() {
     landness
   );
 
-  vec3 N = perturbNormal(normalize(vNormal), vNormal, dHdxy);
+  vec3 N = perturbNormal(vSpherePosition, vNormal, dHdxy);
   vec3 L = normalize(lightDirection);
   vec3 H = normalize(L + V);
 

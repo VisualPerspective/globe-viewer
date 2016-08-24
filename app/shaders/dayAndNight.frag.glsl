@@ -65,7 +65,7 @@ void main() {
     landness
   );
 
-  vec3 N = perturbNormal(normalize(vPosition), vNormal, dHdxy);
+  vec3 N = perturbNormal(vPosition, vNormal, dHdxy);
   vec3 L = normalize(lightDirection);
   vec3 H = normalize(L + V);
 
@@ -105,5 +105,6 @@ void main() {
 
   vec3 shaded = toGamma(tonemap(color * exposure(eye, L, 1.5, 300.0)));
   vec3 final = shaded + countryBorder;
+
   gl_FragColor = vec4(final, 1.0);
 }

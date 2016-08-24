@@ -145,7 +145,7 @@ export default class Camera {
 
     let eye = [
       target[0],
-      2.75 - this.zoom.value * 2.5,
+      2.5 - this.zoom.value * 2.25,
       target[2]
     ]
 

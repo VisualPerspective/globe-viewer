@@ -16,6 +16,7 @@ uniform float landElevationScale;
 
 varying vec2 vUv;
 varying vec3 vPosition;
+varying vec3 vSpherePosition;
 varying vec3 vNormal;
 
 const float PI = 3.141592653589793;
@@ -33,15 +34,16 @@ void main(void) {
   }
 
   vec3 planePosition = vec3(position.x, scale, position.z);
-  vec3 spherePosition = vec3(
-    sin(planePosition.x * PI) * cos(planePosition.z * PI),
-    sin(planePosition.z * PI),
-    -cos(planePosition.x * PI) * cos(planePosition.z * PI)
-  );
+
+  float x = planePosition.x * PI;
+  float z = planePosition.z * PI * 0.999;
+
+  vec3 spherePosition = vec3(sin(x) * cos(z), sin(z), cos(x) * cos(z));
 
   gl_Position = projection * modelView * vec4(planePosition, 1.0);
   vPosition = vec3(model * vec4(planePosition, 1.0));
 
   mat3 normalMatrix = transpose(inverse(mat3(model)));
+  vSpherePosition = spherePosition;
   vNormal = normalize(normalMatrix * spherePosition);
 }

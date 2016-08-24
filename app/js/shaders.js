@@ -2,6 +2,7 @@ import { createProgramInfo as create } from 'twgl.js'
 import sphereVert from '../shaders/sphere.vert.glsl'
 import planeVert from '../shaders/plane.vert.glsl'
 import dayAndNightFrag from '../shaders/dayAndNight.frag.glsl'
+import dayAndNightSimpleFrag from '../shaders/dayAndNightSimple.frag.glsl'
 import dayFrag from '../shaders/day.frag.glsl'
 import nightFrag from '../shaders/night.frag.glsl'
 import elevationFrag from '../shaders/elevation.frag.glsl'
@@ -16,7 +17,7 @@ export default class Shaders {
         'elevation': create(gl, [sphereVert, elevationFrag])
       },
       'plane': {
-        'dayAndNight': create(gl, [planeVert, dayAndNightFrag]),
+        'dayAndNight': create(gl, [planeVert, dayAndNightSimpleFrag]),
         'day': create(gl, [planeVert, dayFrag]),
         'night': create(gl, [planeVert, nightFrag]),
         'elevation': create(gl, [planeVert, elevationFrag])

@@ -11,6 +11,7 @@ precision highp float;
 #pragma glslify: atmosphere = require(./functions/atmosphere)
 #pragma glslify: nightAmbient = require(./functions/nightAmbient)
 #pragma glslify: brdf = require(./functions/brdf)
+#pragma glslify: lambert = require(glsl-diffuse-lambert)
 #pragma glslify: texture2DCubic = require(./functions/texture2DCubic)
 
 uniform sampler2D topographyMap;
@@ -65,7 +66,7 @@ void main() {
     landness
   );
 
-  vec3 N = perturbNormal(normalize(vPosition), vNormal, dHdxy);
+  vec3 N = perturbNormal(normalize(vNormal), vNormal, dHdxy);
   vec3 L = normalize(lightDirection);
   vec3 H = normalize(L + V);
 
@@ -76,34 +77,22 @@ void main() {
   );
 
   vec3 color = nightAmbient(
-    vNdotL,
+    vNdotL - 0.5,
     diffuseColor,
     texture2D(lightsMap, vUv).x,
     vUv
   );
 
+  vec3 lightColor = vec3(0.5);
+
+  //color = lightColor * diffuseColor * lambert(L, N);
+  float incidence = pow(dot(N, L), 1.0);
+
   if (dot(vNormal, L) > 0.0) {
-    vec3 lightColor = vec3(8.0);
-
-    float incidence = pow(dot(N, L), 1.5);
-
-    color = lightColor * incidence * brdf(
-      diffuseColor,
-      0.0, //metallic
-      0.5, //subsurface
-      0.3, //specular
-      roughness, //roughness
-      L, V, N
-    );
-
-    color += atmosphere(
-      vNdotL_clamped,
-      vNdotV_clamped,
-      vec3(0.1, 0.1, 1.0) * 20.0
-    );
+    color = color + pow(lightColor * diffuseColor * incidence, vec3(2.2));
   }
 
-  vec3 shaded = toGamma(tonemap(color * exposure(eye, L, 1.5, 300.0)));
+  vec3 shaded = toGamma(tonemap(color * 30.0));
   vec3 final = shaded + countryBorder;
   gl_FragColor = vec4(final, 1.0);
 }

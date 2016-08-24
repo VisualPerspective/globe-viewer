@@ -10,8 +10,6 @@ export default function registerRangeSlider(
       this.updateFormatted = function (vm) {
         vm.formatted = propertyMap[vm.property].formatted(vm)
       }
-
-      this.throttleFormatted = _.throttle(this.updateFormatted, 50)
     },
     created: function () {
       this.updateFormatted(this)
@@ -45,7 +43,7 @@ export default function registerRangeSlider(
     watch: {
       'value': {
         handler: function () {
-          this.throttleFormatted(this)
+          this.updateFormatted(this)
           controller.updated()
         }
       }

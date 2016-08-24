@@ -38,7 +38,7 @@ void main(void) {
   float x = planePosition.x * PI;
   float z = planePosition.z * PI * 0.999;
 
-  vec3 spherePosition = vec3(sin(x) * cos(z), sin(z), cos(x) * cos(z));
+  vec3 spherePosition = vec3(sin(x) * cos(z), -sin(z), cos(x) * cos(z));
 
   gl_Position = projection * modelView * vec4(planePosition, 1.0);
   vPosition = vec3(model * vec4(planePosition, 1.0));

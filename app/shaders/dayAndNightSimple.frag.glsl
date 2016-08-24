@@ -78,22 +78,23 @@ void main() {
   );
 
   vec3 color = nightAmbient(
-    vNdotL - 0.5,
+    vNdotL - 0.025,
     diffuseColor,
     texture2D(lightsMap, vUv).x,
     vUv
   );
 
-  vec3 lightColor = vec3(0.5);
-
-  //color = lightColor * diffuseColor * lambert(L, N);
-  float incidence = pow(dot(N, L), 1.0);
+  vec3 lightColor = vec3(0.05);
 
   if (dot(vNormal, L) > 0.0) {
-    color = color + pow(lightColor * diffuseColor * incidence, vec3(2.2));
+    float incidence = dot(N, L);
+    color = color + lightColor * pow(diffuseColor, vec3(2.2)) * incidence;
   }
 
-  vec3 shaded = toGamma(tonemap(color * 30.0));
+  vec3 shaded = toGamma(tonemap(color * 100.0));
   vec3 final = shaded + countryBorder;
+
+  vec3 terminatorColor = vec3(0.4, 0.4, 0.0);
+  final += terminatorColor * min(pow(1.0 - abs(vNdotL), 250.0), 1.0);
   gl_FragColor = vec4(final, 1.0);
 }

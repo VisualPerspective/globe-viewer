@@ -46,6 +46,7 @@ void main() {
     topographyMapSize
   );
 
+  float poleFalloff = 1.0 - pow(abs(vPosition.z * 2.0), 4.0);
   dHdxy *= terrainBumpScale(
     landness,
     0.0,
@@ -53,11 +54,11 @@ void main() {
     vNdotV,
     eye,
     vSpherePosition
-  );
+  ) * poleFalloff;
 
   vec3 oceanColor = mix(
-    vec3(0.1, 0.1, 0.35),
-    vec3(0.1, 0.1, 0.3),
+    vec3(0.15, 0.15, 0.35),
+    vec3(0.125, 0.125, 0.3),
     oceanDepth
   );
 
@@ -95,6 +96,6 @@ void main() {
   vec3 final = shaded + countryBorder;
 
   vec3 terminatorColor = vec3(0.4, 0.4, 0.0);
-  final += terminatorColor * min(pow(1.0 - abs(vNdotL), 250.0), 1.0);
+  final += terminatorColor * min(pow(1.0 - abs(vNdotL), 350.0), 1.0);
   gl_FragColor = vec4(final, 1.0);
 }

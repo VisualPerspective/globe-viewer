@@ -1,4 +1,4 @@
-import twgl from 'twgl.js'
+import * as twgl from 'twgl.js/dist/4.x/twgl-full'
 import Shaders from './shaders.js'
 
 const m4 = twgl.m4

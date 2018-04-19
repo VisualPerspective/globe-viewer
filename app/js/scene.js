@@ -1,4 +1,4 @@
-import twgl from 'twgl.js'
+import * as twgl from 'twgl.js/dist/4.x/twgl-full'
 import moment from 'moment'
 import _ from 'lodash'
 

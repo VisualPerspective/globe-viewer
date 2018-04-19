@@ -1,4 +1,4 @@
-import { createProgramInfo as create } from 'twgl.js'
+import { createProgramInfo as create } from 'twgl.js/dist/4.x/twgl-full'
 import sphereVert from '../shaders/sphere.vert.glsl'
 import planeVert from '../shaders/plane.vert.glsl'
 import dayAndNightFrag from '../shaders/dayAndNight.frag.glsl'

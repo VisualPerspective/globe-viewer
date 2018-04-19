@@ -1,12 +1,10 @@
-import twgl from 'twgl.js'
+import { v3 } from 'twgl.js/dist/4.x/twgl-full'
 import _ from 'lodash'
 
 import {
   Vec2Array,
   Vec3Array
 } from './vectorArray'
-
-const v3 = twgl.v3
 
 // icosphere-like sphere, except based on octahedron
 // which gives a clean vertical seam for texturing

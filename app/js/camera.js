@@ -1,6 +1,6 @@
 import _ from 'lodash'
 import hammer from 'hammerjs'
-import twgl from 'twgl.js'
+import * as twgl from 'twgl.js/dist/4.x/twgl-full'
 
 import ControlRange from './controlRange'
 import { toRadians } from './utils'

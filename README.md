@@ -8,19 +8,19 @@ Renders the globe in different ways using WebGL ([Live Demo](http://k9.github.co
 Requires:
 
 * a recent version of nodejs and yarn
-* topojson (npm install -g topojson)
+* topojson (yarn global add topojson)
 * ImageMagick
 
-To install, clone the repo and:
+To install, clone the repo and download and prepare the data (this may take a few minutes):
 ```
-npm install
-chmod +x script/make-vectors.sh
-./script/make-vectors.sh
+yarn install
+yarn make-vectors
+yarn process-images
 ```
 
 To run:
 ```
-brunch watch --server
+yarn start
 ```
 
 The viewer should now be available at `http://localhost:3333`

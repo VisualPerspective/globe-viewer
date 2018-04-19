@@ -11,7 +11,8 @@
   "scripts": {
     "start": "webpack-dev-server --config webpack-config.js",
     "build": "webpack --config webpack-config.js",
-    "make-vectors": "bash script/make-vectors.sh"
+    "make-vectors": "bash script/make-vectors.sh",
+    "process-images": "bash script/process-images.sh"
   },
   "dependencies": {
     "@babel/core": "^7.0.0-beta.44",

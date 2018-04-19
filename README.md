@@ -7,15 +7,15 @@ Renders the globe in different ways using WebGL ([Live Demo](http://k9.github.co
 
 Requires:
 
-* a recent version of nodejs
-* [brunch](http://brunch.io/)
+* a recent version of nodejs and yarn
 * topojson (npm install -g topojson)
+* ImageMagick
 
 To install, clone the repo and:
 ```
 npm install
-chmod +x script/make_vectors.sh
-./script/make_vectors.sh
+chmod +x script/make-vectors.sh
+./script/make-vectors.sh
 ```
 
 To run:

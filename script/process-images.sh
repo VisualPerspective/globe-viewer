@@ -5,10 +5,10 @@ mkdir -p tmpdata
 cd tmpdata
 
 # Lights
-if [ ! -f nightearth.gif ]; then
-  curl "http://eoimages.gsfc.nasa.gov/images/imagerecords/55000/55167/nightearth.gif" -o nightearth.gif
+if [ ! -f nightearth.jpg ]; then
+  curl "https://www.nasa.gov/specials/blackmarble/2016/globalmaps/BlackMarble_2016_3km_gray.jpg" -o nightearth.jpg
 fi
-convert nightearth.gif -resize 4096x4096\! lights-4096.png
+convert nightearth.jpg -resize 4096x4096\! lights-4096.png
 cp lights-4096.png ../app/assets/data/
 
 
@@ -26,11 +26,11 @@ cp color-4096.jpg ../app/assets/data/
 # Heightmaps
 
 if [ ! -f gebco_08_rev_elev_21600x10800.png ]; then
-  curl "http://eoimages.gsfc.nasa.gov/images/imagerecords/73000/73934/gebco_08_rev_elev_21600x10800.png" -o gebco_08_rev_elev_21600x10800.png
+  curl "https://eoimages.gsfc.nasa.gov/images/imagerecords/73000/73934/gebco_08_rev_elev_21600x10800.png" -o gebco_08_rev_elev_21600x10800.png
 fi
 
 if [ ! -f gebco_08_rev_bath_21600x10800.png ]; then
-  curl "http://eoimages.gsfc.nasa.gov/images/imagerecords/73000/73963/gebco_08_rev_bath_21600x10800.png" -o gebco_08_rev_bath_21600x10800.png
+  curl "https://eoimages.gsfc.nasa.gov/images/imagerecords/73000/73963/gebco_08_rev_bath_21600x10800.png" -o gebco_08_rev_bath_21600x10800.png
 fi
 
 # Convert to 16 bit

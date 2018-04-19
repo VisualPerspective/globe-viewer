@@ -27,6 +27,27 @@ if [ ! -f ne_50m_admin_0_countries.zip ]; then
 fi
 unzip -o ne_50m_admin_0_countries.zip
 
-topojson --simplify-proportion 0.4 -o vectors.json -- land=ne_50m_land.shp lakes=ne_50m_lakes.shp rivers=ne_50m_rivers_lake_centerlines_scale_rank.shp countries=ne_50m_admin_0_countries.shp
+# topojson --simplify-proportion 0.4 -o vectors.json -- land=ne_50m_land.shp lakes=ne_50m_lakes.shp rivers=ne_50m_rivers_lake_centerlines_scale_rank.shp countries=ne_50m_admin_0_countries.shp
 
-cp vectors.json ../app/assets/data/
+mkdir -p ../app/assets/data/
+
+geo2topo -q 1e5 -n\
+  countries=<( \
+    shp2json -n ne_50m_admin_0_countries.shp \
+      | ndjson-map 'i = d.properties.iso_n3, d.id = i === "-99" ? undefined : i, delete d.properties, d' \
+      | geostitch -n \
+  ) \
+  land=<( \
+    shp2json -n ne_50m_land.shp \
+      | geostitch -n \
+  ) \
+  lakes=<( \
+    shp2json -n ne_50m_lakes.shp \
+      | geostitch -n \
+  ) \
+  rivers=<( \
+    shp2json -n ne_50m_rivers_lake_centerlines_scale_rank.shp \
+      | geostitch -n \
+  ) \
+  > ../app/assets/data/vectors.json
+

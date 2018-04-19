@@ -68,5 +68,3 @@ vec4 texture2DCubic(
     sy
   );
 }
-
-#pragma glslify: export(texture2DCubic)

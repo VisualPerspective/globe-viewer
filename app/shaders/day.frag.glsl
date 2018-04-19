@@ -1,12 +1,10 @@
 #extension GL_OES_standard_derivatives : enable
 precision highp float;
 
-#pragma glslify: toLinear = require(glsl-gamma/in)
-#pragma glslify: toGamma = require(glsl-gamma/out)
-#pragma glslify: tonemap = require(./functions/tonemap)
-#pragma glslify: exposure = require(./functions/exposure)
-#pragma glslify: brdf = require(./functions/brdf)
-#pragma glslify: texture2DCubic = require(./functions/texture2DCubic)
+@import ./functions/gamma;
+@import ./functions/tonemap;
+@import ./functions/exposure;
+@import ./functions/brdf;
 
 uniform sampler2D topographyMap;
 uniform sampler2D diffuseMap;

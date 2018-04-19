@@ -120,5 +120,3 @@ vec3 brdf(
     Gs * Fs * Ds +
     0.25 * clearcoat * Gr * Fr * Dr;
 }
-
-#pragma glslify: export(brdf)

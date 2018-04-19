@@ -4,5 +4,3 @@ vec3 atmosphere(float NdotL, float NdotV, vec3 color) {
     pow(1.0 - NdotV, 12.0)
   ) * color;
 }
-
-#pragma glslify: export(atmosphere)

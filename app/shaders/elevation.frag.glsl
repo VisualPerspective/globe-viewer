@@ -1,16 +1,15 @@
 #extension GL_OES_standard_derivatives : enable
 precision highp float;
 
-#pragma glslify: toLinear = require(glsl-gamma/in)
-#pragma glslify: toGamma = require(glsl-gamma/out)
-#pragma glslify: heightDerivative = require(./functions/heightDerivative)
-#pragma glslify: perturbNormal = require(./functions/perturbNormal)
-#pragma glslify: tonemap = require(./functions/tonemap)
-#pragma glslify: exposure = require(./functions/exposure)
-#pragma glslify: terrainBumpScale = require(./functions/terrainBumpScale)
-#pragma glslify: atmosphere = require(./functions/atmosphere)
-#pragma glslify: nightAmbient = require(./functions/nightAmbient)
-#pragma glslify: brdf = require(./functions/brdf)
+@import ./functions/gamma;
+@import ./functions/heightDerivative;
+@import ./functions/perturbNormal;
+@import ./functions/tonemap;
+@import ./functions/exposure;
+@import ./functions/terrainBumpScale;
+@import ./functions/atmosphere;
+@import ./functions/nightAmbient;
+@import ./functions/brdf;
 
 uniform sampler2D topographyMap;
 uniform sampler2D diffuseMap;

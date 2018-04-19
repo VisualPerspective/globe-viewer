@@ -29,5 +29,3 @@ float terrainBumpScale(
 
   return bumpScale;
 }
-
-#pragma glslify: export(terrainBumpScale)

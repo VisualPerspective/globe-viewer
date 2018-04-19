@@ -1,5 +1,5 @@
 
-#pragma glslify: texture2DCubic = require(./texture2DCubic)
+@import ./texture2DCubic;
 
 // Based on https://docs.unrealengine.com/latest/attachments/Engine/Rendering/LightingAndShadows/BumpMappingWithoutTangentSpace/mm_sfgrad_bump.pdf
 
@@ -20,5 +20,3 @@ vec2 heightDerivative(
   float dBt = Hul - Hll;
   return vec2(dBs, dBt);
 }
-
-#pragma glslify: export(heightDerivative)

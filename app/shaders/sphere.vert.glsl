@@ -1,7 +1,7 @@
 precision highp float;
 
-#pragma glslify: transpose = require('glsl-transpose')
-#pragma glslify: inverse = require('glsl-inverse')
+@import ./functions/transpose;
+@import ./functions/inverse;
 
 attribute vec3 position;
 attribute vec2 texcoord;

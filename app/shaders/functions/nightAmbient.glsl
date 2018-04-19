@@ -9,5 +9,3 @@ vec3 nightAmbient(
     0.1 * vec3(0.1, 0.1, 1.0) * diffuseColor
   ) * clamp((-NdotL + 0.01) * 2.0, 0.0, 1.0);
 }
-
-#pragma glslify: export(nightAmbient)

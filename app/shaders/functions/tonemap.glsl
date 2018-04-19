@@ -19,5 +19,3 @@ vec3 tonemap(vec3 color) {
     vec3 whiteScale = 1.0 / Uncharted2Tonemap(vec3(W));
     return curr * whiteScale;
 }
-
-#pragma glslify: export(tonemap)

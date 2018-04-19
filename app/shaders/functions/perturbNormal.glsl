@@ -13,5 +13,3 @@ vec3 perturbNormal(vec3 surf_pos, vec3 surf_norm, vec2 dHdxy) {
   vec3 vGrad = sign(fDet) * (dHdxy.x * R1 + dHdxy.y * R2);
   return normalize(abs(fDet) * surf_norm - vGrad);
 }
-
-#pragma glslify: export(perturbNormal)

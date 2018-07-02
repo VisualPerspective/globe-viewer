@@ -6,7 +6,7 @@
   "license": "Apache-2.0",
   "repository": {
     "type": "git",
-    "url": "https://github.com/k9/globe-viewer"
+    "url": "https://github.com/VisualPerspective/globe-viewer"
   },
   "scripts": {
     "start": "webpack-dev-server --config webpack.dev.js",

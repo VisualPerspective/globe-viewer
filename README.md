@@ -1,7 +1,7 @@
 # Globe Viewer
-[![Globe Viewer Example](/demo.jpg?raw=true)](http://k9.github.com/globe-viewer/index.html)
+[![Globe Viewer Example](/demo.jpg?raw=true)](http://visualperspective.github.com/globe-viewer/index.html)
 
-Renders the globe in different ways using WebGL ([Live Demo](http://k9.github.com/globe-viewer/index.html)). Uses fixed data sources for now, though this is meant as a base for visualizations that add other data sets.
+Renders the globe in different ways using WebGL ([Live Demo](http://visualperspective.github.com/globe-viewer/index.html)). Uses fixed data sources for now, though this is meant as a base for visualizations that add other data sets.
 
 ## Installing and Running
 

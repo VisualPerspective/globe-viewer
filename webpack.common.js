@@ -3,7 +3,6 @@ const CopyWebpackPlugin = require('copy-webpack-plugin')
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
 
 module.exports = {
-  mode: 'development',
   entry: './app/initialize.js',
   module: {
     rules: [
@@ -46,7 +45,6 @@ module.exports = {
     modules: ['node_modules', 'app'],
     extensions: ['.js', '.json', '.glsl']
   },
-  devtool: 'inline-source-map',
   devServer: {
     contentBase: './dist/',
     port: 3333

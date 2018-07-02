@@ -9,8 +9,8 @@
     "url": "https://github.com/k9/globe-viewer"
   },
   "scripts": {
-    "start": "webpack-dev-server --config webpack-config.js",
-    "build": "webpack --config webpack-config.js",
+    "start": "webpack-dev-server --config webpack.dev.js",
+    "build": "webpack --config webpack.prod.js",
     "make-vectors": "bash script/make-vectors.sh",
     "process-images": "bash script/process-images.sh"
   },
@@ -50,6 +50,7 @@
     "webpack": "^4.6.0",
     "webpack-dev-server": "^3.1.3",
     "webpack-glsl-loader": "^1.0.1",
+    "webpack-merge": "^4.1.3",
     "world-atlas": "^1.1.4"
   },
   "devDependencies": {

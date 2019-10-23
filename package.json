@@ -16,12 +16,11 @@
   },
   "dependencies": {
     "@babel/core": "^7.0.0-beta.44",
-    "@babel/preset-env": "^7.0.0-beta.44",
-    "@babel/preset-es2016": "^7.0.0-beta.44",
+    "@babel/preset-env": "^7.6.3",
     "babel-loader": "^8.0.0-beta",
     "babel-plugin-glslify": "^2.0.0",
-    "copy-webpack-plugin": "^4.5.1",
-    "css-loader": "^0.28.11",
+    "copy-webpack-plugin": "^5.0.4",
+    "css-loader": "^3.2.0",
     "d3": "^5.1.0",
     "d3-dsv": "^1.0.8",
     "d3-geo-projection": "^2.4.0",
@@ -32,7 +31,7 @@
     "glsl-luma": "^1.0.1",
     "glsl-specular-cook-torrance": "^2.0.1",
     "glsl-transpose": "^1.0.0",
-    "glslify": "^6.1.1",
+    "glslify": "^7.0.0",
     "hammerjs": "^2.0.8",
     "lodash": "^4.13.1",
     "moment": "^2.13.0",
@@ -40,8 +39,8 @@
     "node-sass": "^4.8.3",
     "numeral": "^2.0.6",
     "platform": "^1.3.1",
-    "raw-loader": "^0.5.1",
-    "sass-loader": "^7.0.1",
+    "raw-loader": "^3.1.0",
+    "sass-loader": "^8.0.0",
     "shapefile": "^0.6.6",
     "stats.js": "^0.17.0",
     "topojson": "^3.0.2",
@@ -51,9 +50,9 @@
     "webpack-dev-server": "^3.1.3",
     "webpack-glsl-loader": "^1.0.1",
     "webpack-merge": "^4.1.3",
-    "world-atlas": "^1.1.4"
+    "world-atlas": "^2.0.2"
   },
   "devDependencies": {
-    "webpack-cli": "^2.0.14"
+    "webpack-cli": "^3.3.9"
   }
 }

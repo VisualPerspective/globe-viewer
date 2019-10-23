@@ -80,7 +80,7 @@ export default class Camera {
         this.zoom.changeBy(amount)
         e.preventDefault()
       }
-    })
+    }, { passive: false })
   }
 
   handleMouseMove(e) {
